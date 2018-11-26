@@ -1,6 +1,8 @@
 # geojson
 
-TODO: Write a description here
+This shard is meant to provide a simple interface for creating, reading, and
+writing geoJSON strings and objects that represent them, based on the
+[geoJSON specification](https://tools.ietf.org/html/rfc7946).
 
 ## Installation
 
@@ -8,7 +10,7 @@ TODO: Write a description here
 ```yaml
 dependencies:
   geojson:
-    github: your-github-user/geojson
+    git: ssh://git@192.168.99.111:7999/~bwade/crgeojson.git
 ```
 2. Run `shards install`
 
@@ -26,7 +28,7 @@ TODO: Write development instructions here
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/geojson/fork>)
+1. Clone the repo from ssh://git@192.168.99.111:7999/~bwade/crgeojson.git
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -34,4 +36,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [Benjamin Wade](https://github.com/your-github-user) - creator and maintainer
+- Benjamin Wade - creator and maintainer
