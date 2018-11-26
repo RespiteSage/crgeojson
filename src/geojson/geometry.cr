@@ -50,19 +50,13 @@ module GeoJSON
     include JSON::Serializable
 
     getter type : String = "Point"
-    getter coordinates : Array(Float64)
+    getter coordinates : Position
 
     def initialize(lon, lat)
-      @coordinates = [lon.to_f64, lat.to_f64]
+      @coordinates = Position.new lon.to_f64, lat.to_f64
     end
 
-    def lon
-      coordinates[0]
-    end
-
-    def lat
-      coordinates[1]
-    end
+    delegate lon, lat, to: coordinates
 
     def ==(other : Point)
       coordinates == other.coordinates
@@ -73,10 +67,10 @@ module GeoJSON
     include JSON::Serializable
 
     getter type : String = "MultiPoint"
-    getter coordinates : Array(Array(Float64))
+    getter coordinates : Array(Position)
 
     def initialize(*points : Point)
-      @coordinates = points.map { |point| [point.lon, point.lat]}.to_a
+      @coordinates = points.map { |point| Position.new point.lon, point.lat}.to_a
     end
 
     def [](index : Int32 | Int64)

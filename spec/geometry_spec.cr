@@ -93,8 +93,8 @@ describe Point do
 
         multipoint = MultiPoint.new first, second
 
-        multipoint[0].should eq [10.0, 15.0]
-        multipoint[1].should eq [20.0, 25.0]
+        multipoint[0].should eq Position.new(10.0, 15.0)
+        multipoint[1].should eq Position.new(20.0, 25.0)
       end
     end
 
