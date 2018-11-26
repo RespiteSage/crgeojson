@@ -15,12 +15,30 @@ describe Geometry do
     end
 
     it "accepts valid geometry types" do
-      geometry_types = ["Point","MultiPoint","LineString","MultiLineString",
-                        "Polygon","MultiPolygon","GeometryCollection"]
+      geometry_strings = [%({"type":"Point","coordinates":[0,0]}),
+                          %({"type":"MultiPoint","coordinates":[[0,0]]}),
+                          %({"type":"LineString","coordinates":[[0,0],[0,1]]}),
+                          %({"type":"MultiLineString","coordinates":[[[0,0],[0,1]],[[1,0],[0,1]]]}),
+                          %({"type":"Polygon","coordinates":[[[0,0],[1,0],[0,1],[0,0]]]}),
+                          %({"type":"MultiPolygon","coordinates":[[[[0,0],[0,1],[1,0],[0,0]]]]}),
+                          %({"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[0,0]}]})]
 
-      geometry_types.each do |type|
-        json = %({"type":"#{type}"})
+      geometry_strings.each do |json|
         Geometry.from_json json
+      end
+
+      it "returns a Point for a point string" do
+        result = Geometry.from_json %({"type":"Point","coordinates":[0,0]})
+
+        result.should be_a Point
+      end
+
+      it "returns the correct Point for a point string" do
+        result = Geometry.from_json %({"type":"Point","coordinates":[10,15]})
+
+        reference = Point.new 10, 15
+
+        result.should eq reference
       end
     end
   end
@@ -46,6 +64,24 @@ describe Point do
       point = Point.new 0, 0
 
       point.type.should eq "Point"
+    end
+  end
+
+  describe "#to_json" do
+    it "returns accurate geoJSON" do
+      point = Point.new 10.0, 15.0
+
+      point.to_json.should eq %({"type":"Point","coordinates":[10.0,15.0]})
+    end
+  end
+
+  describe "#from_json" do
+    it "creates a Point matching the json" do
+      result = Point.from_json %({"type":"Point","coordinates":[10.0,15.0]})
+
+      reference = Point.new 10.0, 15.0
+
+      result.should eq reference
     end
   end
 end
