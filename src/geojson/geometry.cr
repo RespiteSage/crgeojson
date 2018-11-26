@@ -69,4 +69,23 @@ module GeoJSON
     end
   end
 
+  class MultiPoint < Geometry
+    include JSON::Serializable
+
+    getter type : String = "MultiPoint"
+    getter coordinates : Array(Array(Float64))
+
+    def initialize(*points : Point)
+      @coordinates = points.map { |point| [point.lon, point.lat]}.to_a
+    end
+
+    def [](index : Int32 | Int64)
+      coordinates[index]
+    end
+
+    def ==(other : MultiPoint)
+      coordinates == other.coordinates
+    end
+  end
+
 end
