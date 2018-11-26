@@ -11,10 +11,6 @@ module GeoJSON
     MultiPolygon
     GeometryCollection
 
-    def self.contains?(type : String)
-      GeometryTypes.names.includes? type
-    end
-
     def self.from_s(type_string : String)
       GeometryTypes.values.find { |type|
         type.to_s == type_string
@@ -48,7 +44,6 @@ module GeoJSON
         new parser
       end
     end
-
   end
 
   class Point < Geometry
