@@ -84,51 +84,51 @@ describe Point do
       result.should eq reference
     end
   end
+end
 
-  describe MultiPoint do
-    describe ".new" do
-      it "creates a new multipoint with the given points" do
-        first = Point.new 10.0, 15.0
-        second = Point.new 20.0, 25.0
+describe MultiPoint do
+  describe ".new" do
+    it "creates a new multipoint with the given points" do
+      first = Point.new 10.0, 15.0
+      second = Point.new 20.0, 25.0
 
-        multipoint = MultiPoint.new first, second
+      multipoint = MultiPoint.new first, second
 
-        multipoint[0].should eq Position.new(10.0, 15.0)
-        multipoint[1].should eq Position.new(20.0, 25.0)
-      end
+      multipoint[0].should eq Position.new(10.0, 15.0)
+      multipoint[1].should eq Position.new(20.0, 25.0)
     end
+  end
 
-    describe "#type" do
-      it %(returns "Point") do
-        multipoint = MultiPoint.new Point.new(0,0)
+  describe "#type" do
+    it %(returns "Point") do
+      multipoint = MultiPoint.new Point.new(0,0)
 
-        multipoint.type.should eq "MultiPoint"
-      end
+      multipoint.type.should eq "MultiPoint"
     end
+  end
 
-    describe "#to_json" do
-      it "returns accurate geoJSON" do
-        first = Point.new 10.0, 15.0
-        second = Point.new 20.0, 25.0
+  describe "#to_json" do
+    it "returns accurate geoJSON" do
+      first = Point.new 10.0, 15.0
+      second = Point.new 20.0, 25.0
 
-        multipoint = MultiPoint.new first, second
+      multipoint = MultiPoint.new first, second
 
-        reference_json = %({"type":"MultiPoint","coordinates":[[10.0,15.0],[20.0,25.0]]})
+      reference_json = %({"type":"MultiPoint","coordinates":[[10.0,15.0],[20.0,25.0]]})
 
-        multipoint.to_json.should eq reference_json
-      end
+      multipoint.to_json.should eq reference_json
     end
+  end
 
-    describe "#from_json" do
-      it "creates a Point matching the json" do
-        result = MultiPoint.from_json %({"type":"MultiPoint","coordinates":[[10.0,15.0],[20.0,25.0]]})
+  describe "#from_json" do
+    it "creates a Point matching the json" do
+      result = MultiPoint.from_json %({"type":"MultiPoint","coordinates":[[10.0,15.0],[20.0,25.0]]})
 
-        first = Point.new 10.0, 15.0
-        second = Point.new 20.0, 25.0
-        reference = MultiPoint.new first, second
+      first = Point.new 10.0, 15.0
+      second = Point.new 20.0, 25.0
+      reference = MultiPoint.new first, second
 
-        result.should eq reference
-      end
+      result.should eq reference
     end
   end
 end
