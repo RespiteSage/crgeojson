@@ -100,7 +100,7 @@ describe MultiPoint do
   end
 
   describe "#type" do
-    it %(returns "Point") do
+    it %(returns "MultiPoint") do
       multipoint = MultiPoint.new Position.new(0,0)
 
       multipoint.type.should eq "MultiPoint"
@@ -121,12 +121,59 @@ describe MultiPoint do
   end
 
   describe "#from_json" do
-    it "creates a Point matching the json" do
+    it "creates a MultiPoint matching the json" do
       result = MultiPoint.from_json %({"type":"MultiPoint","coordinates":[[10.0,15.0],[20.0,25.0]]})
 
       first = Position.new 10.0, 15.0
       second = Position.new 20.0, 25.0
       reference = MultiPoint.new first, second
+
+      result.should eq reference
+    end
+  end
+end
+
+describe LineString do
+  describe ".new" do
+    it "creates a new linestring with the given points" do
+      first = Position.new 10.0, 15.0
+      second = Position.new 20.0, 25.0
+
+      linestring = LineString.new first, second
+
+      linestring[0].should eq Position.new(10.0, 15.0)
+      linestring[1].should eq Position.new(20.0, 25.0)
+    end
+  end
+
+  describe "#type" do
+    it %(returns "LineString") do
+      linestring = LineString.new Position.new(0,0)
+
+      linestring.type.should eq "LineString"
+    end
+  end
+
+  describe "#to_json" do
+    it "returns accurate geoJSON" do
+      first = Position.new 10.0, 15.0
+      second = Position.new 20.0, 25.0
+
+      linestring = LineString.new first, second
+
+      reference_json = %({"type":"LineString","coordinates":[[10.0,15.0],[20.0,25.0]]})
+
+      linestring.to_json.should eq reference_json
+    end
+  end
+
+  describe "#from_json" do
+    it "creates a LineString matching the json" do
+      result = LineString.from_json %({"type":"LineString","coordinates":[[10.0,15.0],[20.0,25.0]]})
+
+      first = Position.new 10.0, 15.0
+      second = Position.new 20.0, 25.0
+      reference = LineString.new first, second
 
       result.should eq reference
     end

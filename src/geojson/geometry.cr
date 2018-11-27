@@ -82,4 +82,23 @@ module GeoJSON
     end
   end
 
+  class LineString < Geometry
+    include JSON::Serializable
+    
+    getter type : String = "LineString"
+    getter coordinates : Array(Position)
+
+    def initialize(*points : Position)
+      @coordinates = points.to_a
+    end
+
+    def [](index : Int32 | Int64)
+      coordinates[index]
+    end
+
+    def ==(other : LineString)
+      coordinates == other.coordinates
+    end
+  end
+
 end
