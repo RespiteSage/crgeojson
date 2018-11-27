@@ -112,7 +112,30 @@ module GeoJSON
     def [](index : Int)
       LineString.new coordinates[index]
     end
+  end
 
+  class Polygon < Geometry
+    include JSON::Serializable
+
+    getter type : String = "Polygon"
+    getter coordinates : Array(LinearRing)
+
+    def initialize(*points : Position)
+      if points.first == points.last
+        ring = LinearRing.new *points
+      else
+        ring = LinearRing.new points.to_a.push(points.first)
+      end
+      @coordinates = Array(LinearRing).new.push(ring)
+    end
+
+    def [](index)
+      coordinates[index]
+    end
+
+    def exterior
+      coordinates[0]
+    end
   end
 
 end

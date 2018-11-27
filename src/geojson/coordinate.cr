@@ -30,6 +30,7 @@ module GeoJSON
   end
 
   class LineStringCoordinates
+    # TODO: give this a better name
 
     getter coordinates : Array(Position)
 
@@ -53,12 +54,34 @@ module GeoJSON
       coordinates[index]
     end
 
-    def ==(other : LineStringCoordinates)
+    def ==(other : self)
       coordinates == other.coordinates
     end
 
     delegate to_json, to: coordinates
 
+  end
+
+  class LinearRing < LineStringCoordinates
+    # TODO: implement right-hand rule checking
+
+    def initialize(points : Array(Position))
+      if points.size >= 4 && points.first == points.last
+        @coordinates = points
+      elsif points.size >= 4
+        raise "LinearRing must have matching first and last points!"
+      else
+        raise "LinearRing must have four or more points!"
+      end
+    end
+
+    def initialize(*points : Position)
+      initialize points.to_a
+    end
+
+    def initialize(parser : JSON::PullParser)
+      @coordinates = Array(Position).new(parser)
+    end
   end
 
 end

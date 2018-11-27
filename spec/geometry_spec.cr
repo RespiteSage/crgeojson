@@ -247,3 +247,55 @@ describe MultiLineString do
     end
   end
 end
+
+describe Polygon do
+  describe ".new" do
+    it "creates a new polygon with the given points" do
+      first = Position.new 0,0
+      second = Position.new 1,0
+      third = Position.new 0,1
+
+      polygon = Polygon.new first, second, third
+
+      polygon.exterior[0].should eq Position.new 0,0
+      polygon.exterior[1].should eq Position.new 1,0
+      polygon.exterior[2].should eq Position.new 0,1
+    end
+  end
+
+  describe "#type" do
+    it %(returns "Polygon") do
+      polygon = Polygon.new Position.new(0,0), Position.new(1,0), Position.new(0,1)
+
+      polygon.type.should eq "Polygon"
+    end
+  end
+
+  describe "#to_json" do
+    it "returns accurate geoJSON" do
+      first = Position.new 0,0
+      second = Position.new 1,0
+      third = Position.new 0,1
+
+      polygon = Polygon.new first, second, third
+
+      reference_json = %({"type":"Polygon","coordinates":[[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]]})
+
+      polygon.to_json.should eq reference_json
+    end
+  end
+
+  describe "#from_json" do
+    it "creates a Polygon matching the json" do
+      result = Polygon.from_json %({"type":"Polygon","coordinates":[[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]]})
+
+      first = Position.new 0,0
+      second = Position.new 1,0
+      third = Position.new 0,1
+
+      reference = Polygon.new first, second, third
+
+      result.should eq reference
+    end
+  end
+end
