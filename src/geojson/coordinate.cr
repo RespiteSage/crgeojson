@@ -33,12 +33,16 @@ module GeoJSON
 
     getter coordinates : Array(Position)
 
-    def initialize(*points : Position)
+    def initialize(points : Array(Position))
       unless points.size < 2
-        @coordinates = points.to_a
+        @coordinates = points
       else
         raise "LineString must have two or more points!"
       end
+    end
+
+    def initialize(*points : Position)
+      initialize points.to_a
     end
 
     def initialize(parser : JSON::PullParser)

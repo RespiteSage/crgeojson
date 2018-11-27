@@ -90,9 +90,29 @@ module GeoJSON
       @coordinates = LineStringCoordinates.new *points
     end
 
+    def initialize(coordinates : LineStringCoordinates)
+      @coordinates = coordinates
+    end
+
     def [](index : Int)
       coordinates[index]
     end
+  end
+
+  class MultiLineString < Geometry
+    include JSON::Serializable
+
+    getter type : String = "MultiLineString"
+    getter coordinates : Array(LineStringCoordinates)
+
+    def initialize(*linestrings : LineString)
+      @coordinates = linestrings.map { |linestring| linestring.coordinates}.to_a
+    end
+
+    def [](index : Int)
+      LineString.new coordinates[index]
+    end
+
   end
 
 end

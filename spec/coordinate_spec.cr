@@ -37,7 +37,7 @@ end
 
 describe LineStringCoordinates do
   describe ".new" do
-    it "properly sets internal points" do
+    it "properly sets internal points from Positions" do
       first = Position.new 1.0, 2.0
       second = Position.new 3.0, 2.0
 
@@ -53,6 +53,16 @@ describe LineStringCoordinates do
       expect_raises(Exception, "LineString must have two or more points!") do
         linestring = LineStringCoordinates.new point
       end
+    end
+
+    it "works properly with an array of Positions" do
+      first = Position.new 1.0, 2.0
+      second = Position.new 3.0, 2.0
+
+      result = LineStringCoordinates.new [first, second]
+
+      result[0].should eq Position.new 1.0, 2.0
+      result[1].should eq Position.new 3.0, 2.0
     end
   end
 

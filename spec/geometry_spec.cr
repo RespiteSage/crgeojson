@@ -187,3 +187,63 @@ describe LineString do
     end
   end
 end
+
+describe MultiLineString do
+  describe ".new" do
+    it "creates a new multilinestring with the given points" do
+      first = Position.new 10.0, 15.0
+      second = Position.new 20.0, 25.0
+
+      linestring = LineString.new first, second
+
+      multilinestring = MultiLineString.new linestring
+
+      multilinestring[0].should eq LineString.new(Position.new(10.0,15.0),Position.new(20.0,25.0))
+    end
+  end
+
+  describe "#type" do
+    it %(returns "MultiLineString") do
+      linestring = LineString.new Position.new(0,0), Position.new(1,0)
+
+      multilinestring = MultiLineString.new linestring
+
+      multilinestring.type.should eq "MultiLineString"
+    end
+  end
+
+  describe "#to_json" do
+    it "returns accurate geoJSON" do
+      first = Position.new 0.0, 0.0
+      second = Position.new 0.0, 1.0
+      third = Position.new 1.0, 0.0
+      fourth = Position.new 0.0, 1.0
+
+      linestring_one = LineString.new first, second
+      linestring_two = LineString.new third, fourth
+
+      multilinestring = MultiLineString.new linestring_one, linestring_two
+
+      reference_json = %({"type":"MultiLineString","coordinates":[[[0.0,0.0],[0.0,1.0]],[[1.0,0.0],[0.0,1.0]]]})
+
+      multilinestring.to_json.should eq reference_json
+    end
+  end
+
+  describe "#from_json" do
+    it "creates a MultiLineString matching the json" do
+      result = MultiLineString.from_json %({"type":"MultiLineString","coordinates":[[[0.0,0.0],[0.0,1.0]],[[1.0,0.0],[0.0,1.0]]]})
+
+      first = Position.new 0.0, 0.0
+      second = Position.new 0.0, 1.0
+      third = Position.new 1.0, 0.0
+      fourth = Position.new 0.0, 1.0
+
+      linestring_one = LineString.new first, second
+      linestring_two = LineString.new third, fourth
+      reference = MultiLineString.new linestring_one, linestring_two
+
+      result.should eq reference
+    end
+  end
+end
