@@ -149,10 +149,10 @@ describe LinearRing do
       third = Position.new  0, 1
       fourth = Position.new 0, 0
 
-      polygon = LinearRing.from_json "[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]"
+      linear_ring = LinearRing.from_json "[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]"
       reference = LinearRing.new first, second, third, fourth
 
-      polygon.should eq reference
+      linear_ring.should eq reference
     end
   end
 
@@ -163,9 +163,68 @@ describe LinearRing do
       third = Position.new  0, 1
       fourth = Position.new 0, 0
 
-      linestring = LinearRing.new first, second, third, fourth
+      linear_ring = LinearRing.new first, second, third, fourth
 
-      linestring.to_json.should eq "[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]"
+      linear_ring.to_json.should eq "[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]"
+    end
+  end
+end
+
+describe PolyRings do
+  describe ".new" do
+    it "properly sets internal rings" do
+      first  = LinearRing.new Position.new(1,2), Position.new(3,2),
+                              Position.new(2,0), Position.new(1,2)
+      second = LinearRing.new Position.new(2,3), Position.new(4,3),
+                              Position.new(3,1), Position.new(2,3)
+
+      result = PolyRings.new first, second
+
+      result[0].should eq LinearRing.new Position.new(1,2), Position.new(3,2),
+                                         Position.new(2,0), Position.new(1,2)
+      result[1].should eq LinearRing.new Position.new(2,3), Position.new(4,3),
+                                         Position.new(3,1), Position.new(2,3)
+    end
+
+    it "works properly with an array of rings" do
+      first  = LinearRing.new Position.new(1,2), Position.new(3,2),
+                              Position.new(2,0), Position.new(1,2)
+      second = LinearRing.new Position.new(2,3), Position.new(4,3),
+                              Position.new(3,1), Position.new(2,3)
+
+      result = PolyRings.new [first, second]
+
+      result[0].should eq LinearRing.new Position.new(1,2), Position.new(3,2),
+                                         Position.new(2,0), Position.new(1,2)
+      result[1].should eq LinearRing.new Position.new(2,3), Position.new(4,3),
+                                         Position.new(3,1), Position.new(2,3)
+    end
+  end
+
+  describe "#from_json" do
+    it "returns PolyRings corresponding to the json" do
+      first  = LinearRing.new Position.new(1,2), Position.new(3,2),
+                              Position.new(2,0), Position.new(1,2)
+      second = LinearRing.new Position.new(2,3), Position.new(4,3),
+                              Position.new(3,1), Position.new(2,3)
+
+      polyrings = PolyRings.from_json %([[[1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]],[[2.0,3.0],[4.0,3.0],[3.0,1.0],[2.0,3.0]]])
+      reference = PolyRings.new first, second
+
+      polyrings.should eq reference
+    end
+  end
+
+  describe "#to_json" do
+    it "returns accurate geoJSON" do
+      first  = LinearRing.new Position.new(1,2), Position.new(3,2),
+                              Position.new(2,0), Position.new(1,2)
+      second = LinearRing.new Position.new(2,3), Position.new(4,3),
+                              Position.new(3,1), Position.new(2,3)
+
+      polyrings = PolyRings.new first, second
+
+      polyrings.to_json.should eq %([[[1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]],[[2.0,3.0],[4.0,3.0],[3.0,1.0],[2.0,3.0]]])
     end
   end
 end

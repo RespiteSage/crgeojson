@@ -118,7 +118,7 @@ module GeoJSON
     include JSON::Serializable
 
     getter type : String = "Polygon"
-    getter coordinates : Array(LinearRing)
+    getter coordinates : PolyRings
 
     def initialize(*points : Position)
       begin
@@ -136,12 +136,16 @@ module GeoJSON
       rescue ex
         raise ex
       end
-      
-      @coordinates = Array(LinearRing).new.push(ring)
+
+      @coordinates = PolyRings.new ring
     end
 
     def initialize(*rings : LinearRing)
-      @coordinates = rings.to_a
+      @coordinates = PolyRings.new *rings
+    end
+
+    def initialize(coordinates : PolyRings)
+      @coordinates = coordinates
     end
 
     def [](index)
@@ -151,6 +155,24 @@ module GeoJSON
     def exterior
       coordinates[0]
     end
+  end
+
+  class MultiPolygon < Geometry
+    include JSON::Serializable
+
+    getter type : String = "MultiPolygon"
+    getter coordinates : Array(PolyRings)
+
+    def initialize(*polygons : Polygon)
+      @coordinates = polygons.map { |polygon| polygon.coordinates}.to_a
+    end
+
+    def [](index : Int)
+      Polygon.new coordinates[index]
+    end
+
+
+
   end
 
 end

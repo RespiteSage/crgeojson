@@ -329,3 +329,57 @@ describe Polygon do
     end
   end
 end
+
+describe MultiPolygon do
+  describe ".new" do
+    it "creates a new multipolygon with the given polygons" do
+      first  = Position.new 0,0
+      second = Position.new 1,0
+      third  = Position.new 0,1
+
+      polygon_one = Polygon.new first, second, third
+      polygon_two = Polygon.new second, first, third
+
+      multipolygon = MultiPolygon.new polygon_one, polygon_two
+
+      multipolygon[0].should eq Polygon.new first, second, third
+      multipolygon[1].should eq Polygon.new second, first, third
+    end
+  end
+
+  describe "#type" do
+    it %(returns "MultiPolygon") do
+      polygon = Polygon.new Position.new(0,0), Position.new(1,0), Position.new(0,1)
+
+      multipolygon = MultiPolygon.new polygon
+
+      multipolygon.type.should eq "MultiPolygon"
+    end
+  end
+
+  describe "#to_json" do
+    it "returns accurate geoJSON" do
+      first  = Polygon.new Position.new(0,0), Position.new(0,1), Position.new(1,0)
+      second = Polygon.new Position.new(0,2), Position.new(0,3), Position.new(1,2)
+
+      multipolygon = MultiPolygon.new first, second
+
+      reference_json = %({"type":"MultiPolygon","coordinates":[[[[0.0,0.0],[0.0,1.0],[1.0,0.0],[0.0,0.0]]],[[[0.0,2.0],[0.0,3.0],[1.0,2.0],[0.0,2.0]]]]})
+
+      multipolygon.to_json.should eq reference_json
+    end
+  end
+
+  describe "#from_json" do
+    it "creates a MultiPolygon matching the json" do
+      result = MultiPolygon.from_json %({"type":"MultiPolygon","coordinates":[[[[0.0,0.0],[0.0,1.0],[1.0,0.0],[0.0,0.0]]],[[[0.0,2.0],[0.0,3.0],[1.0,2.0],[0.0,2.0]]]]})
+
+      first  = Polygon.new Position.new(0,0), Position.new(0,1), Position.new(1,0)
+      second = Polygon.new Position.new(0,2), Position.new(0,3), Position.new(1,2)
+
+      reference = MultiPolygon.new first, second
+
+      result.should eq reference
+    end
+  end
+end
