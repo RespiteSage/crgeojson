@@ -75,7 +75,7 @@ module GeoJSON
       @coordinates = points.to_a
     end
 
-    def [](index : Int32 | Int64)
+    def [](index : Int)
       coordinates[index]
     end
   end
@@ -90,7 +90,7 @@ module GeoJSON
       @coordinates = points.to_a
     end
 
-    def [](index : Int32 | Int64)
+    def [](index : Int)
       coordinates[index]
     end
   end
