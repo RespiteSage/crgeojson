@@ -1,5 +1,7 @@
 require "./spec_helper"
 
+# TODO: change testing to be insensitive of object (not array) order
+
 describe Geometry do
   describe "#from_json" do
     it "rejects invalid geometry type" do
