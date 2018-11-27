@@ -84,10 +84,10 @@ module GeoJSON
     include JSON::Serializable
 
     getter type : String = "LineString"
-    getter coordinates : Array(Position)
+    getter coordinates : LineStringCoordinates
 
     def initialize(*points : Position)
-      @coordinates = points.to_a
+      @coordinates = LineStringCoordinates.new *points
     end
 
     def [](index : Int)

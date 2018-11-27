@@ -144,11 +144,19 @@ describe LineString do
       linestring[0].should eq Position.new(10.0, 15.0)
       linestring[1].should eq Position.new(20.0, 25.0)
     end
+
+    it "rejects fewer than two points" do
+      point = Position.new 10.0, 15.0
+
+      expect_raises(Exception, "LineString must have two or more points!") do
+        linestring = LineString.new point
+      end
+    end
   end
 
   describe "#type" do
     it %(returns "LineString") do
-      linestring = LineString.new Position.new(0,0)
+      linestring = LineString.new Position.new(0,0), Position.new(1,0)
 
       linestring.type.should eq "LineString"
     end
