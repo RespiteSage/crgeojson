@@ -43,6 +43,10 @@ module GeoJSON
       coordinates == other.coordinates
     end
 
+    def [](index : Int)
+      coordinates[index]
+    end
+
     macro inherited
       def self.from_json(json)
         # yes, this is copied from Object; I'm not sure how else to do it
@@ -82,10 +86,6 @@ module GeoJSON
     def initialize(coordinates : LineStringCoordinates)
       @coordinates = coordinates
     end
-
-    def [](index : Int)
-      coordinates[index]
-    end
   end
 
   class Polygon < Geometry
@@ -120,10 +120,6 @@ module GeoJSON
 
     def initialize(coordinates : PolyRings)
       @coordinates = coordinates
-    end
-
-    def [](index)
-      coordinates[index]
     end
 
     def exterior
