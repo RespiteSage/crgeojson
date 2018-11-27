@@ -5,7 +5,21 @@ module GeoJSON
   class MalformedCoordinateException < Exception
   end
 
-  class Position
+  abstract class Coordinates
+    abstract def coordinates : Array(T)
+
+    def ==(other : self)
+      coordinates == other.coordinates
+    end
+
+    def [](index : Int)
+      coordinates[index]
+    end
+
+    delegate to_json, to: coordinates
+  end
+
+  class Position < Coordinates
 
     getter coordinates : Array(Float64)
 
@@ -24,15 +38,9 @@ module GeoJSON
     def lat
       coordinates[1]
     end
-
-    def ==(other : Position)
-      coordinates == other.coordinates
-    end
-
-    delegate to_json, to: coordinates
   end
 
-  class LineStringCoordinates
+  class LineStringCoordinates < Coordinates
     # TODO: give this a better name
 
     getter coordinates : Array(Position)
@@ -52,17 +60,6 @@ module GeoJSON
     def initialize(parser : JSON::PullParser)
       @coordinates = Array(Position).new(parser)
     end
-
-    def [](index : Int)
-      coordinates[index]
-    end
-
-    def ==(other : self)
-      coordinates == other.coordinates
-    end
-
-    delegate to_json, to: coordinates
-
   end
 
   class LinearRing < LineStringCoordinates
@@ -87,7 +84,7 @@ module GeoJSON
     end
   end
 
-  class PolyRings
+  class PolyRings < Coordinates
 
     getter coordinates : Array(LinearRing)
 
@@ -102,17 +99,6 @@ module GeoJSON
     def initialize(parser : JSON::PullParser)
       @coordinates = Array(LinearRing).new(parser)
     end
-
-    def [](index : Int)
-      coordinates[index]
-    end
-
-    def ==(other : self)
-      coordinates == other.coordinates
-    end
-
-    delegate to_json, to: coordinates
-
   end
 
 end
