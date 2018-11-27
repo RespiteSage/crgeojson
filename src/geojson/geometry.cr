@@ -62,22 +62,11 @@ module GeoJSON
       @coordinates = Position.new lon.to_f64, lat.to_f64
     end
 
+    def initialize(coordinates : Position)
+      @coordinates = coordinates
+    end
+
     delegate lon, lat, to: coordinates
-  end
-
-  class MultiPoint < Geometry
-    include JSON::Serializable
-
-    getter type : String = "MultiPoint"
-    getter coordinates : Array(Position)
-
-    def initialize(*points : Position)
-      @coordinates = points.to_a
-    end
-
-    def [](index : Int)
-      coordinates[index]
-    end
   end
 
   class LineString < Geometry
@@ -96,21 +85,6 @@ module GeoJSON
 
     def [](index : Int)
       coordinates[index]
-    end
-  end
-
-  class MultiLineString < Geometry
-    include JSON::Serializable
-
-    getter type : String = "MultiLineString"
-    getter coordinates : Array(LineStringCoordinates)
-
-    def initialize(*linestrings : LineString)
-      @coordinates = linestrings.map { |linestring| linestring.coordinates}.to_a
-    end
-
-    def [](index : Int)
-      LineString.new coordinates[index]
     end
   end
 
@@ -155,24 +129,6 @@ module GeoJSON
     def exterior
       coordinates[0]
     end
-  end
-
-  class MultiPolygon < Geometry
-    include JSON::Serializable
-
-    getter type : String = "MultiPolygon"
-    getter coordinates : Array(PolyRings)
-
-    def initialize(*polygons : Polygon)
-      @coordinates = polygons.map { |polygon| polygon.coordinates}.to_a
-    end
-
-    def [](index : Int)
-      Polygon.new coordinates[index]
-    end
-
-
-
   end
 
 end
