@@ -20,6 +20,8 @@ module GeoJSON
 
   abstract class Geometry < Base
 
+    abstract def coordinates
+
     def self.from_json(json)
       parsed = JSON.parse json
       type_string = parsed["type"]?
@@ -35,6 +37,10 @@ module GeoJSON
       else
         raise "Type field invalid or missing!"
       end
+    end
+
+    def ==(other : self)
+      coordinates == other.coordinates
     end
 
     macro inherited
@@ -57,10 +63,6 @@ module GeoJSON
     end
 
     delegate lon, lat, to: coordinates
-
-    def ==(other : Point)
-      coordinates == other.coordinates
-    end
   end
 
   class MultiPoint < Geometry
@@ -76,15 +78,11 @@ module GeoJSON
     def [](index : Int32 | Int64)
       coordinates[index]
     end
-
-    def ==(other : MultiPoint)
-      coordinates == other.coordinates
-    end
   end
 
   class LineString < Geometry
     include JSON::Serializable
-    
+
     getter type : String = "LineString"
     getter coordinates : Array(Position)
 
@@ -94,10 +92,6 @@ module GeoJSON
 
     def [](index : Int32 | Int64)
       coordinates[index]
-    end
-
-    def ==(other : LineString)
-      coordinates == other.coordinates
     end
   end
 
