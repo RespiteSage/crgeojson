@@ -121,12 +121,27 @@ module GeoJSON
     getter coordinates : Array(LinearRing)
 
     def initialize(*points : Position)
-      if points.first == points.last
-        ring = LinearRing.new *points
-      else
-        ring = LinearRing.new points.to_a.push(points.first)
+      begin
+        if points.first == points.last
+          ring = LinearRing.new *points
+        else
+          ring = LinearRing.new points.to_a.push(points.first)
+        end
+      rescue ex_mal : MalformedCoordinateException
+        if ex_mal.message == "LinearRing must have four or more points!"
+          raise MalformedCoordinateException.new("Polygon must have three or more points!")
+        else
+          raise ex_mal
+        end
+      rescue ex
+        raise ex
       end
+      
       @coordinates = Array(LinearRing).new.push(ring)
+    end
+
+    def initialize(*rings : LinearRing)
+      @coordinates = rings.to_a
     end
 
     def [](index)

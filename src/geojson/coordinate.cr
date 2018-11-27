@@ -2,6 +2,9 @@ require "json"
 
 module GeoJSON
 
+  class MalformedCoordinateException < Exception
+  end
+
   class Position
 
     getter coordinates : Array(Float64)
@@ -38,7 +41,7 @@ module GeoJSON
       unless points.size < 2
         @coordinates = points
       else
-        raise "LineString must have two or more points!"
+        raise MalformedCoordinateException("LineString must have two or more points!")
       end
     end
 
@@ -69,9 +72,9 @@ module GeoJSON
       if points.size >= 4 && points.first == points.last
         @coordinates = points
       elsif points.size >= 4
-        raise "LinearRing must have matching first and last points!"
+        raise MalformedCoordinateException.new("LinearRing must have matching first and last points!")
       else
-        raise "LinearRing must have four or more points!"
+        raise MalformedCoordinateException.new("LinearRing must have four or more points!")
       end
     end
 
