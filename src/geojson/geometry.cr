@@ -2,40 +2,36 @@ require "json"
 
 module GeoJSON
 
-  enum GeometryTypes
-    Point
-    MultiPoint
-    LineString
-    MultiLineString
-    Polygon
-    MultiPolygon
-    GeometryCollection
-
-    def self.from_s(type_string : String)
-      GeometryTypes.values.find { |type|
-        type.to_s == type_string
-      }
-    end
-  end
-
   abstract class Geometry < Base
 
     abstract def coordinates
 
-    def self.from_json(json)
-      parsed = JSON.parse json
-      type_string = parsed["type"]?
-      type_string = type_string.as_s? unless type_string.nil?
+    def self.new(pull : JSON::PullParser)
+      Geometry.from_json(pull.read_raw)
+    end
 
-      if type_string
-        case GeometryTypes.from_s type_string
-        when .nil?
-          raise "Invalid geometry type!"
-        when .point?
-          Point.from_json json
-        end
+    def Geometry.from_json(geometry_json)
+      parsed = JSON.parse geometry_json
+      type_string = parsed["type"]?
+
+      if type_string.nil?
+        raise "Type field missing!"
+      end
+
+      type_string = type_string.as_s?
+
+      if type_string.nil?
+        raise "Type field is not a string!"
+      end
+
+      geometry_types = [Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon]
+
+      klass = geometry_types.find { |k| k.name == "GeoJSON::#{type_string}" }
+
+      if klass.nil?
+        raise %(Invalid geometry type "#{type_string}"!)
       else
-        raise "Type field invalid or missing!"
+        klass.from_json geometry_json
       end
     end
 
@@ -124,6 +120,25 @@ module GeoJSON
 
     def exterior
       coordinates[0]
+    end
+  end
+
+  class GeometryCollection < Base
+    include JSON::Serializable
+
+    getter type : String = "GeometryCollection"
+    getter geometries : Array(Geometry)
+
+    def initialize(*geometries : Geometry)
+      @geometries = Array(Geometry).new.push(*geometries)
+    end
+
+    def [](index : Int)
+      geometries[index]
+    end
+
+    def ==(other : self)
+      geometries = other.geometries
     end
   end
 

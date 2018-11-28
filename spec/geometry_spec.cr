@@ -5,13 +5,13 @@ require "./spec_helper"
 describe Geometry do
   describe "#from_json" do
     it "rejects invalid geometry type" do
-      expect_raises(Exception, "Invalid geometry type!") do
+      expect_raises(Exception, %(Invalid geometry type "Sphere"!)) do
         Geometry.from_json %({"type":"Sphere"})
       end
     end
 
     it "rejects missing type string" do
-      expect_raises(Exception, "Type field invalid or missing!") do
+      expect_raises(Exception, "Type field missing!") do
         Geometry.from_json %({"kind":"Sphere"})
       end
     end
@@ -22,8 +22,7 @@ describe Geometry do
                           %({"type":"LineString","coordinates":[[0,0],[0,1]]}),
                           %({"type":"MultiLineString","coordinates":[[[0,0],[0,1]],[[1,0],[0,1]]]}),
                           %({"type":"Polygon","coordinates":[[[0,0],[1,0],[0,1],[0,0]]]}),
-                          %({"type":"MultiPolygon","coordinates":[[[[0,0],[0,1],[1,0],[0,0]]]]}),
-                          %({"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[0,0]}]})]
+                          %({"type":"MultiPolygon","coordinates":[[[[0,0],[0,1],[1,0],[0,0]]]]})]
 
       geometry_strings.each do |json|
         Geometry.from_json json
@@ -221,6 +220,52 @@ describe Polygon do
       polygon = Polygon.new outer_ring, inner_ring
 
       polygon.exterior.should eq outer_ring
+    end
+  end
+end
+
+describe GeometryCollection do
+  describe ".new" do
+    it "creates a new geometry collection with the given geometries" do
+      first  = Point.new 1, 5
+      second = LineString.new Position.new(2,7), Position.new(3,1)
+
+      collection = GeometryCollection.new first, second
+
+      collection[0].should eq Point.new(1,5)
+      collection[1].should eq LineString.new Position.new(2,7), Position.new(3,1)
+    end
+  end
+
+  describe "#type" do
+    it %(returns "GeometryCollection") do
+      collection = GeometryCollection.new Point.new(0,0)
+
+      collection.type.should eq "GeometryCollection"
+    end
+  end
+
+  describe "#to_json" do
+    it "returns accurate geoJSON" do
+      first  = Point.new 1, 5
+      second = LineString.new Position.new(2,7), Position.new(3,1)
+
+      collection = GeometryCollection.new first, second
+
+      collection.to_json.should eq %({"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[1.0,5.0]},{"type":"LineString","coordinates":[[2.0,7.0],[3.0,1.0]]}]})
+    end
+  end
+
+  describe "#from_json" do
+    it "creates a GeometryCollection matching the json" do
+      result = GeometryCollection.from_json %({"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[1.0,5.0]},{"type":"LineString","coordinates":[[2.0,7.0],[3.0,1.0]]}]})
+
+      first  = Point.new 1, 5
+      second = LineString.new Position.new(2,7), Position.new(3,1)
+
+      reference = GeometryCollection.new first, second
+
+      result.should eq reference
     end
   end
 end
