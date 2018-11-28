@@ -3,12 +3,14 @@ require "json"
 module GeoJSON
 
   private abstract class MultiGeometry(T, U) < Geometry
-    include JSON::Serializable
-
     abstract def coordinates : Array(T)
 
     def [](index : Int)
       U.new coordinates[index]
+    end
+
+    macro inherited
+      include JSON::Serializable
     end
   end
 
