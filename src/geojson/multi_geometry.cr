@@ -2,42 +2,42 @@ require "json"
 
 module GeoJSON
 
-  private abstract class MultiGeometry(T, U) < Geometry
-    abstract def coordinates : Array(T)
-
-    def [](index : Int)
-      U.new coordinates[index]
-    end
-
-    macro inherited
-      include JSON::Serializable
-    end
-  end
-
-  class MultiPoint < MultiGeometry(Position, Point)
+  class MultiPoint < Geometry
     getter type : String = "MultiPoint"
     getter coordinates : Array(Position)
 
     def initialize(*points : Position)
       @coordinates = points.to_a
     end
+
+    def [](index : Int)
+      Point.new coordinates[index]
+    end
   end
 
-  class MultiLineString < MultiGeometry(LineStringCoordinates, LineString)
+  class MultiLineString < Geometry
     getter type : String = "MultiLineString"
     getter coordinates : Array(LineStringCoordinates)
 
     def initialize(*linestrings : LineString)
       @coordinates = linestrings.map { |linestring| linestring.coordinates}.to_a
     end
+
+    def [](index : Int)
+      LineString.new coordinates[index]
+    end
   end
 
-  class MultiPolygon < MultiGeometry(PolyRings, Polygon)
+  class MultiPolygon < Geometry
     getter type : String = "MultiPolygon"
     getter coordinates : Array(PolyRings)
 
     def initialize(*polygons : Polygon)
       @coordinates = polygons.map { |polygon| polygon.coordinates}.to_a
+    end
+
+    def [](index : Int)
+      Polygon.new coordinates[index]
     end
   end
 

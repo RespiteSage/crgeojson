@@ -44,6 +44,8 @@ module GeoJSON
     end
 
     macro inherited
+      include JSON::Serializable
+
       def self.from_json(json)
         # yes, this is copied from Object; I'm not sure how else to do it
         parser = JSON::PullParser.new json
@@ -53,8 +55,6 @@ module GeoJSON
   end
 
   class Point < Geometry
-    include JSON::Serializable
-
     getter type : String = "Point"
     getter coordinates : Position
 
@@ -70,8 +70,6 @@ module GeoJSON
   end
 
   class LineString < Geometry
-    include JSON::Serializable
-
     getter type : String = "LineString"
     getter coordinates : LineStringCoordinates
 
@@ -85,8 +83,6 @@ module GeoJSON
   end
 
   class Polygon < Geometry
-    include JSON::Serializable
-
     getter type : String = "Polygon"
     getter coordinates : PolyRings
 
