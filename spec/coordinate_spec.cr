@@ -5,22 +5,22 @@ describe Position do
     it "properly sets the longitude and latitude" do
       result = Position.new 15.0, 10.0
 
-      result.lon.should eq 15.0
-      result.lat.should eq 10.0
+      result.longitude.should eq 15.0
+      result.latitude.should eq 10.0
     end
 
     it "accepts integers" do
       result = Position.new 15, 10
 
-      result.lon.should eq 15.0
-      result.lat.should eq 10.0
+      result.longitude.should eq 15.0
+      result.latitude.should eq 10.0
     end
 
     it "properly sets coordinates with an altivation" do
       result = Position.new 12.0, 41.0, 300.0
 
-      result.lon.should eq 12.0
-      result.lat.should eq 41.0
+      result.longitude.should eq 12.0
+      result.latitude.should eq 41.0
       result.altivation.should eq 300.0
     end
   end

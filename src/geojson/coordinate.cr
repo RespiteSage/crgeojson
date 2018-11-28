@@ -35,11 +35,11 @@ module GeoJSON
       @coordinates = Array(Float64).new(parser)
     end
 
-    def lon
+    def longitude
       coordinates[0]
     end
 
-    def lat
+    def latitude
       coordinates[1]
     end
 

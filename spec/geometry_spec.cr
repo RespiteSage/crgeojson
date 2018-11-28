@@ -51,8 +51,8 @@ describe Point do
     it "creates a new point with the given coordinates" do
       point = Point.new 10.0, 15.0
 
-      point.lon.should eq 10.0
-      point.lat.should eq 15.0
+      point.longitude.should eq 10.0
+      point.latitude.should eq 15.0
     end
 
     it "takes integer arguments" do
@@ -62,8 +62,8 @@ describe Point do
     it "creates a point with coordinates and altivation" do
       point = Point.new 12.0, 41.0, 300.0
 
-      point.lon.should eq 12.0
-      point.lat.should eq 41.0
+      point.longitude.should eq 12.0
+      point.latitude.should eq 41.0
       point.altivation.should eq 300.0
     end
   end

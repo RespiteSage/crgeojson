@@ -66,7 +66,7 @@ module GeoJSON
       @coordinates = coordinates
     end
 
-    delegate lon, lat, altivation, to: coordinates
+    delegate longitude, latitude, altivation, to: coordinates
   end
 
   class LineString < Geometry
