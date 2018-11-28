@@ -15,6 +15,14 @@ describe Position do
       result.lon.should eq 15.0
       result.lat.should eq 10.0
     end
+
+    it "properly sets coordinates with an altivation" do
+      result = Position.new 12.0, 41.0, 300.0
+
+      result.lon.should eq 12.0
+      result.lat.should eq 41.0
+      result.altivation.should eq 300.0
+    end
   end
 
   describe "#from_json" do

@@ -58,6 +58,14 @@ describe Point do
     it "takes integer arguments" do
       point = Point.new 10, 15
     end
+
+    it "creates a point with coordinates and altivation" do
+      point = Point.new 12.0, 41.0, 300.0
+
+      point.lon.should eq 12.0
+      point.lat.should eq 41.0
+      point.altivation.should eq 300.0
+    end
   end
 
   describe "#type" do

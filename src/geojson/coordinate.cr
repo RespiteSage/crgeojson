@@ -6,7 +6,7 @@ module GeoJSON
   end
 
   abstract class Coordinates
-    abstract def coordinates : Array(T)
+    abstract def coordinates : Array
 
     def ==(other : self)
       coordinates == other.coordinates
@@ -23,8 +23,12 @@ module GeoJSON
 
     getter coordinates : Array(Float64)
 
-    def initialize(longitude, latitude)
-      @coordinates = [longitude.to_f64, latitude.to_f64]
+    def initialize(longitude, latitude, altivation = nil)
+      unless altivation.nil?
+        @coordinates = [longitude.to_f64, latitude.to_f64, altivation.to_f64]
+      else
+        @coordinates = [longitude.to_f64, latitude.to_f64]
+      end
     end
 
     def initialize(parser : JSON::PullParser)
@@ -38,6 +42,11 @@ module GeoJSON
     def lat
       coordinates[1]
     end
+
+    def altivation
+      coordinates[2]?
+    end
+
   end
 
   class LineStringCoordinates < Coordinates

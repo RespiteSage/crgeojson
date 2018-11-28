@@ -58,15 +58,15 @@ module GeoJSON
     getter type : String = "Point"
     getter coordinates : Position
 
-    def initialize(lon, lat)
-      @coordinates = Position.new lon.to_f64, lat.to_f64
+    def initialize(lon, lat, altivation = nil)
+      @coordinates = Position.new lon, lat, altivation
     end
 
     def initialize(coordinates : Position)
       @coordinates = coordinates
     end
 
-    delegate lon, lat, to: coordinates
+    delegate lon, lat, altivation, to: coordinates
   end
 
   class LineString < Geometry
