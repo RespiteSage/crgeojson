@@ -6,8 +6,8 @@ module GeoJSON
     getter type : String = "MultiPoint"
     getter coordinates : Array(Position)
 
-    def initialize(*points : Position)
-      @coordinates = points.to_a
+    def initialize(*points : Point)
+      @coordinates = points.map { |point| point.coordinates }.to_a
     end
 
     def [](index : Int)
