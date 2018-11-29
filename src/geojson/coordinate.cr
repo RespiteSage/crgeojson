@@ -50,8 +50,6 @@ module GeoJSON
   end
 
   class LineStringCoordinates < Coordinates
-    # TODO: give this a better name
-
     getter coordinates : Array(Position)
 
     def initialize(points : Array(Position))
@@ -72,8 +70,6 @@ module GeoJSON
   end
 
   class LinearRing < LineStringCoordinates
-    # TODO: implement right-hand rule checking
-
     def initialize(points : Array(Position))
       if points.size >= 4 && points.first == points.last
         @coordinates = points
