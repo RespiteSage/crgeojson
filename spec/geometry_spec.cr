@@ -25,20 +25,58 @@ describe Geometry do
       geometry_strings.each do |json|
         Geometry.from_json json
       end
+    end
 
-      it "returns a Point for a point string" do
-        result = Geometry.from_json %({"type":"Point","coordinates":[0,0]})
+    it "returns the correct Point for a point string" do
+      result = Geometry.from_json %({"type":"Point","coordinates":[10,15]})
 
-        result.should be_a Point
-      end
+      reference = Point.new 10, 15
 
-      it "returns the correct Point for a point string" do
-        result = Geometry.from_json %({"type":"Point","coordinates":[10,15]})
+      result.should eq reference
+    end
 
-        reference = Point.new 10, 15
+    it "returns the correct MultiPoint for a multipoint string" do
+      result = Geometry.from_json %({"type":"MultiPoint","coordinates":[[10.0,15.0],[20.0,25.0]]})
 
-        result.should eq reference
-      end
+      reference = MultiPoint.new Point.new(10,15), Point.new(20,25)
+
+      result.should eq reference
+    end
+
+    it "returns the correct LineString for a linestring string" do
+      result = Geometry.from_json %({"type":"LineString","coordinates":[[10.0,15.0],[20.0,25.0]]})
+
+      reference = LineString.new Position.new(10,15), Position.new(20,25)
+
+      result.should eq reference
+    end
+
+    it "returns the correct MultiLineString for a multilinestring string" do
+      result = Geometry.from_json %({"type":"MultiLineString","coordinates":[[[0.0,0.0],[0.0,1.0]],[[1.0,0.0],[0.0,1.0]]]})
+
+      first  = LineString.new Position.new(0,0), Position.new(0,1)
+      second = LineString.new Position.new(1,0), Position.new(0,1)
+      reference = MultiLineString.new first, second
+
+      result.should eq reference
+    end
+
+    it "returns the correct Polygon for a polygon string" do
+      result = Geometry.from_json %({"type":"Polygon","coordinates":[[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]]})
+
+      reference = Polygon.new Position.new(0,0), Position.new(1,0), Position.new(0,1)
+
+      result.should eq reference
+    end
+
+    it "returns the correct MultiPolygon for a multipolygon string" do
+      result = Geometry.from_json %({"type":"MultiPolygon","coordinates":[[[[0.0,0.0],[0.0,1.0],[1.0,0.0],[0.0,0.0]]],[[[0.0,2.0],[0.0,3.0],[1.0,2.0],[0.0,2.0]]]]})
+
+      first  = Polygon.new Position.new(0,0), Position.new(0,1), Position.new(1,0)
+      second = Polygon.new Position.new(0,2), Position.new(0,3), Position.new(1,2)
+      reference = MultiPolygon.new first, second
+
+      result.should eq reference
     end
   end
 
