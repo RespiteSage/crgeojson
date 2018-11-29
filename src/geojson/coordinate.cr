@@ -72,7 +72,7 @@ module GeoJSON
       raise_if_invalid
     end
 
-    def raise_if_invalid
+    private def raise_if_invalid
       if coordinates.size < 2
         raise MalformedCoordinateException.new("LineString must have two or more points!")
       end
@@ -96,7 +96,7 @@ module GeoJSON
       raise_if_invalid
     end
 
-    def raise_if_invalid
+    private def raise_if_invalid
       if coordinates.size < 4
         raise MalformedCoordinateException.new("LinearRing must have four or more points!")
       end
