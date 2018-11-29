@@ -66,6 +66,10 @@ module GeoJSON
       @coordinates = coordinates
     end
 
+    def initialize(coordinates : Array(Number))
+      @coordinates = Position.new coordinates
+    end
+
     delegate longitude, latitude, altivation, to: coordinates
   end
 
@@ -80,18 +84,22 @@ module GeoJSON
     def initialize(coordinates : LineStringCoordinates)
       @coordinates = coordinates
     end
+
+    def initialize(*points : Array(Number))
+      @coordinates = LineStringCoordinates.new *points
+    end
   end
 
   class Polygon < Geometry
     getter type : String = "Polygon"
     getter coordinates : PolyRings
 
-    def initialize(*points : Position)
+    def initialize(points : Array(Position))
       begin
         if points.first == points.last
-          ring = LinearRing.new *points
+          ring = LinearRing.new points
         else
-          ring = LinearRing.new points.to_a.push(points.first)
+          ring = LinearRing.new points.push(points.first)
         end
       rescue ex_mal : MalformedCoordinateException
         if ex_mal.message == "LinearRing must have four or more points!"
@@ -106,12 +114,20 @@ module GeoJSON
       @coordinates = PolyRings.new ring
     end
 
+    def initialize(*points : Position)
+      initialize points.to_a
+    end
+
     def initialize(*rings : LinearRing)
       @coordinates = PolyRings.new *rings
     end
 
     def initialize(coordinates : PolyRings)
       @coordinates = coordinates
+    end
+
+    def initialize(*points : Array(Number))
+      initialize *points.map { |point| Position.new point }
     end
 
     def exterior

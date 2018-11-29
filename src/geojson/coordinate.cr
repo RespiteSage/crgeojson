@@ -31,12 +31,16 @@ module GeoJSON
       end
     end
 
+    def initialize(coordinates : Array(Number))
+      @coordinates = coordinates.map { |number| number.to_f64 }
+
+      raise_if_invalid
+    end
+
     def initialize(parser : JSON::PullParser)
       @coordinates = Array(Float64).new(parser)
 
-      if coordinates.size < 2 || coordinates.size > 3
-        raise MalformedCoordinateException.new "Position must have two or three coordinates!"
-      end
+      raise_if_invalid
     end
 
     def longitude
@@ -51,6 +55,11 @@ module GeoJSON
       coordinates[2]?
     end
 
+    private def raise_if_invalid
+      if coordinates.size < 2 || coordinates.size > 3
+        raise MalformedCoordinateException.new "Position must have two or three coordinates!"
+      end
+    end
   end
 
   class LineStringCoordinates < Coordinates
@@ -64,6 +73,16 @@ module GeoJSON
 
     def initialize(*points : Position)
       initialize points.to_a
+    end
+
+    def initialize(arrays : Array(Array))
+      @coordinates = arrays.map { |array| Position.new(array)}
+
+      raise_if_invalid
+    end
+
+    def initialize(*arrays : Array)
+      initialize arrays.to_a
     end
 
     def initialize(parser : JSON::PullParser)
@@ -96,6 +115,14 @@ module GeoJSON
       raise_if_invalid
     end
 
+    def initialize(arrays : Array(Array))
+      super
+    end
+
+    def initialize(*arrays : Array)
+      super
+    end
+
     private def raise_if_invalid
       if coordinates.size < 4
         raise MalformedCoordinateException.new("LinearRing must have four or more points!")
@@ -117,6 +144,14 @@ module GeoJSON
 
     def initialize(*rings : LinearRing)
       initialize rings.to_a
+    end
+
+    def initialize(arrays : Array(Array))
+      @coordinates = arrays.map { |array| LinearRing.new array }
+    end
+
+    def initialize(*arrays : Array)
+      initialize arrays.to_a
     end
 
     def initialize(parser : JSON::PullParser)

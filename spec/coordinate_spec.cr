@@ -23,6 +23,26 @@ describe Position do
       result.latitude.should eq 41.0
       result.altivation.should eq 300.0
     end
+
+    it "works with an array of floats" do
+      result = Position.new [17.0, 19.0, 23.0]
+
+      result.longitude.should eq 17.0
+      result.latitude.should eq 19.0
+      result.altivation.should eq 23.0
+    end
+
+    it "raises for an array with only one value" do
+      expect_raises(MalformedCoordinateException,"Position must have two or three coordinates!") do
+        Position.new [10.0]
+      end
+    end
+
+    it "raises for an array with more than three values" do
+      expect_raises(MalformedCoordinateException,"Position must have two or three coordinates!") do
+        Position.new [10.0, 15.0, 20.0, 25.0]
+      end
+    end
   end
 
   describe "#from_json" do
@@ -83,6 +103,24 @@ describe LineStringCoordinates do
 
       result[0].should eq Position.new 1.0, 2.0
       result[1].should eq Position.new 3.0, 2.0
+    end
+
+    it "works properly with an array of arrays of floats" do
+      result = LineStringCoordinates.new [[1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]]
+
+      result[0].should eq Position.new(1,2)
+      result[1].should eq Position.new(3,2)
+      result[2].should eq Position.new(2,0)
+      result[3].should eq Position.new(1,2)
+    end
+
+    it "works properly with multiple arrays of floats" do
+      result = LineStringCoordinates.new [1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]
+
+      result[0].should eq Position.new(1,2)
+      result[1].should eq Position.new(3,2)
+      result[2].should eq Position.new(2,0)
+      result[3].should eq Position.new(1,2)
     end
   end
 
@@ -166,6 +204,24 @@ describe LinearRing do
       result[2].should eq Position.new 2, 0
       result[3].should eq Position.new 1, 2
     end
+
+    it "works properly with an array of arrays of floats" do
+      result = LinearRing.new [[1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]]
+
+      result[0].should eq Position.new(1,2)
+      result[1].should eq Position.new(3,2)
+      result[2].should eq Position.new(2,0)
+      result[3].should eq Position.new(1,2)
+    end
+
+    it "works properly with multiple arrays of floats" do
+      result = LinearRing.new [1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]
+
+      result[0].should eq Position.new(1,2)
+      result[1].should eq Position.new(3,2)
+      result[2].should eq Position.new(2,0)
+      result[3].should eq Position.new(1,2)
+    end
   end
 
   describe "#from_json" do
@@ -231,6 +287,40 @@ describe PolyRings do
                               Position.new(3,1), Position.new(2,3)
 
       result = PolyRings.new [first, second]
+
+      result[0].should eq LinearRing.new Position.new(1,2), Position.new(3,2),
+                                         Position.new(2,0), Position.new(1,2)
+      result[1].should eq LinearRing.new Position.new(2,3), Position.new(4,3),
+                                         Position.new(3,1), Position.new(2,3)
+    end
+
+    it "works properly with an array of arrays of positions" do
+      first  = [Position.new(1.0,2.0), Position.new(3.0,2.0),
+                Position.new(2.0,0.0), Position.new(1.0,2.0)]
+      second = [Position.new(2.0,3.0), Position.new(4.0,3.0),
+                Position.new(3.0,1.0), Position.new(2.0,3.0)]
+
+      result = PolyRings.new [first, second]
+
+      result[0].should eq LinearRing.new Position.new(1,2), Position.new(3,2),
+                                         Position.new(2,0), Position.new(1,2)
+      result[1].should eq LinearRing.new Position.new(2,3), Position.new(4,3),
+                                         Position.new(3,1), Position.new(2,3)
+    end
+
+    it "works properly with an array of arrays of arrays of floats" do
+      result = PolyRings.new [[[1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]],
+                              [[2.0,3.0],[4.0,3.0],[3.0,1.0],[2.0,3.0]]]
+
+      result[0].should eq LinearRing.new Position.new(1,2), Position.new(3,2),
+                                         Position.new(2,0), Position.new(1,2)
+      result[1].should eq LinearRing.new Position.new(2,3), Position.new(4,3),
+                                         Position.new(3,1), Position.new(2,3)
+    end
+
+    it "works properly with multiple arrays of arrays of floats" do
+      result = PolyRings.new [[1.0,2.0], [3.0,2.0], [2.0,0.0], [1.0,2.0]],
+                             [[2.0,3.0], [4.0,3.0], [3.0,1.0], [2.0,3.0]]
 
       result[0].should eq LinearRing.new Position.new(1,2), Position.new(3,2),
                                          Position.new(2,0), Position.new(1,2)

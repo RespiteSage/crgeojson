@@ -102,6 +102,14 @@ describe Point do
       point.latitude.should eq 41.0
       point.altivation.should eq 300.0
     end
+
+    it "creates a point from an array" do
+      point = Point.new [12.0, 41.0, 300.0]
+
+      point.longitude.should eq 12.0
+      point.latitude.should eq 41.0
+      point.altivation.should eq 300.0
+    end
   end
 
   describe "#type" do
@@ -149,6 +157,13 @@ describe LineString do
       expect_raises(Exception, "LineString must have two or more points!") do
         linestring = LineString.new point
       end
+    end
+
+    it "creates a linestring from coordinate arrays" do
+      linestring = LineString.new [10.0, 15.0], [20.0, 25.0]
+
+      linestring[0].should eq Position.new(10.0, 15.0)
+      linestring[1].should eq Position.new(20.0, 25.0)
     end
   end
 
@@ -217,6 +232,30 @@ describe Polygon do
 
       polygon[0].should eq LinearRing.new(Position.new(0,0),Position.new(5,0),Position.new(0,5),Position.new(0,0))
       polygon[1].should eq LinearRing.new(Position.new(1,1),Position.new(1,2),Position.new(2,1),Position.new(1,1))
+    end
+
+    it "creates a new polygon with an array of points" do
+      first = Position.new 0,0
+      second = Position.new 1,0
+      third = Position.new 0,1
+
+      polygon = Polygon.new [first, second, third]
+
+      polygon.exterior[0].should eq Position.new 0,0
+      polygon.exterior[1].should eq Position.new 1,0
+      polygon.exterior[2].should eq Position.new 0,1
+    end
+
+    it "creates a new polygon from point arrays" do
+      first = Position.new 0,0
+      second = Position.new 1,0
+      third = Position.new 0,1
+
+      polygon = Polygon.new [0,0], [1,0], [0,1]
+
+      polygon.exterior[0].should eq Position.new 0,0
+      polygon.exterior[1].should eq Position.new 1,0
+      polygon.exterior[2].should eq Position.new 0,1
     end
   end
 
