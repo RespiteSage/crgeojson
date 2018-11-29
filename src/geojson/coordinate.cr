@@ -57,11 +57,9 @@ module GeoJSON
     getter coordinates : Array(Position)
 
     def initialize(points : Array(Position))
-      unless points.size < 2
-        @coordinates = points
-      else
-        raise MalformedCoordinateException.new("LineString must have two or more points!")
-      end
+      @coordinates = points
+
+      raise_if_invalid
     end
 
     def initialize(*points : Position)
@@ -71,6 +69,10 @@ module GeoJSON
     def initialize(parser : JSON::PullParser)
       @coordinates = Array(Position).new(parser)
 
+      raise_if_invalid
+    end
+
+    def raise_if_invalid
       if coordinates.size < 2
         raise MalformedCoordinateException.new("LineString must have two or more points!")
       end
@@ -79,13 +81,9 @@ module GeoJSON
 
   class LinearRing < LineStringCoordinates
     def initialize(points : Array(Position))
-      if points.size >= 4 && points.first == points.last
-        @coordinates = points
-      elsif points.size >= 4
-        raise MalformedCoordinateException.new("LinearRing must have matching first and last points!")
-      else
-        raise MalformedCoordinateException.new("LinearRing must have four or more points!")
-      end
+      @coordinates = points
+
+      raise_if_invalid
     end
 
     def initialize(*points : Position)
@@ -95,6 +93,10 @@ module GeoJSON
     def initialize(parser : JSON::PullParser)
       @coordinates = Array(Position).new(parser)
 
+      raise_if_invalid
+    end
+
+    def raise_if_invalid
       if coordinates.size < 4
         raise MalformedCoordinateException.new("LinearRing must have four or more points!")
       end
