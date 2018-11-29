@@ -1,4 +1,5 @@
 require "json"
+require "./coordinate"
 
 module GeoJSON
 
@@ -12,13 +13,13 @@ module GeoJSON
 
     def Geometry.from_json(geometry_json)
       parsed = JSON.parse geometry_json
-      type_string = parsed["type"]?
+      type_field = parsed["type"]?
 
-      if type_string.nil?
+      if type_field.nil?
         raise "Type field missing!"
       end
 
-      type_string = type_string.as_s?
+      type_string = type_field.as_s?
 
       if type_string.nil?
         raise "Type field is not a string!"
@@ -52,38 +53,37 @@ module GeoJSON
         new parser
       end
     end
+
+    macro coordinate_type(type, subtype=nil)
+      getter coordinates : {{type}}
+
+      def initialize(@coordinates : {{type}})
+      end
+
+      {% if subtype %}
+      def initialize(coordinates : Array({{subtype}}))
+        @coordinates = {{type}}.new coordinates
+      end
+
+      def initialize(*coordinates : {{subtype}})
+        initialize coordinates.to_a
+      end
+      {% end %}
+    end
   end
 
   class Point < Geometry
     getter type : String = "Point"
-    getter coordinates : Position
 
-    def initialize(lon, lat, altivation = nil)
-      @coordinates = Position.new lon, lat, altivation
-    end
-
-    def initialize(coordinates : Position)
-      @coordinates = coordinates
-    end
-
-    def initialize(coordinates : Array(Number))
-      @coordinates = Position.new coordinates
-    end
+    coordinate_type Position, subtype: Number
 
     delegate longitude, latitude, altivation, to: coordinates
   end
 
   class LineString < Geometry
     getter type : String = "LineString"
-    getter coordinates : LineStringCoordinates
 
-    def initialize(*points : Position)
-      @coordinates = LineStringCoordinates.new *points
-    end
-
-    def initialize(coordinates : LineStringCoordinates)
-      @coordinates = coordinates
-    end
+    coordinate_type LineStringCoordinates, subtype: Position
 
     def initialize(*points : Array(Number))
       @coordinates = LineStringCoordinates.new *points
@@ -92,7 +92,8 @@ module GeoJSON
 
   class Polygon < Geometry
     getter type : String = "Polygon"
-    getter coordinates : PolyRings
+
+    coordinate_type PolyRings, subtype: LinearRing
 
     def initialize(points : Array(Position))
       begin
@@ -116,14 +117,6 @@ module GeoJSON
 
     def initialize(*points : Position)
       initialize points.to_a
-    end
-
-    def initialize(*rings : LinearRing)
-      @coordinates = PolyRings.new *rings
-    end
-
-    def initialize(coordinates : PolyRings)
-      @coordinates = coordinates
     end
 
     def initialize(*points : Array(Number))
