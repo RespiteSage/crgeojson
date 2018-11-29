@@ -2,7 +2,7 @@ require "json"
 
 module GeoJSON
 
-  abstract class Base
+  private abstract class Base
     abstract def type : String
 
   end

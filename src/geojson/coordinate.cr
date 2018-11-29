@@ -5,7 +5,7 @@ module GeoJSON
   class MalformedCoordinateException < Exception
   end
 
-  abstract class Coordinates
+  private abstract class Coordinates
     abstract def coordinates : Array
 
     def ==(other : self)
