@@ -33,6 +33,10 @@ module GeoJSON
 
     def initialize(parser : JSON::PullParser)
       @coordinates = Array(Float64).new(parser)
+
+      if coordinates.size < 2 || coordinates.size > 3
+        raise MalformedCoordinateException.new "Position must have two or three coordinates!"
+      end
     end
 
     def longitude
@@ -66,6 +70,10 @@ module GeoJSON
 
     def initialize(parser : JSON::PullParser)
       @coordinates = Array(Position).new(parser)
+
+      if coordinates.size < 2
+        raise MalformedCoordinateException.new("LineString must have two or more points!")
+      end
     end
   end
 
@@ -86,6 +94,14 @@ module GeoJSON
 
     def initialize(parser : JSON::PullParser)
       @coordinates = Array(Position).new(parser)
+
+      if coordinates.size < 4
+        raise MalformedCoordinateException.new("LinearRing must have four or more points!")
+      end
+
+      if coordinates.first != coordinates.last
+        raise MalformedCoordinateException.new("LinearRing must have matching first and last points!")
+      end
     end
   end
 

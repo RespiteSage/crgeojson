@@ -32,6 +32,18 @@ describe Position do
 
       position.should eq reference
     end
+
+    it "raises for an array with only one value" do
+      expect_raises(MalformedCoordinateException,"Position must have two or three coordinates!") do
+        Position.from_json "[10.0]"
+      end
+    end
+
+    it "raises for an array with more than three values" do
+      expect_raises(MalformedCoordinateException,"Position must have two or three coordinates!") do
+        Position.from_json "[10.0, 15.0, 20.0, 25.0]"
+      end
+    end
   end
 
   describe "#to_json" do
@@ -83,6 +95,12 @@ describe LineStringCoordinates do
       reference = LineStringCoordinates.new first, second
 
       linestring.should eq reference
+    end
+
+    it "raises for fewer than two points" do
+      expect_raises(MalformedCoordinateException, "LineString must have two or more points!") do
+        LineStringCoordinates.from_json "[[1.0,2.0]]"
+      end
     end
   end
 
@@ -161,6 +179,18 @@ describe LinearRing do
       reference = LinearRing.new first, second, third, fourth
 
       linear_ring.should eq reference
+    end
+
+    it "raises for fewer than four points" do
+      expect_raises(Exception, "LinearRing must have four or more points!") do
+        LinearRing.from_json "[[0.0,0.0],[1.0,0.0],[0.0,0.0]]"
+      end
+    end
+
+    it "raises if the first and last point don't match" do
+      expect_raises(Exception, "LinearRing must have matching first and last points!") do
+        LinearRing.from_json "[[0.0,0.0],[1.0,0.0],[0.0,1.0],[-1.0,0.0]]"
+      end
     end
   end
 
