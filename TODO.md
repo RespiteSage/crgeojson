@@ -1,5 +1,6 @@
 # Project To-Do List
 
+## Necessary
 - Implement Features and FeatureCollections
 - Add methods to check if the LinearRings of a Polygon properly follow the
   right-hand rule and by default enforce this requirement ONLY on Polygons being
@@ -15,3 +16,6 @@
   GeometryCollection, not that it MUST not
 - Implement antimeridian cutting of existing Geometry objects
 - Handle coordinates around the poles
+
+## Potential
+- Allow geometries with empty coordinate arrays
