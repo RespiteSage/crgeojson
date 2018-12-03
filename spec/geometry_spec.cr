@@ -122,7 +122,7 @@ describe Point do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      point = Point.new 10.0, 15.0
+      point = Point.new 10, 15
 
       point.to_json.should eq %({"type":"Point","coordinates":[10.0,15.0]})
     end
@@ -132,7 +132,7 @@ describe Point do
     it "creates a Point matching the json" do
       result = Point.from_json %({"type":"Point","coordinates":[10.0,15.0]})
 
-      reference = Point.new 10.0, 15.0
+      reference = Point.new 10, 15
 
       result.should eq reference
     end
@@ -142,8 +142,8 @@ end
 describe LineString do
   describe ".new" do
     it "creates a new linestring with the given points" do
-      first = Position.new 10.0, 15.0
-      second = Position.new 20.0, 25.0
+      first = Position.new 10, 15
+      second = Position.new 20, 25
 
       linestring = LineString.new first, second
 
@@ -152,7 +152,7 @@ describe LineString do
     end
 
     it "rejects fewer than two points" do
-      point = Position.new 10.0, 15.0
+      point = Position.new 10, 15
 
       expect_raises(Exception, "LineString must have two or more points!") do
         linestring = LineString.new point
@@ -192,8 +192,8 @@ describe LineString do
     it "creates a LineString matching the json" do
       result = LineString.from_json %({"type":"LineString","coordinates":[[10.0,15.0],[20.0,25.0]]})
 
-      first = Position.new 10.0, 15.0
-      second = Position.new 20.0, 25.0
+      first = Position.new 10, 15
+      second = Position.new 20, 25
       reference = LineString.new first, second
 
       result.should eq reference
@@ -204,20 +204,20 @@ end
 describe Polygon do
   describe ".new" do
     it "creates a new polygon with the given points" do
-      first = Position.new 0,0
-      second = Position.new 1,0
-      third = Position.new 0,1
+      first = Position.new 0, 0
+      second = Position.new 1, 0
+      third = Position.new 0, 1
 
       polygon = Polygon.new first, second, third
 
-      polygon.exterior[0].should eq Position.new 0,0
-      polygon.exterior[1].should eq Position.new 1,0
-      polygon.exterior[2].should eq Position.new 0,1
+      polygon.exterior[0].should eq Position.new 0, 0
+      polygon.exterior[1].should eq Position.new 1, 0
+      polygon.exterior[2].should eq Position.new 0, 1
     end
 
     it "raises for fewer than three arguments" do
-      first = Position.new 0,0
-      second = Position.new 1,0
+      first = Position.new 0, 0
+      second = Position.new 1, 0
 
       expect_raises(Exception, "Polygon must have three or more points!") do
         polygon = Polygon.new first, second
@@ -235,27 +235,27 @@ describe Polygon do
     end
 
     it "creates a new polygon with an array of points" do
-      first = Position.new 0,0
-      second = Position.new 1,0
-      third = Position.new 0,1
+      first = Position.new 0, 0
+      second = Position.new 1, 0
+      third = Position.new 0, 1
 
       polygon = Polygon.new [first, second, third]
 
-      polygon.exterior[0].should eq Position.new 0,0
-      polygon.exterior[1].should eq Position.new 1,0
-      polygon.exterior[2].should eq Position.new 0,1
+      polygon.exterior[0].should eq Position.new 0, 0
+      polygon.exterior[1].should eq Position.new 1, 0
+      polygon.exterior[2].should eq Position.new 0, 1
     end
 
     it "creates a new polygon from point arrays" do
-      first = Position.new 0,0
-      second = Position.new 1,0
-      third = Position.new 0,1
+      first = Position.new 0, 0
+      second = Position.new 1, 0
+      third = Position.new 0, 1
 
       polygon = Polygon.new [0,0], [1,0], [0,1]
 
-      polygon.exterior[0].should eq Position.new 0,0
-      polygon.exterior[1].should eq Position.new 1,0
-      polygon.exterior[2].should eq Position.new 0,1
+      polygon.exterior[0].should eq Position.new 0, 0
+      polygon.exterior[1].should eq Position.new 1, 0
+      polygon.exterior[2].should eq Position.new 0, 1
     end
   end
 
@@ -269,9 +269,9 @@ describe Polygon do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first = Position.new 0,0
-      second = Position.new 1,0
-      third = Position.new 0,1
+      first = Position.new 0, 0
+      second = Position.new 1, 0
+      third = Position.new 0, 1
 
       polygon = Polygon.new first, second, third
 
@@ -285,9 +285,9 @@ describe Polygon do
     it "creates a Polygon matching the json" do
       result = Polygon.from_json %({"type":"Polygon","coordinates":[[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]]})
 
-      first = Position.new 0,0
-      second = Position.new 1,0
-      third = Position.new 0,1
+      first = Position.new 0, 0
+      second = Position.new 1, 0
+      third = Position.new 0, 1
 
       reference = Polygon.new first, second, third
 
@@ -315,7 +315,7 @@ describe GeometryCollection do
 
       collection = GeometryCollection.new first, second
 
-      collection[0].should eq Point.new(1,5)
+      collection[0].should eq Point.new 1, 5
       collection[1].should eq LineString.new Position.new(2,7), Position.new(3,1)
     end
   end

@@ -78,13 +78,13 @@ end
 describe LineStringCoordinates do
   describe ".new" do
     it "properly sets internal points from Positions" do
-      first = Position.new 1.0, 2.0
-      second = Position.new 3.0, 2.0
+      first = Position.new 1, 2
+      second = Position.new 3, 2
 
       result = LineStringCoordinates.new first, second
 
-      result[0].should eq Position.new 1.0, 2.0
-      result[1].should eq Position.new 3.0, 2.0
+      result[0].should eq Position.new 1, 2
+      result[1].should eq Position.new 3, 2
     end
 
     it "raises for fewer than two arguments" do
@@ -96,31 +96,31 @@ describe LineStringCoordinates do
     end
 
     it "works properly with an array of Positions" do
-      first = Position.new 1.0, 2.0
-      second = Position.new 3.0, 2.0
+      first = Position.new 1, 2
+      second = Position.new 3, 2
 
       result = LineStringCoordinates.new [first, second]
 
-      result[0].should eq Position.new 1.0, 2.0
-      result[1].should eq Position.new 3.0, 2.0
+      result[0].should eq Position.new 1, 2
+      result[1].should eq Position.new 3, 2
     end
 
     it "works properly with an array of arrays of floats" do
       result = LineStringCoordinates.new [[1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]]
 
-      result[0].should eq Position.new(1,2)
-      result[1].should eq Position.new(3,2)
-      result[2].should eq Position.new(2,0)
-      result[3].should eq Position.new(1,2)
+      result[0].should eq Position.new 1, 2
+      result[1].should eq Position.new 3, 2
+      result[2].should eq Position.new 2, 0
+      result[3].should eq Position.new 1, 2
     end
 
     it "works properly with multiple arrays of floats" do
       result = LineStringCoordinates.new [1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]
 
-      result[0].should eq Position.new(1,2)
-      result[1].should eq Position.new(3,2)
-      result[2].should eq Position.new(2,0)
-      result[3].should eq Position.new(1,2)
+      result[0].should eq Position.new 1, 2
+      result[1].should eq Position.new 3, 2
+      result[2].should eq Position.new 2, 0
+      result[3].should eq Position.new 1, 2
     end
   end
 
@@ -208,19 +208,19 @@ describe LinearRing do
     it "works properly with an array of arrays of floats" do
       result = LinearRing.new [[1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]]
 
-      result[0].should eq Position.new(1,2)
-      result[1].should eq Position.new(3,2)
-      result[2].should eq Position.new(2,0)
-      result[3].should eq Position.new(1,2)
+      result[0].should eq Position.new 1, 2
+      result[1].should eq Position.new 3, 2
+      result[2].should eq Position.new 2, 0
+      result[3].should eq Position.new 1, 2
     end
 
     it "works properly with multiple arrays of floats" do
       result = LinearRing.new [1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]
 
-      result[0].should eq Position.new(1,2)
-      result[1].should eq Position.new(3,2)
-      result[2].should eq Position.new(2,0)
-      result[3].should eq Position.new(1,2)
+      result[0].should eq Position.new 1, 2
+      result[1].should eq Position.new 3, 2
+      result[2].should eq Position.new 2, 0
+      result[3].should eq Position.new 1, 2
     end
   end
 
