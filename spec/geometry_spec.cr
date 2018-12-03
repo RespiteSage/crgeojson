@@ -14,6 +14,12 @@ describe Geometry do
       end
     end
 
+    it "rejects type string with wrong type argument" do
+      expect_raises(Exception, "Type field is not a string!") do
+        Geometry.from_json %({"type":7})
+      end
+    end
+
     it "accepts valid geometry types" do
       geometry_strings = [%({"type":"Point","coordinates":[0,0]}),
                           %({"type":"MultiPoint","coordinates":[[0,0]]}),
