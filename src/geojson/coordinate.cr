@@ -46,6 +46,14 @@ module GeoJSON
       initialize coordinates.to_a
     end
 
+    def initialize(longitude lon, latitude lat, altivation alt = nil)
+      unless alt.nil?
+        initialize [lon, lat, alt]
+      else
+        initialize [lon, lat]
+      end
+    end
+
     def longitude
       coordinates[0]
     end

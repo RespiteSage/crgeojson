@@ -73,6 +73,10 @@ module GeoJSON
 
     coordinate_type Position, subtype: Number
 
+    def initialize(longitude lon, latitude lat, altivation alt = nil)
+      @coordinates = Position.new lon, lat, alt
+    end
+
     delegate longitude, latitude, altivation, to: coordinates
   end
 
