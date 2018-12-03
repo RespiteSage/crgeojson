@@ -134,9 +134,9 @@ module GeoJSON
       @geometries = Array(Geometry).new.push(*geometries)
     end
 
-    def_equals coordinates
+    def_equals geometries
 
-    delegate "[]", to: coordinates
+    delegate "[]", to: geometries
   end
 
 end
