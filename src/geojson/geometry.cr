@@ -36,13 +36,9 @@ module GeoJSON
       end
     end
 
-    def ==(other : self)
-      coordinates == other.coordinates
-    end
+    def_equals coordinates
 
-    def [](index : Int)
-      coordinates[index]
-    end
+    delegate "[]", to: coordinates
 
     macro inherited
       include JSON::Serializable
@@ -138,13 +134,9 @@ module GeoJSON
       @geometries = Array(Geometry).new.push(*geometries)
     end
 
-    def [](index : Int)
-      geometries[index]
-    end
+    def_equals coordinates
 
-    def ==(other : self)
-      geometries = other.geometries
-    end
+    delegate "[]", to: coordinates
   end
 
 end

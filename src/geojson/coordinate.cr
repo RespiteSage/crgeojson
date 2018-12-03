@@ -11,17 +11,11 @@ module GeoJSON
     def initialize(@coordinates : Array(T))
     end
 
-    def ==(other : self)
-      coordinates == other.coordinates
-    end
-
-    def [](index : Int)
-      coordinates[index]
-    end
-
     abstract def raise_if_invalid
 
-    delegate to_json, to: coordinates
+    delegate to_json, "[]", to: coordinates
+
+    def_equals coordinates
 
     macro inherited
       def initialize(@coordinates : Array(T))
