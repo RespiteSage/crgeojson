@@ -108,8 +108,6 @@ module GeoJSON
         else
           raise ex_mal
         end
-      rescue ex
-        raise ex
       end
 
       @coordinates = PolyRings.new ring
