@@ -44,10 +44,6 @@ module GeoJSON
       raise_if_invalid
     end
 
-    def initialize(*coordinates : Number)
-      initialize coordinates.to_a
-    end
-
     def initialize(longitude lon, latitude lat, altivation alt = nil)
       unless alt.nil?
         initialize [lon, lat, alt]
