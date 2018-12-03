@@ -17,6 +17,8 @@ module GeoJSON
 
     def_equals coordinates
 
+    # We use the inherited macro to create subclass initializers because any
+    # subclass initializer will obscure all superclass initializers
     macro inherited
       def initialize(@coordinates : Array(T))
         raise_if_invalid

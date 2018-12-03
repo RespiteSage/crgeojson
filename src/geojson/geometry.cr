@@ -39,6 +39,8 @@ module GeoJSON
 
     delegate "[]", to: coordinates
 
+    # We need to inherit the Object-default self.from_json because we don't want
+    # Geometry subclasses inheriting its special self.from_json method
     macro inherited
       include JSON::Serializable
 
@@ -49,6 +51,8 @@ module GeoJSON
       end
     end
 
+    # We use a macro to create subclass initializers because any subclass
+    # initializer will obscure all superclass initializers
     macro coordinate_type(type, subtype)
       getter coordinates : {{type}}
 
