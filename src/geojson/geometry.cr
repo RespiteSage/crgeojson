@@ -4,6 +4,7 @@ require "./coordinate"
 module GeoJSON
 
   abstract class Geometry < Base
+    GEOMETRY_TYPES = [Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon]
 
     abstract def coordinates
 
@@ -25,9 +26,7 @@ module GeoJSON
         raise "Type field is not a string!"
       end
 
-      geometry_types = [Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon]
-
-      klass = geometry_types.find { |k| k.name == "GeoJSON::#{type_string}" }
+      klass = GEOMETRY_TYPES.find { |k| k.name == "GeoJSON::#{type_string}" }
 
       if klass.nil?
         raise %(Invalid geometry type "#{type_string}"!)
