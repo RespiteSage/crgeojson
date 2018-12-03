@@ -49,7 +49,7 @@ module GeoJSON
       end
     end
 
-    macro coordinate_type(type, subtype=nil)
+    macro coordinate_type(type, subtype)
       getter coordinates : {{type}}
 
       def initialize(@coordinates : {{type}})
