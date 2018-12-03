@@ -59,7 +59,6 @@ module GeoJSON
       def initialize(@coordinates : {{type}})
       end
 
-      {% if subtype %}
       def initialize(coordinates : Array({{subtype}}))
         @coordinates = {{type}}.new coordinates
       end
@@ -67,7 +66,6 @@ module GeoJSON
       def initialize(*coordinates : {{subtype}})
         initialize coordinates.to_a
       end
-      {% end %}
     end
   end
 
