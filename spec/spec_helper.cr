@@ -1,2 +1,4 @@
 require "spec"
-require "../src/geojson"
+require "../src/geojson/**"
+
+include GeoJSON
