@@ -7,12 +7,12 @@ module GeoJSON
     getter type = "Feature"
 
     @[JSON::Field(emit_null: true)]
-    property geometry : Geometry?
-
-    property id : (Int32 | String | Nil)
+    getter geometry : Geometry?
 
     @[JSON::Field(emit_null: true)]
-    property properties : Hash(String,JSON::Any::Type)?
+    getter properties : Hash(String, JSON::Any::Type)?
+
+    getter id : (String | Int32 | Nil)
 
     def initialize(@geometry, @properties = nil, *, @id = nil)
     end
@@ -20,6 +20,4 @@ module GeoJSON
     def_equals type, geometry, id, properties
 
   end
-
-
 end
