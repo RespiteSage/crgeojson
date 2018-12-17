@@ -44,7 +44,7 @@ describe Geometry do
     it "returns the correct MultiPoint for a multipoint string" do
       result = Geometry.from_json %({"type":"MultiPoint","coordinates":[[10.0,15.0],[20.0,25.0]]})
 
-      reference = MultiPoint.new Point.new(10,15), Point.new(20,25)
+      reference = MultiPoint.new Point.new(10, 15), Point.new(20, 25)
 
       result.should eq reference
     end
@@ -52,7 +52,7 @@ describe Geometry do
     it "returns the correct LineString for a linestring string" do
       result = Geometry.from_json %({"type":"LineString","coordinates":[[10.0,15.0],[20.0,25.0]]})
 
-      reference = LineString.new Position.new(10,15), Position.new(20,25)
+      reference = LineString.new Position.new(10, 15), Position.new(20, 25)
 
       result.should eq reference
     end
@@ -60,8 +60,8 @@ describe Geometry do
     it "returns the correct MultiLineString for a multilinestring string" do
       result = Geometry.from_json %({"type":"MultiLineString","coordinates":[[[0.0,0.0],[0.0,1.0]],[[1.0,0.0],[0.0,1.0]]]})
 
-      first  = LineString.new Position.new(0,0), Position.new(0,1)
-      second = LineString.new Position.new(1,0), Position.new(0,1)
+      first = LineString.new Position.new(0, 0), Position.new(0, 1)
+      second = LineString.new Position.new(1, 0), Position.new(0, 1)
       reference = MultiLineString.new first, second
 
       result.should eq reference
@@ -70,7 +70,7 @@ describe Geometry do
     it "returns the correct Polygon for a polygon string" do
       result = Geometry.from_json %({"type":"Polygon","coordinates":[[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]]})
 
-      reference = Polygon.new Position.new(0,0), Position.new(1,0), Position.new(0,1)
+      reference = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
 
       result.should eq reference
     end
@@ -78,14 +78,13 @@ describe Geometry do
     it "returns the correct MultiPolygon for a multipolygon string" do
       result = Geometry.from_json %({"type":"MultiPolygon","coordinates":[[[[0.0,0.0],[0.0,1.0],[1.0,0.0],[0.0,0.0]]],[[[0.0,2.0],[0.0,3.0],[1.0,2.0],[0.0,2.0]]]]})
 
-      first  = Polygon.new Position.new(0,0), Position.new(0,1), Position.new(1,0)
-      second = Polygon.new Position.new(0,2), Position.new(0,3), Position.new(1,2)
+      first = Polygon.new Position.new(0, 0), Position.new(0, 1), Position.new(1, 0)
+      second = Polygon.new Position.new(0, 2), Position.new(0, 3), Position.new(1, 2)
       reference = MultiPolygon.new first, second
 
       result.should eq reference
     end
   end
-
 end
 
 describe Point do
@@ -175,7 +174,7 @@ describe LineString do
 
   describe "#type" do
     it %(returns "LineString") do
-      linestring = LineString.new Position.new(0,0), Position.new(1,0)
+      linestring = LineString.new Position.new(0, 0), Position.new(1, 0)
 
       linestring.type.should eq "LineString"
     end
@@ -231,13 +230,33 @@ describe Polygon do
     end
 
     it "creates a new polygon with the given rings" do
-      outer_ring = LinearRing.new(Position.new(0,0),Position.new(5,0),Position.new(0,5),Position.new(0,0))
-      inner_ring = LinearRing.new(Position.new(1,1),Position.new(1,2),Position.new(2,1),Position.new(1,1))
+      outer_ring = LinearRing.new(
+        Position.new(0, 0),
+        Position.new(5, 0),
+        Position.new(0, 5),
+        Position.new(0, 0)
+      )
+      inner_ring = LinearRing.new(
+        Position.new(1, 1),
+        Position.new(1, 2),
+        Position.new(2, 1),
+        Position.new(1, 1)
+      )
 
       polygon = Polygon.new outer_ring, inner_ring
 
-      polygon[0].should eq LinearRing.new(Position.new(0,0),Position.new(5,0),Position.new(0,5),Position.new(0,0))
-      polygon[1].should eq LinearRing.new(Position.new(1,1),Position.new(1,2),Position.new(2,1),Position.new(1,1))
+      polygon[0].should eq LinearRing.new(
+        Position.new(0, 0),
+        Position.new(5, 0),
+        Position.new(0, 5),
+        Position.new(0, 0)
+      )
+      polygon[1].should eq LinearRing.new(
+        Position.new(1, 1),
+        Position.new(1, 2),
+        Position.new(2, 1),
+        Position.new(1, 1)
+      )
     end
 
     it "creates a new polygon with an array of points" do
@@ -257,7 +276,7 @@ describe Polygon do
       second = Position.new 1, 0
       third = Position.new 0, 1
 
-      polygon = Polygon.new [0,0], [1,0], [0,1]
+      polygon = Polygon.new [0, 0], [1, 0], [0, 1]
 
       polygon.exterior[0].should eq Position.new 0, 0
       polygon.exterior[1].should eq Position.new 1, 0
@@ -267,7 +286,7 @@ describe Polygon do
 
   describe "#type" do
     it %(returns "Polygon") do
-      polygon = Polygon.new Position.new(0,0), Position.new(1,0), Position.new(0,1)
+      polygon = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
 
       polygon.type.should eq "Polygon"
     end
@@ -303,8 +322,18 @@ describe Polygon do
 
   describe "#exterior" do
     it "returns the first LinearRing" do
-      outer_ring = LinearRing.new(Position.new(0,0),Position.new(5,0),Position.new(0,5),Position.new(0,0))
-      inner_ring = LinearRing.new(Position.new(1,1),Position.new(1,2),Position.new(2,1),Position.new(1,1))
+      outer_ring = LinearRing.new(
+        Position.new(0, 0),
+        Position.new(5, 0),
+        Position.new(0, 5),
+        Position.new(0, 0)
+      )
+      inner_ring = LinearRing.new(
+        Position.new(1, 1),
+        Position.new(1, 2),
+        Position.new(2, 1),
+        Position.new(1, 1)
+      )
 
       polygon = Polygon.new outer_ring, inner_ring
 
@@ -316,19 +345,19 @@ end
 describe GeometryCollection do
   describe ".new" do
     it "creates a new geometry collection with the given geometries" do
-      first  = Point.new 1, 5
-      second = LineString.new Position.new(2,7), Position.new(3,1)
+      first = Point.new 1, 5
+      second = LineString.new Position.new(2, 7), Position.new(3, 1)
 
       collection = GeometryCollection.new first, second
 
       collection[0].should eq Point.new 1, 5
-      collection[1].should eq LineString.new Position.new(2,7), Position.new(3,1)
+      collection[1].should eq LineString.new Position.new(2, 7), Position.new(3, 1)
     end
   end
 
   describe "#type" do
     it %(returns "GeometryCollection") do
-      collection = GeometryCollection.new Point.new(0,0)
+      collection = GeometryCollection.new Point.new(0, 0)
 
       collection.type.should eq "GeometryCollection"
     end
@@ -336,8 +365,8 @@ describe GeometryCollection do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first  = Point.new 1, 5
-      second = LineString.new Position.new(2,7), Position.new(3,1)
+      first = Point.new 1, 5
+      second = LineString.new Position.new(2, 7), Position.new(3, 1)
 
       collection = GeometryCollection.new first, second
 
@@ -349,8 +378,8 @@ describe GeometryCollection do
     it "creates a GeometryCollection matching the json" do
       result = GeometryCollection.from_json %({"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[1.0,5.0]},{"type":"LineString","coordinates":[[2.0,7.0],[3.0,1.0]]}]})
 
-      first  = Point.new 1, 5
-      second = LineString.new Position.new(2,7), Position.new(3,1)
+      first = Point.new 1, 5
+      second = LineString.new Position.new(2, 7), Position.new(3, 1)
 
       reference = GeometryCollection.new first, second
 

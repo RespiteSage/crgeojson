@@ -3,10 +3,10 @@ require "./spec_helper"
 describe FeatureCollection do
   describe ".new" do
     it "sets the feature array" do
-      collection = FeatureCollection.new [Feature.new(Point.new(1,0)), Feature.new(Point.new(1,0))]
+      collection = FeatureCollection.new [Feature.new(Point.new(1, 0)), Feature.new(Point.new(1, 0))]
 
-      collection.features[0].should eq Feature.new(Point.new(1,0))
-      collection.features[1].should eq Feature.new(Point.new(1,0))
+      collection.features[0].should eq Feature.new(Point.new(1, 0))
+      collection.features[1].should eq Feature.new(Point.new(1, 0))
     end
 
     it "allows an empty array" do
@@ -26,7 +26,7 @@ describe FeatureCollection do
 
   describe "#to_json" do
     it "returns accurate json" do
-      collection = FeatureCollection.new [Feature.new(Point.new(1,0)), Feature.new(Point.new(1,0))]
+      collection = FeatureCollection.new [Feature.new(Point.new(1, 0)), Feature.new(Point.new(1, 0))]
 
       collection.to_json.should eq %({"type":"FeatureCollection","features":[\
         {"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null},\
@@ -40,7 +40,7 @@ describe FeatureCollection do
         {"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null},\
         {"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null}]})
 
-      reference = collection = FeatureCollection.new [Feature.new(Point.new(1,0)), Feature.new(Point.new(1,0))]
+      reference = collection = FeatureCollection.new [Feature.new(Point.new(1, 0)), Feature.new(Point.new(1, 0))]
 
       result.should eq reference
     end

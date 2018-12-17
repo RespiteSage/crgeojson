@@ -1,7 +1,6 @@
 require "./spec_helper"
 
 describe Feature do
-
   describe ".new" do
     it "sets a geometry and leaves properties and id unset" do
       geometry = Point.new 0, 0
@@ -116,7 +115,7 @@ describe Feature do
     it "creates a Feature from the matching json" do
       result = Feature.from_json %({"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":{"layer":2},"id":43})
 
-      reference = Feature.new Point.new(1,0), {"layer"=>2_i64} of String => JSON::Any::Type, id: 43
+      reference = Feature.new Point.new(1, 0), {"layer" => 2_i64} of String => JSON::Any::Type, id: 43
 
       result.should eq reference
     end
@@ -124,7 +123,7 @@ describe Feature do
     it "creates a Feature from json with a missing id" do
       result = Feature.from_json %({"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":{"layer":2}})
 
-      reference = Feature.new Point.new(1,0), {"layer"=>2_i64} of String => JSON::Any::Type
+      reference = Feature.new Point.new(1, 0), {"layer" => 2_i64} of String => JSON::Any::Type
 
       result.should eq reference
     end
@@ -132,7 +131,7 @@ describe Feature do
     it "creates a Feature from json with null properties" do
       result = Feature.from_json %({"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null,"id":43})
 
-      reference = Feature.new Point.new(1,0), id: 43
+      reference = Feature.new Point.new(1, 0), id: 43
 
       result.should eq reference
     end
@@ -140,10 +139,9 @@ describe Feature do
     it "creates a Feature from json with a null geometry" do
       result = Feature.from_json %({"type":"Feature","geometry":null,"properties":{"layer":2},"id":43})
 
-      reference = Feature.new nil, {"layer"=>2_i64} of String => JSON::Any::Type, id: 43
+      reference = Feature.new nil, {"layer" => 2_i64} of String => JSON::Any::Type, id: 43
 
       result.should eq reference
     end
   end
-
 end

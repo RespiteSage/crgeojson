@@ -1,6 +1,4 @@
-
 module GeoJSON
-
   class Feature < Base
     include JSON::Serializable
 
@@ -18,6 +16,5 @@ module GeoJSON
     end
 
     def_equals type, geometry, id, properties
-
   end
 end

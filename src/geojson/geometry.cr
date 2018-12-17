@@ -2,7 +2,6 @@ require "json"
 require "./coordinate"
 
 module GeoJSON
-
   abstract class Geometry < Base
     GEOMETRY_TYPES = [Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon]
 
@@ -141,5 +140,4 @@ module GeoJSON
 
     delegate "[]", to: geometries
   end
-
 end

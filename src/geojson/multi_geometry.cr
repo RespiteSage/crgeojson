@@ -1,7 +1,6 @@
 require "json"
 
 module GeoJSON
-
   class MultiPoint < Geometry
     getter type : String = "MultiPoint"
     getter coordinates : Array(Position)
@@ -20,7 +19,7 @@ module GeoJSON
     getter coordinates : Array(LineStringCoordinates)
 
     def initialize(*linestrings : LineString)
-      @coordinates = linestrings.map { |linestring| linestring.coordinates}.to_a
+      @coordinates = linestrings.map { |linestring| linestring.coordinates }.to_a
     end
 
     def [](index : Int)
@@ -33,12 +32,11 @@ module GeoJSON
     getter coordinates : Array(PolyRings)
 
     def initialize(*polygons : Polygon)
-      @coordinates = polygons.map { |polygon| polygon.coordinates}.to_a
+      @coordinates = polygons.map { |polygon| polygon.coordinates }.to_a
     end
 
     def [](index : Int)
       Polygon.new coordinates[index]
     end
   end
-
 end
