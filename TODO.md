@@ -5,7 +5,7 @@
 - Add methods to check if the LinearRings of a Polygon properly follow the
   right-hand rule and by default enforce this requirement ONLY on Polygons being
   created from the Crystal side
-- Add methods for building geometries incrementally
+- Add methods for building geometries, features, and feature collections incrementally
 - Find a better name for LineStringCoordinates
 - Add optional "bbox" (bounding box) property to all GeoJSON objects
 - Allow extra "foreign" json members and find a way to give easy access to them
