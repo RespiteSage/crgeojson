@@ -4,7 +4,7 @@ module GeoJSON
   class Feature < Base
     include JSON::Serializable
 
-    getter type = "Feature"
+    getter type : String = "Feature"
 
     @[JSON::Field(emit_null: true)]
     getter geometry : Geometry?

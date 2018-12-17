@@ -4,7 +4,7 @@ module GeoJSON
   class FeatureCollection < Base
     include JSON::Serializable
 
-    getter type = "FeatureCollection"
+    getter type : String = "FeatureCollection"
     getter features : Array(Feature)
 
     def initialize(@features)

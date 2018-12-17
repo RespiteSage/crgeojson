@@ -28,19 +28,17 @@ describe FeatureCollection do
     it "returns accurate json" do
       collection = FeatureCollection.new [Feature.new(Point.new(1,0)), Feature.new(Point.new(1,0))]
 
-      collection.to_json.should eq %({"features":[\
-        {"geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null,"type":"Feature"},\
-        {"geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null,"type":"Feature"}],\
-        "type":"FeatureCollection"})
+      collection.to_json.should eq %({"type":"FeatureCollection","features":[\
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null},\
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null}]})
     end
   end
 
   describe "#from_json" do
     it "creates a FeatureCollection from the matching json" do
-      result = FeatureCollection.from_json %({"features":[\
-        {"geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null,"type":"Feature"},\
-        {"geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null,"type":"Feature"}],\
-        "type":"FeatureCollection"})
+      result = FeatureCollection.from_json %({"type":"FeatureCollection","features":[\
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null},\
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null}]})
 
       reference = collection = FeatureCollection.new [Feature.new(Point.new(1,0)), Feature.new(Point.new(1,0))]
 
