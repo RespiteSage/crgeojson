@@ -1,7 +1,6 @@
 # Project To-Do List
 
 ## Necessary
-- Implement Features and FeatureCollections
 - Add methods to check if the LinearRings of a Polygon properly follow the
   right-hand rule and by default enforce this requirement ONLY on Polygons being
   created from the Crystal side
