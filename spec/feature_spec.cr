@@ -81,7 +81,7 @@ describe Feature do
 
       feature = Feature.new geometry, properties, id: 43
 
-      feature.to_json.should eq %({"type":"Feature","geometry":#{geometry.to_json},"properties":{"color":"0xFF00FF","layer":2},"id":43})
+      feature.to_json.should be_equivalent_json_to %({"type":"Feature","geometry":#{geometry.to_json},"properties":{"color":"0xFF00FF","layer":2},"id":43})
     end
 
     it "does not output any id when it is unset" do
@@ -91,7 +91,7 @@ describe Feature do
 
       feature = Feature.new geometry, properties
 
-      feature.to_json.should eq %({"type":"Feature","geometry":#{geometry.to_json},"properties":{"color":"0xFF00FF","layer":2}})
+      feature.to_json.should be_equivalent_json_to %({"type":"Feature","geometry":#{geometry.to_json},"properties":{"color":"0xFF00FF","layer":2}})
     end
 
     it "outputs null value for unset properties" do
@@ -99,7 +99,7 @@ describe Feature do
 
       feature = Feature.new geometry, id: 43
 
-      feature.to_json.should eq %({"type":"Feature","geometry":#{geometry.to_json},"properties":null,"id":43})
+      feature.to_json.should be_equivalent_json_to %({"type":"Feature","geometry":#{geometry.to_json},"properties":null,"id":43})
     end
 
     it "outputs null value for nil geometry" do
@@ -107,7 +107,7 @@ describe Feature do
 
       feature = Feature.new nil, properties, id: 43
 
-      feature.to_json.should eq %({"type":"Feature","geometry":null,"properties":{"color":"0xFF00FF","layer":2},"id":43})
+      feature.to_json.should be_equivalent_json_to %({"type":"Feature","geometry":null,"properties":{"color":"0xFF00FF","layer":2},"id":43})
     end
   end
 

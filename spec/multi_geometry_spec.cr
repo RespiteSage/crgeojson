@@ -30,7 +30,7 @@ describe MultiPoint do
 
       reference_json = %({"type":"MultiPoint","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      multipoint.to_json.should eq reference_json
+      multipoint.to_json.should be_equivalent_json_to reference_json
     end
   end
 
@@ -116,7 +116,7 @@ describe MultiLineString do
 
       reference_json = %({"type":"MultiLineString","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      multilinestring.to_json.should eq reference_json
+      multilinestring.to_json.should be_equivalent_json_to reference_json
     end
   end
 
@@ -205,7 +205,7 @@ describe MultiPolygon do
 
       reference_json = %({"type":"MultiPolygon","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      multipolygon.to_json.should eq reference_json
+      multipolygon.to_json.should be_equivalent_json_to reference_json
     end
   end
 

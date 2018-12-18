@@ -128,7 +128,7 @@ describe Point do
       coordinates = Position.new 10, 15
       point = Point.new coordinates
 
-      point.to_json.should eq %({"type":"Point","coordinates":#{coordinates.to_json}})
+      point.to_json.should be_equivalent_json_to %({"type":"Point","coordinates":#{coordinates.to_json}})
     end
   end
 
@@ -221,7 +221,7 @@ describe LineString do
 
       reference_json = %({"type":"LineString","coordinates":#{coordinates.to_json}})
 
-      linestring.to_json.should eq reference_json
+      linestring.to_json.should be_equivalent_json_to reference_json
     end
   end
 
@@ -364,7 +364,7 @@ describe Polygon do
 
       reference_json = %({"type":"Polygon","coordinates":#{coordinates.to_json}})
 
-      polygon.to_json.should eq reference_json
+      polygon.to_json.should be_equivalent_json_to reference_json
     end
   end
 
@@ -462,7 +462,7 @@ describe GeometryCollection do
 
       collection = GeometryCollection.new first, second
 
-      collection.to_json.should eq %({"type":"GeometryCollection","geometries":[#{first.to_json},#{second.to_json}]})
+      collection.to_json.should be_equivalent_json_to %({"type":"GeometryCollection","geometries":[#{first.to_json},#{second.to_json}]})
     end
   end
 
