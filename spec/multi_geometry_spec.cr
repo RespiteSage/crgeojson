@@ -23,12 +23,12 @@ describe MultiPoint do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first = Point.new 10.0, 15.0
-      second = Point.new 20.0, 25.0
+      first = Position.new 10.0, 15.0
+      second = Position.new 20.0, 25.0
 
-      multipoint = MultiPoint.new first, second
+      multipoint = MultiPoint.new Point.new(first), Point.new(second)
 
-      reference_json = %({"type":"MultiPoint","coordinates":[[10.0,15.0],[20.0,25.0]]})
+      reference_json = %({"type":"MultiPoint","coordinates":[#{first.to_json},#{second.to_json}]})
 
       multipoint.to_json.should eq reference_json
     end
@@ -36,11 +36,12 @@ describe MultiPoint do
 
   describe "#from_json" do
     it "creates a MultiPoint matching the json" do
-      result = MultiPoint.from_json %({"type":"MultiPoint","coordinates":[[10.0,15.0],[20.0,25.0]]})
+      first = Position.new 10.0, 15.0
+      second = Position.new 20.0, 25.0
 
-      first = Point.new 10.0, 15.0
-      second = Point.new 20.0, 25.0
-      reference = MultiPoint.new first, second
+      result = MultiPoint.from_json %({"type":"MultiPoint","coordinates":[#{first.to_json},#{second.to_json}]})
+
+      reference = MultiPoint.new Point.new(first), Point.new(second)
 
       result.should eq reference
     end
@@ -73,17 +74,12 @@ describe MultiLineString do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first = Position.new 0.0, 0.0
-      second = Position.new 0.0, 1.0
-      third = Position.new 1.0, 0.0
-      fourth = Position.new 0.0, 1.0
+      first = LineStringCoordinates.new Position.new(0, 0), Position.new(0, 1)
+      second = LineStringCoordinates.new Position.new(1, 0), Position.new(0, 1)
 
-      linestring_one = LineString.new first, second
-      linestring_two = LineString.new third, fourth
+      multilinestring = MultiLineString.new LineString.new(first), LineString.new(second)
 
-      multilinestring = MultiLineString.new linestring_one, linestring_two
-
-      reference_json = %({"type":"MultiLineString","coordinates":[[[0.0,0.0],[0.0,1.0]],[[1.0,0.0],[0.0,1.0]]]})
+      reference_json = %({"type":"MultiLineString","coordinates":[#{first.to_json},#{second.to_json}]})
 
       multilinestring.to_json.should eq reference_json
     end
@@ -91,16 +87,12 @@ describe MultiLineString do
 
   describe "#from_json" do
     it "creates a MultiLineString matching the json" do
-      result = MultiLineString.from_json %({"type":"MultiLineString","coordinates":[[[0.0,0.0],[0.0,1.0]],[[1.0,0.0],[0.0,1.0]]]})
+      first = LineStringCoordinates.new Position.new(0, 0), Position.new(0, 1)
+      second = LineStringCoordinates.new Position.new(1, 0), Position.new(0, 1)
 
-      first = Position.new 0.0, 0.0
-      second = Position.new 0.0, 1.0
-      third = Position.new 1.0, 0.0
-      fourth = Position.new 0.0, 1.0
+      result = MultiLineString.from_json %({"type":"MultiLineString","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      linestring_one = LineString.new first, second
-      linestring_two = LineString.new third, fourth
-      reference = MultiLineString.new linestring_one, linestring_two
+      reference = MultiLineString.new LineString.new(first), LineString.new(second)
 
       result.should eq reference
     end
@@ -136,12 +128,12 @@ describe MultiPolygon do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first = Polygon.new Position.new(0, 0), Position.new(0, 1), Position.new(1, 0)
-      second = Polygon.new Position.new(0, 2), Position.new(0, 3), Position.new(1, 2)
+      first = PolyRings.new [Position.new(0, 0), Position.new(0, 1), Position.new(1, 0), Position.new(0, 0)]
+      second = PolyRings.new [Position.new(0, 2), Position.new(0, 3), Position.new(1, 2), Position.new(0, 2)]
 
-      multipolygon = MultiPolygon.new first, second
+      multipolygon = MultiPolygon.new Polygon.new(first), Polygon.new(second)
 
-      reference_json = %({"type":"MultiPolygon","coordinates":[[[[0.0,0.0],[0.0,1.0],[1.0,0.0],[0.0,0.0]]],[[[0.0,2.0],[0.0,3.0],[1.0,2.0],[0.0,2.0]]]]})
+      reference_json = %({"type":"MultiPolygon","coordinates":[#{first.to_json},#{second.to_json}]})
 
       multipolygon.to_json.should eq reference_json
     end
@@ -149,12 +141,12 @@ describe MultiPolygon do
 
   describe "#from_json" do
     it "creates a MultiPolygon matching the json" do
-      result = MultiPolygon.from_json %({"type":"MultiPolygon","coordinates":[[[[0.0,0.0],[0.0,1.0],[1.0,0.0],[0.0,0.0]]],[[[0.0,2.0],[0.0,3.0],[1.0,2.0],[0.0,2.0]]]]})
+      first = PolyRings.new [Position.new(0, 0), Position.new(0, 1), Position.new(1, 0), Position.new(0, 0)]
+      second = PolyRings.new [Position.new(0, 2), Position.new(0, 3), Position.new(1, 2), Position.new(0, 2)]
 
-      first = Polygon.new Position.new(0, 0), Position.new(0, 1), Position.new(1, 0)
-      second = Polygon.new Position.new(0, 2), Position.new(0, 3), Position.new(1, 2)
+      result = MultiPolygon.from_json %({"type":"MultiPolygon","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      reference = MultiPolygon.new first, second
+      reference = MultiPolygon.new Polygon.new(first), Polygon.new(second)
 
       result.should eq reference
     end

@@ -129,7 +129,7 @@ describe LineStringCoordinates do
       first  = Position.new 1.0, 2.0
       second = Position.new 3.0, 2.0
 
-      linestring = LineStringCoordinates.from_json "[[1.0,2.0],[3.0,2.0]]"
+      linestring = LineStringCoordinates.from_json "[#{first.to_json},#{second.to_json}]"
       reference = LineStringCoordinates.new first, second
 
       linestring.should eq reference
@@ -149,7 +149,7 @@ describe LineStringCoordinates do
 
       linestring = LineStringCoordinates.new first, second
 
-      linestring.to_json.should eq "[[1.0,2.0],[3.0,2.0]]"
+      linestring.to_json.should eq "[#{first.to_json},#{second.to_json}]"
     end
   end
 end
@@ -231,7 +231,7 @@ describe LinearRing do
       third  = Position.new 0, 1
       fourth = Position.new 0, 0
 
-      linear_ring = LinearRing.from_json "[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]"
+      linear_ring = LinearRing.from_json "[#{first.to_json},#{second.to_json},#{third.to_json},#{fourth.to_json}]"
       reference = LinearRing.new first, second, third, fourth
 
       linear_ring.should eq reference
@@ -259,7 +259,7 @@ describe LinearRing do
 
       linear_ring = LinearRing.new first, second, third, fourth
 
-      linear_ring.to_json.should eq "[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]"
+      linear_ring.to_json.should eq "[#{first.to_json},#{second.to_json},#{third.to_json},#{fourth.to_json}]"
     end
   end
 end
@@ -400,7 +400,7 @@ describe PolyRings do
         Position.new(2, 3)
       )
 
-      polyrings = PolyRings.from_json %([[[1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]],[[2.0,3.0],[4.0,3.0],[3.0,1.0],[2.0,3.0]]])
+      polyrings = PolyRings.from_json %([#{first.to_json},#{second.to_json}])
       reference = PolyRings.new first, second
 
       polyrings.should eq reference
@@ -424,7 +424,7 @@ describe PolyRings do
 
       polyrings = PolyRings.new first, second
 
-      polyrings.to_json.should eq %([[[1.0,2.0],[3.0,2.0],[2.0,0.0],[1.0,2.0]],[[2.0,3.0],[4.0,3.0],[3.0,1.0],[2.0,3.0]]])
+      polyrings.to_json.should eq %([#{first.to_json},#{second.to_json}])
     end
   end
 end

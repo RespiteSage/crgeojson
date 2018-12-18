@@ -81,7 +81,7 @@ describe Feature do
 
       feature = Feature.new geometry, properties, id: 43
 
-      feature.to_json.should eq %({"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":{"color":"0xFF00FF","layer":2},"id":43})
+      feature.to_json.should eq %({"type":"Feature","geometry":#{geometry.to_json},"properties":{"color":"0xFF00FF","layer":2},"id":43})
     end
 
     it "does not output any id when it is unset" do
@@ -91,7 +91,7 @@ describe Feature do
 
       feature = Feature.new geometry, properties
 
-      feature.to_json.should eq %({"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":{"color":"0xFF00FF","layer":2}})
+      feature.to_json.should eq %({"type":"Feature","geometry":#{geometry.to_json},"properties":{"color":"0xFF00FF","layer":2}})
     end
 
     it "outputs null value for unset properties" do
@@ -99,7 +99,7 @@ describe Feature do
 
       feature = Feature.new geometry, id: 43
 
-      feature.to_json.should eq %({"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null,"id":43})
+      feature.to_json.should eq %({"type":"Feature","geometry":#{geometry.to_json},"properties":null,"id":43})
     end
 
     it "outputs null value for nil geometry" do
@@ -113,25 +113,31 @@ describe Feature do
 
   describe "#from_json" do
     it "creates a Feature from the matching json" do
-      result = Feature.from_json %({"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":{"layer":2},"id":43})
+      geometry = Point.new 1, 0
 
-      reference = Feature.new Point.new(1, 0), {"layer" => 2_i64} of String => JSON::Any::Type, id: 43
+      result = Feature.from_json %({"type":"Feature","geometry":#{geometry.to_json},"properties":{"layer":2},"id":43})
+
+      reference = Feature.new geometry, {"layer" => 2_i64} of String => JSON::Any::Type, id: 43
 
       result.should eq reference
     end
 
     it "creates a Feature from json with a missing id" do
-      result = Feature.from_json %({"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":{"layer":2}})
+      geometry = Point.new 1, 0
 
-      reference = Feature.new Point.new(1, 0), {"layer" => 2_i64} of String => JSON::Any::Type
+      result = Feature.from_json %({"type":"Feature","geometry":#{geometry.to_json},"properties":{"layer":2}})
+
+      reference = Feature.new geometry, {"layer" => 2_i64} of String => JSON::Any::Type
 
       result.should eq reference
     end
 
     it "creates a Feature from json with null properties" do
-      result = Feature.from_json %({"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null,"id":43})
+      geometry = Point.new 1, 0
 
-      reference = Feature.new Point.new(1, 0), id: 43
+      result = Feature.from_json %({"type":"Feature","geometry":#{geometry.to_json},"properties":null,"id":43})
+
+      reference = Feature.new geometry, id: 43
 
       result.should eq reference
     end
