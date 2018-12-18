@@ -40,7 +40,7 @@ describe FeatureCollection do
         {"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null},\
         {"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,0.0]},"properties":null}]})
 
-      reference = collection = FeatureCollection.new [Feature.new(Point.new(1, 0)), Feature.new(Point.new(1, 0))]
+      reference = FeatureCollection.new [Feature.new(Point.new(1, 0)), Feature.new(Point.new(1, 0))]
 
       result.should eq reference
     end
