@@ -34,7 +34,7 @@ module GeoJSON
       end
     end
 
-    def_equals coordinates, type
+    def_equals_and_hash coordinates, type
 
     delegate "[]", to: coordinates
 

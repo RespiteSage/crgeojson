@@ -15,6 +15,6 @@ module GeoJSON
     def initialize(@geometry, @properties = nil, *, @id = nil)
     end
 
-    def_equals type, geometry, id, properties
+    def_equals_and_hash type, geometry, id, properties
   end
 end

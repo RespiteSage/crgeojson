@@ -14,7 +14,7 @@ module GeoJSON
 
     delegate to_json, "[]", to: coordinates
 
-    def_equals coordinates
+    def_equals_and_hash coordinates
 
     # We use the inherited macro to create subclass initializers because any
     # subclass initializer will obscure all superclass initializers

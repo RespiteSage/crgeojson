@@ -12,6 +12,6 @@ module GeoJSON
       @features = features.to_a
     end
 
-    def_equals type, features
+    def_equals_and_hash type, features
   end
 end
