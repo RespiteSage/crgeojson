@@ -128,7 +128,9 @@ describe Point do
       coordinates = Position.new 10, 15
       point = Point.new coordinates
 
-      point.to_json.should be_equivalent_json_to %({"type":"Point","coordinates":#{coordinates.to_json}})
+      reference_json = %({"type":"Point","coordinates":#{coordinates.to_json}})
+
+      point.to_json.should be_equivalent_json_to reference_json
     end
   end
 
@@ -462,7 +464,9 @@ describe GeometryCollection do
 
       collection = GeometryCollection.new first, second
 
-      collection.to_json.should be_equivalent_json_to %({"type":"GeometryCollection","geometries":[#{first.to_json},#{second.to_json}]})
+      reference_json = %({"type":"GeometryCollection","geometries":[#{first.to_json},#{second.to_json}]})
+
+      collection.to_json.should be_equivalent_json_to reference_json
     end
   end
 

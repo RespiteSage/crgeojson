@@ -30,7 +30,9 @@ describe FeatureCollection do
 
       collection = FeatureCollection.new [feature, feature]
 
-      collection.to_json.should be_equivalent_json_to %({"type":"FeatureCollection","features":[#{feature.to_json},#{feature.to_json}]})
+      reference_json = %({"type":"FeatureCollection","features":[#{feature.to_json},#{feature.to_json}]})
+
+      collection.to_json.should be_equivalent_json_to reference_json
     end
   end
 

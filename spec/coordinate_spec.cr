@@ -76,7 +76,9 @@ describe Position do
     it "returns accurate geoJSON" do
       position = Position.new 10.0, 15.0
 
-      position.to_json.should be_equivalent_json_to "[10.0,15.0]"
+      reference_json = "[10.0,15.0]"
+
+      position.to_json.should be_equivalent_json_to reference_json
     end
   end
 
@@ -195,7 +197,9 @@ describe LineStringCoordinates do
 
       linestring = LineStringCoordinates.new first, second
 
-      linestring.to_json.should be_equivalent_json_to "[#{first.to_json},#{second.to_json}]"
+      reference_json = "[#{first.to_json},#{second.to_json}]"
+
+      linestring.to_json.should be_equivalent_json_to reference_json
     end
   end
 
@@ -364,7 +368,9 @@ describe LinearRing do
 
       linear_ring = LinearRing.new first, second, third, fourth
 
-      linear_ring.to_json.should be_equivalent_json_to "[#{first.to_json},#{second.to_json},#{third.to_json},#{fourth.to_json}]"
+      reference_json = "[#{first.to_json},#{second.to_json},#{third.to_json},#{fourth.to_json}]"
+
+      linear_ring.to_json.should be_equivalent_json_to reference_json
     end
   end
 
@@ -619,7 +625,9 @@ describe PolyRings do
 
       polyrings = PolyRings.new first, second
 
-      polyrings.to_json.should be_equivalent_json_to %([#{first.to_json},#{second.to_json}])
+      reference_json = %([#{first.to_json},#{second.to_json}])
+
+      polyrings.to_json.should be_equivalent_json_to reference_json
     end
   end
 
