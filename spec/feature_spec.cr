@@ -7,7 +7,7 @@ describe Feature do
 
       feature = Feature.new geometry
 
-      feature.geometry.should eq Point.new 0, 0
+      feature.geometry.should eq geometry
       feature.properties.should be_nil
       feature.id.should be_nil
     end
@@ -19,8 +19,8 @@ describe Feature do
 
       feature = Feature.new geometry, properties
 
-      feature.geometry.should eq Point.new 1, 0
-      feature.properties.should eq ({"color" => "0xFF00FF", "layer" => 2_i64} of String => JSON::Any::Type)
+      feature.geometry.should eq geometry
+      feature.properties.should eq properties
       feature.id.should be_nil
     end
 
@@ -29,7 +29,7 @@ describe Feature do
 
       feature = Feature.new geometry, id: 43
 
-      feature.geometry.should eq Point.new 4, 9
+      feature.geometry.should eq geometry
       feature.properties.should be_nil
       feature.id.should eq 43
     end
@@ -39,7 +39,7 @@ describe Feature do
 
       feature = Feature.new geometry, id: "forty-three"
 
-      feature.geometry.should eq LineString.new [0, 0], [1, 4]
+      feature.geometry.should eq geometry
       feature.properties.should be_nil
       feature.id.should eq "forty-three"
     end
@@ -51,8 +51,8 @@ describe Feature do
 
       feature = Feature.new geometry, properties, id: 43
 
-      feature.geometry.should eq Point.new 1, 0
-      feature.properties.should eq ({"color" => "0xFF00FF", "layer" => 2_i64} of String => JSON::Any::Type)
+      feature.geometry.should eq geometry
+      feature.properties.should eq properties
       feature.id.should eq 43
     end
 
