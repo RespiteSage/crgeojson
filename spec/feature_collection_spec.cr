@@ -3,10 +3,10 @@ require "./spec_helper"
 describe FeatureCollection do
   describe ".new" do
     it "sets the feature array" do
-      collection = FeatureCollection.new [Feature.new(Point.new(1, 0)), Feature.new(Point.new(1, 0))]
+      collection = FeatureCollection.new [Feature.new(Point.new(1, 0)), Feature.new(Point.new(0, 7))]
 
       collection.features[0].should eq Feature.new(Point.new(1, 0))
-      collection.features[1].should eq Feature.new(Point.new(1, 0))
+      collection.features[1].should eq Feature.new(Point.new(0, 7))
     end
 
     it "allows an empty array" do
