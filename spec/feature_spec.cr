@@ -150,4 +150,62 @@ describe Feature do
       result.should eq reference
     end
   end
+
+  describe "#==" do
+    geometry = Point.new 0, 1
+    properties = {"layer" => 2_i64} of String => JSON::Any::Type
+    id = 43
+
+    it "is true for the same object" do
+      result = Feature.new geometry, properties, id: id
+
+      result.should eq result
+    end
+
+    it "is true for a different Feature with the same geometry, properties, and id" do
+      first = Feature.new geometry, properties, id: id
+
+      second = Feature.new geometry, properties, id: id
+
+      first.should eq second
+    end
+
+    it "is false for a different Feature with a different id" do
+      first = Feature.new geometry, properties, id: id
+
+      other_id = "forty-three"
+
+      second = Feature.new geometry, properties, id: other_id
+
+      first.should_not eq second
+    end
+
+    it "is false for a different Feature with different properties" do
+      first = Feature.new geometry, properties, id: id
+
+      other_properties = {"layer" => 7_i64} of String => JSON::Any::Type
+
+      second = Feature.new geometry, other_properties, id: id
+
+      first.should_not eq second
+    end
+
+    it "is false for a different Feature with a different geometry" do
+      first = Feature.new geometry, properties, id: id
+
+      other_geometry = Point.new 7, 1
+
+      second = Feature.new other_geometry, properties, id: id
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = Feature.new geometry, properties, id: id
+
+      second = "Something else"
+
+      first.should_not eq second
+    end
+  end
 end

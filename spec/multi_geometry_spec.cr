@@ -46,6 +46,41 @@ describe MultiPoint do
       result.should eq reference
     end
   end
+
+  describe "#==" do
+    first_point = Point.new 10.0, 15.0
+    second_point = Point.new 20.0, 25.0
+
+    it "is true for the same object" do
+      result = MultiPoint.new first_point, second_point
+
+      result.should eq result
+    end
+
+    it "is true for a different MultiPoint with the same coordinates" do
+      first = MultiPoint.new first_point, second_point
+
+      second = MultiPoint.new first_point, second_point
+
+      first.should eq second
+    end
+
+    it "is false for a different MultiPoint with different coordinates" do
+      first = MultiPoint.new first_point, second_point
+
+      second = MultiPoint.new second_point
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = MultiPoint.new first_point, second_point
+
+      second = "Something else"
+
+      first.should_not eq second
+    end
+  end
 end
 
 describe MultiLineString do
@@ -95,6 +130,41 @@ describe MultiLineString do
       reference = MultiLineString.new LineString.new(first), LineString.new(second)
 
       result.should eq reference
+    end
+  end
+
+  describe "#==" do
+    first_linestring = LineString.new Position.new(1, 2), Position.new(3, 2)
+    second_linestring = LineString.new Position.new(1, 2), Position.new(1, 7)
+
+    it "is true for the same object" do
+      result = MultiLineString.new first_linestring, second_linestring
+
+      result.should eq result
+    end
+
+    it "is true for a different MultiLineString with the same coordinates" do
+      first = MultiLineString.new first_linestring, second_linestring
+
+      second = MultiLineString.new first_linestring, second_linestring
+
+      first.should eq second
+    end
+
+    it "is false for a different MultiLineString with different coordinates" do
+      first = MultiLineString.new first_linestring, second_linestring
+
+      second = MultiLineString.new second_linestring
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = MultiLineString.new first_linestring, second_linestring
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end
@@ -149,6 +219,41 @@ describe MultiPolygon do
       reference = MultiPolygon.new Polygon.new(first), Polygon.new(second)
 
       result.should eq reference
+    end
+  end
+
+  describe "#==" do
+    first_polygon = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
+    second_polygon = Polygon.new Position.new(0, 0), Position.new(2, 0), Position.new(0, 7)
+
+    it "is true for the same object" do
+      result = MultiPolygon.new first_polygon, second_polygon
+
+      result.should eq result
+    end
+
+    it "is true for a different MultiPolygon with the same coordinates" do
+      first = MultiPolygon.new first_polygon, second_polygon
+
+      second = MultiPolygon.new first_polygon, second_polygon
+
+      first.should eq second
+    end
+
+    it "is false for a different MultiPolygon with different coordinates" do
+      first = MultiPolygon.new first_polygon, second_polygon
+
+      second = MultiPolygon.new second_polygon
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = MultiPolygon.new first_polygon, second_polygon
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end

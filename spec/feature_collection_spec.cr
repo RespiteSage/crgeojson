@@ -45,4 +45,39 @@ describe FeatureCollection do
       result.should eq reference
     end
   end
+
+  describe "#==" do
+    first_feature = Feature.new Point.new(1, 0), id: 47
+    second_feature = Feature.new Point.new(0, 1)
+
+    it "is true for the same object" do
+      result = FeatureCollection.new first_feature, second_feature
+
+      result.should eq result
+    end
+
+    it "is true for a different FeatureCollection with the same features" do
+      first = FeatureCollection.new first_feature, second_feature
+
+      second = FeatureCollection.new first_feature, second_feature
+
+      first.should eq second
+    end
+
+    it "is false for a different FeatureCollection with different features" do
+      first = FeatureCollection.new first_feature, second_feature
+
+      second = FeatureCollection.new second_feature
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = FeatureCollection.new first_feature, second_feature
+
+      second = "Something else"
+
+      first.should_not eq second
+    end
+  end
 end

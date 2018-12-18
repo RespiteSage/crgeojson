@@ -143,6 +143,38 @@ describe Point do
       result.should eq reference
     end
   end
+
+  describe "#==" do
+    it "is true for the same object" do
+      result = Point.new 0, 1
+
+      result.should eq result
+    end
+
+    it "is true for a different Point with the same coordinates" do
+      first = Point.new 0, 1
+
+      second = Point.new 0, 1
+
+      first.should eq second
+    end
+
+    it "is false for a different Point with different coordinates" do
+      first = Point.new 0, 1
+
+      second = Point.new 1, 0
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = Point.new 0, 1
+
+      second = "Something else"
+
+      first.should_not eq second
+    end
+  end
 end
 
 describe LineString do
@@ -202,6 +234,38 @@ describe LineString do
       reference = LineString.new coordinates
 
       result.should eq reference
+    end
+  end
+
+  describe "#==" do
+    it "is true for the same object" do
+      result = LineString.new Position.new(10.0, 15.0), Position.new(20.0, 25.0)
+
+      result.should eq result
+    end
+
+    it "is true for a different LineString with the same coordinates" do
+      first = LineString.new Position.new(10.0, 15.0), Position.new(20.0, 25.0)
+
+      second = LineString.new Position.new(10.0, 15.0), Position.new(20.0, 25.0)
+
+      first.should eq second
+    end
+
+    it "is false for a different LineString with different coordinates" do
+      first = LineString.new Position.new(10.0, 15.0), Position.new(20.0, 25.0)
+
+      second = LineString.new Position.new(10.0, 15.0), Position.new(10.0, 13.0)
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = LineString.new Position.new(10.0, 15.0), Position.new(20.0, 25.0)
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end
@@ -336,6 +400,38 @@ describe Polygon do
       polygon.exterior.should eq outer_ring
     end
   end
+
+  describe "#==" do
+    it "is true for the same object" do
+      result = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
+
+      result.should eq result
+    end
+
+    it "is true for a different Polygon with the same coordinates" do
+      first = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
+
+      second = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
+
+      first.should eq second
+    end
+
+    it "is false for a different Polygon with different coordinates" do
+      first = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
+
+      second = Polygon.new Position.new(0, 0), Position.new(2, 0), Position.new(0, 5)
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
+
+      second = "Something else"
+
+      first.should_not eq second
+    end
+  end
 end
 
 describe GeometryCollection do
@@ -380,6 +476,41 @@ describe GeometryCollection do
       reference = GeometryCollection.new first, second
 
       result.should eq reference
+    end
+  end
+
+  describe "#==" do
+    first_geometry = Point.new 1, 5
+    second_geometry = LineString.new Position.new(2, 7), Position.new(3, 1)
+
+    it "is true for the same object" do
+      result = GeometryCollection.new first_geometry, second_geometry
+
+      result.should eq result
+    end
+
+    it "is true for a different GeometryCollection with the same coordinates" do
+      first = GeometryCollection.new first_geometry, second_geometry
+
+      second = GeometryCollection.new first_geometry, second_geometry
+
+      first.should eq second
+    end
+
+    it "is false for a different GeometryCollection with different geometries" do
+      first = GeometryCollection.new first_geometry, second_geometry
+
+      second = GeometryCollection.new second_geometry
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = GeometryCollection.new first_geometry, second_geometry
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end

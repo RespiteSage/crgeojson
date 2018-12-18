@@ -1,5 +1,11 @@
 require "./spec_helper"
 
+class MockCoordinates(T) < Coordinates(T)
+  def raise_if_invalid
+    # do nothing
+  end
+end
+
 describe Position do
   describe ".new" do
     it "properly sets the longitude and latitude" do
@@ -71,6 +77,46 @@ describe Position do
       position = Position.new 10.0, 15.0
 
       position.to_json.should eq "[10.0,15.0]"
+    end
+  end
+
+  describe "#==" do
+    it "is true for the same object" do
+      result = Position.new 0, 1
+
+      result.should eq result
+    end
+
+    it "is true for a different Position with the same coordinates" do
+      first = Position.new 0, 1
+
+      second = Position.new 0, 1
+
+      first.should eq second
+    end
+
+    it "is false for a different Position with different coordinates" do
+      first = Position.new 0, 1
+
+      second = Position.new 1, 0
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another Coordinates subclass" do
+      first = Position.new 0, 1
+
+      second = MockCoordinates(Float64).new [0.0, 1.0]
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = Position.new 0, 1
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end
@@ -150,6 +196,65 @@ describe LineStringCoordinates do
       linestring = LineStringCoordinates.new first, second
 
       linestring.to_json.should eq "[#{first.to_json},#{second.to_json}]"
+    end
+  end
+
+  describe "#==" do
+    it "is true for the same object" do
+      result = LineStringCoordinates.new Position.new(1, 2), Position.new(3, 2)
+
+      result.should eq result
+    end
+
+    it "is true for a different LineStringCoordinates with the same coordinates" do
+      first = LineStringCoordinates.new Position.new(1, 2), Position.new(3, 2)
+
+      second = LineStringCoordinates.new Position.new(1, 2), Position.new(3, 2)
+
+      first.should eq second
+    end
+
+    it "is false for a different LineStringCoordinates with different coordinates" do
+      first = LineStringCoordinates.new Position.new(1, 2), Position.new(3, 2)
+
+      second = LineStringCoordinates.new Position.new(1, 2), Position.new(1, 7)
+
+      first.should_not eq second
+    end
+
+    # A LinearRing will always be a valid LineStringCoordinates
+    it "is true for a LinearRing with the same coordinates" do
+      first = LineStringCoordinates.new(
+        Position.new(0, 0),
+        Position.new(1, 0),
+        Position.new(0, 1),
+        Position.new(0, 0)
+      )
+
+      second = LinearRing.new(
+        Position.new(0, 0),
+        Position.new(1, 0),
+        Position.new(0, 1),
+        Position.new(0, 0)
+      )
+
+      first.should eq second
+    end
+
+    it "is false for an object of another Coordinates subclass" do
+      first = LineStringCoordinates.new Position.new(1, 2), Position.new(3, 2)
+
+      second = MockCoordinates(Position).new [Position.new(1, 2), Position.new(3, 2)]
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = LineStringCoordinates.new Position.new(1, 2), Position.new(3, 2)
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end
@@ -260,6 +365,96 @@ describe LinearRing do
       linear_ring = LinearRing.new first, second, third, fourth
 
       linear_ring.to_json.should eq "[#{first.to_json},#{second.to_json},#{third.to_json},#{fourth.to_json}]"
+    end
+  end
+
+  describe "#==" do
+    it "is true for the same object" do
+      result = Position.new 0, 1
+
+      result.should eq result
+    end
+
+    it "is true for a different LinearRing with the same coordinates" do
+      first = LinearRing.new(
+        Position.new(0, 0),
+        Position.new(1, 0),
+        Position.new(0, 1),
+        Position.new(0, 0)
+      )
+
+      second = LinearRing.new(
+        Position.new(0, 0),
+        Position.new(1, 0),
+        Position.new(0, 1),
+        Position.new(0, 0)
+      )
+
+      first.should eq second
+    end
+
+    it "is false for a different LinearRing with different coordinates" do
+      first = LinearRing.new(
+        Position.new(0, 0),
+        Position.new(1, 0),
+        Position.new(0, 1),
+        Position.new(0, 0)
+      )
+
+      second = LinearRing.new(
+        Position.new(0, 0),
+        Position.new(2, 1),
+        Position.new(1, 2),
+        Position.new(0, 0)
+      )
+
+      first.should_not eq second
+    end
+
+    # A LineStringCoordinates should be able to change in ways that make it an
+    # invalid LinearRing
+    it "is false for a LineStringCoordinates with the same coordinates" do
+      first = LinearRing.new(
+        Position.new(0, 0),
+        Position.new(1, 0),
+        Position.new(0, 1),
+        Position.new(0, 0)
+      )
+
+      second = LineStringCoordinates.new(
+        Position.new(0, 0),
+        Position.new(1, 0),
+        Position.new(0, 1),
+        Position.new(0, 0)
+      )
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another Coordinates subclass" do
+      first = LinearRing.new(
+        Position.new(0, 0),
+        Position.new(1, 0),
+        Position.new(0, 1),
+        Position.new(0, 0)
+      )
+
+      second = MockCoordinates(Position).new [Position.new(0, 0), Position.new(1, 0), Position.new(0, 1), Position.new(0, 0)]
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = LinearRing.new(
+        Position.new(0, 0),
+        Position.new(1, 0),
+        Position.new(0, 1),
+        Position.new(0, 0)
+      )
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end
@@ -425,6 +620,59 @@ describe PolyRings do
       polyrings = PolyRings.new first, second
 
       polyrings.to_json.should eq %([#{first.to_json},#{second.to_json}])
+    end
+  end
+
+  describe "#==" do
+    first_ring = LinearRing.new(
+      Position.new(1, 2),
+      Position.new(3, 2),
+      Position.new(2, 0),
+      Position.new(1, 2)
+    )
+    second_ring = LinearRing.new(
+      Position.new(2, 3),
+      Position.new(4, 3),
+      Position.new(3, 1),
+      Position.new(2, 3)
+    )
+
+    it "is true for the same object" do
+      result = PolyRings.new first_ring, second_ring
+
+      result.should eq result
+    end
+
+    it "is true for a different PolyRings with the same coordinates" do
+      first = PolyRings.new first_ring, second_ring
+
+      second = PolyRings.new first_ring, second_ring
+
+      first.should eq second
+    end
+
+    it "is false for a different PolyRings with different coordinates" do
+      first = PolyRings.new first_ring, second_ring
+
+      second = PolyRings.new second_ring
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another Coordinates subclass" do
+      first = PolyRings.new first_ring, second_ring
+
+      second = MockCoordinates(LinearRing).new [first_ring, second_ring]
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = PolyRings.new first_ring, second_ring
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end
