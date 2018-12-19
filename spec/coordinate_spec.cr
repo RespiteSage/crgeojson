@@ -226,7 +226,6 @@ describe LineStringCoordinates do
       first.should_not eq second
     end
 
-    # A LinearRing will always be a valid LineStringCoordinates
     it "is true for a LinearRing with the same coordinates" do
       first = LineStringCoordinates.new(
         Position.new(0, 0),
@@ -417,9 +416,7 @@ describe LinearRing do
       first.should_not eq second
     end
 
-    # A LineStringCoordinates should be able to change in ways that make it an
-    # invalid LinearRing
-    it "is false for a LineStringCoordinates with the same coordinates" do
+    it "is true for a LineStringCoordinates with the same coordinates" do
       first = LinearRing.new(
         Position.new(0, 0),
         Position.new(1, 0),
@@ -434,7 +431,7 @@ describe LinearRing do
         Position.new(0, 0)
       )
 
-      first.should_not eq second
+      first.should eq second
     end
 
     it "is false for an object of another Coordinates subclass" do

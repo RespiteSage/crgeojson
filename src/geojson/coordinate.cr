@@ -83,6 +83,10 @@ module GeoJSON
         raise MalformedCoordinateException.new("LineString must have two or more points!")
       end
     end
+
+    def ==(other : LineStringCoordinates)
+      self.coordinates == other.coordinates
+    end
   end
 
   class LinearRing < LineStringCoordinates
