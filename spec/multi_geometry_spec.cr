@@ -15,7 +15,7 @@ describe MultiPoint do
 
   describe "#type" do
     it %(returns "MultiPoint") do
-      multipoint = MultiPoint.new Point.new(0,0)
+      multipoint = MultiPoint.new Point.new(0, 0)
 
       multipoint.type.should eq "MultiPoint"
     end
@@ -23,26 +23,62 @@ describe MultiPoint do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first = Point.new 10.0, 15.0
-      second = Point.new 20.0, 25.0
+      first = Position.new 10.0, 15.0
+      second = Position.new 20.0, 25.0
 
-      multipoint = MultiPoint.new first, second
+      multipoint = MultiPoint.new Point.new(first), Point.new(second)
 
-      reference_json = %({"type":"MultiPoint","coordinates":[[10.0,15.0],[20.0,25.0]]})
+      reference_json = %({"type":"MultiPoint","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      multipoint.to_json.should eq reference_json
+      multipoint.to_json.should be_equivalent_json_to reference_json
     end
   end
 
   describe "#from_json" do
     it "creates a MultiPoint matching the json" do
-      result = MultiPoint.from_json %({"type":"MultiPoint","coordinates":[[10.0,15.0],[20.0,25.0]]})
+      first = Position.new 10.0, 15.0
+      second = Position.new 20.0, 25.0
 
-      first = Point.new 10.0, 15.0
-      second = Point.new 20.0, 25.0
-      reference = MultiPoint.new first, second
+      result = MultiPoint.from_json %({"type":"MultiPoint","coordinates":[#{first.to_json},#{second.to_json}]})
+
+      reference = MultiPoint.new Point.new(first), Point.new(second)
 
       result.should eq reference
+    end
+  end
+
+  describe "#==" do
+    first_point = Point.new 10.0, 15.0
+    second_point = Point.new 20.0, 25.0
+
+    it "is true for the same object" do
+      result = MultiPoint.new first_point, second_point
+
+      result.should eq result
+    end
+
+    it "is true for a different MultiPoint with the same coordinates" do
+      first = MultiPoint.new first_point, second_point
+
+      second = MultiPoint.new first_point, second_point
+
+      first.should eq second
+    end
+
+    it "is false for a different MultiPoint with different coordinates" do
+      first = MultiPoint.new first_point, second_point
+
+      second = MultiPoint.new second_point
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = MultiPoint.new first_point, second_point
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end
@@ -57,13 +93,13 @@ describe MultiLineString do
 
       multilinestring = MultiLineString.new linestring
 
-      multilinestring[0].should eq LineString.new(Position.new(10.0,15.0),Position.new(20.0,25.0))
+      multilinestring[0].should eq LineString.new(Position.new(10.0, 15.0), Position.new(20.0, 25.0))
     end
   end
 
   describe "#type" do
     it %(returns "MultiLineString") do
-      linestring = LineString.new Position.new(0,0), Position.new(1,0)
+      linestring = LineString.new Position.new(0, 0), Position.new(1, 0)
 
       multilinestring = MultiLineString.new linestring
 
@@ -73,36 +109,62 @@ describe MultiLineString do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first = Position.new 0.0, 0.0
-      second = Position.new 0.0, 1.0
-      third = Position.new 1.0, 0.0
-      fourth = Position.new 0.0, 1.0
+      first = LineStringCoordinates.new Position.new(0, 0), Position.new(0, 1)
+      second = LineStringCoordinates.new Position.new(1, 0), Position.new(0, 1)
 
-      linestring_one = LineString.new first, second
-      linestring_two = LineString.new third, fourth
+      multilinestring = MultiLineString.new LineString.new(first), LineString.new(second)
 
-      multilinestring = MultiLineString.new linestring_one, linestring_two
+      reference_json = %({"type":"MultiLineString","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      reference_json = %({"type":"MultiLineString","coordinates":[[[0.0,0.0],[0.0,1.0]],[[1.0,0.0],[0.0,1.0]]]})
-
-      multilinestring.to_json.should eq reference_json
+      multilinestring.to_json.should be_equivalent_json_to reference_json
     end
   end
 
   describe "#from_json" do
     it "creates a MultiLineString matching the json" do
-      result = MultiLineString.from_json %({"type":"MultiLineString","coordinates":[[[0.0,0.0],[0.0,1.0]],[[1.0,0.0],[0.0,1.0]]]})
+      first = LineStringCoordinates.new Position.new(0, 0), Position.new(0, 1)
+      second = LineStringCoordinates.new Position.new(1, 0), Position.new(0, 1)
 
-      first = Position.new 0.0, 0.0
-      second = Position.new 0.0, 1.0
-      third = Position.new 1.0, 0.0
-      fourth = Position.new 0.0, 1.0
+      result = MultiLineString.from_json %({"type":"MultiLineString","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      linestring_one = LineString.new first, second
-      linestring_two = LineString.new third, fourth
-      reference = MultiLineString.new linestring_one, linestring_two
+      reference = MultiLineString.new LineString.new(first), LineString.new(second)
 
       result.should eq reference
+    end
+  end
+
+  describe "#==" do
+    first_linestring = LineString.new Position.new(1, 2), Position.new(3, 2)
+    second_linestring = LineString.new Position.new(1, 2), Position.new(1, 7)
+
+    it "is true for the same object" do
+      result = MultiLineString.new first_linestring, second_linestring
+
+      result.should eq result
+    end
+
+    it "is true for a different MultiLineString with the same coordinates" do
+      first = MultiLineString.new first_linestring, second_linestring
+
+      second = MultiLineString.new first_linestring, second_linestring
+
+      first.should eq second
+    end
+
+    it "is false for a different MultiLineString with different coordinates" do
+      first = MultiLineString.new first_linestring, second_linestring
+
+      second = MultiLineString.new second_linestring
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = MultiLineString.new first_linestring, second_linestring
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end
@@ -110,9 +172,9 @@ end
 describe MultiPolygon do
   describe ".new" do
     it "creates a new multipolygon with the given polygons" do
-      first  = Position.new 0,0
-      second = Position.new 1,0
-      third  = Position.new 0,1
+      first = Position.new 0, 0
+      second = Position.new 1, 0
+      third = Position.new 0, 1
 
       polygon_one = Polygon.new first, second, third
       polygon_two = Polygon.new second, first, third
@@ -126,7 +188,7 @@ describe MultiPolygon do
 
   describe "#type" do
     it %(returns "MultiPolygon") do
-      polygon = Polygon.new Position.new(0,0), Position.new(1,0), Position.new(0,1)
+      polygon = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
 
       multipolygon = MultiPolygon.new polygon
 
@@ -136,27 +198,62 @@ describe MultiPolygon do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first  = Polygon.new Position.new(0,0), Position.new(0,1), Position.new(1,0)
-      second = Polygon.new Position.new(0,2), Position.new(0,3), Position.new(1,2)
+      first = PolyRings.new [Position.new(0, 0), Position.new(0, 1), Position.new(1, 0), Position.new(0, 0)]
+      second = PolyRings.new [Position.new(0, 2), Position.new(0, 3), Position.new(1, 2), Position.new(0, 2)]
 
-      multipolygon = MultiPolygon.new first, second
+      multipolygon = MultiPolygon.new Polygon.new(first), Polygon.new(second)
 
-      reference_json = %({"type":"MultiPolygon","coordinates":[[[[0.0,0.0],[0.0,1.0],[1.0,0.0],[0.0,0.0]]],[[[0.0,2.0],[0.0,3.0],[1.0,2.0],[0.0,2.0]]]]})
+      reference_json = %({"type":"MultiPolygon","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      multipolygon.to_json.should eq reference_json
+      multipolygon.to_json.should be_equivalent_json_to reference_json
     end
   end
 
   describe "#from_json" do
     it "creates a MultiPolygon matching the json" do
-      result = MultiPolygon.from_json %({"type":"MultiPolygon","coordinates":[[[[0.0,0.0],[0.0,1.0],[1.0,0.0],[0.0,0.0]]],[[[0.0,2.0],[0.0,3.0],[1.0,2.0],[0.0,2.0]]]]})
+      first = PolyRings.new [Position.new(0, 0), Position.new(0, 1), Position.new(1, 0), Position.new(0, 0)]
+      second = PolyRings.new [Position.new(0, 2), Position.new(0, 3), Position.new(1, 2), Position.new(0, 2)]
 
-      first  = Polygon.new Position.new(0,0), Position.new(0,1), Position.new(1,0)
-      second = Polygon.new Position.new(0,2), Position.new(0,3), Position.new(1,2)
+      result = MultiPolygon.from_json %({"type":"MultiPolygon","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      reference = MultiPolygon.new first, second
+      reference = MultiPolygon.new Polygon.new(first), Polygon.new(second)
 
       result.should eq reference
+    end
+  end
+
+  describe "#==" do
+    first_polygon = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
+    second_polygon = Polygon.new Position.new(0, 0), Position.new(2, 0), Position.new(0, 7)
+
+    it "is true for the same object" do
+      result = MultiPolygon.new first_polygon, second_polygon
+
+      result.should eq result
+    end
+
+    it "is true for a different MultiPolygon with the same coordinates" do
+      first = MultiPolygon.new first_polygon, second_polygon
+
+      second = MultiPolygon.new first_polygon, second_polygon
+
+      first.should eq second
+    end
+
+    it "is false for a different MultiPolygon with different coordinates" do
+      first = MultiPolygon.new first_polygon, second_polygon
+
+      second = MultiPolygon.new second_polygon
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = MultiPolygon.new first_polygon, second_polygon
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end

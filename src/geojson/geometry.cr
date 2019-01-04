@@ -2,7 +2,6 @@ require "json"
 require "./coordinate"
 
 module GeoJSON
-
   abstract class Geometry < Base
     GEOMETRY_TYPES = [Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon]
 
@@ -35,7 +34,7 @@ module GeoJSON
       end
     end
 
-    def_equals coordinates, type
+    def_equals_and_hash coordinates, type
 
     delegate "[]", to: coordinates
 
@@ -141,5 +140,4 @@ module GeoJSON
 
     delegate "[]", to: geometries
   end
-
 end

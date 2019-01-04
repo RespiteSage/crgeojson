@@ -1,7 +1,6 @@
 require "json"
 
 module GeoJSON
-
   class MalformedCoordinateException < Exception
   end
 
@@ -15,7 +14,7 @@ module GeoJSON
 
     delegate to_json, "[]", to: coordinates
 
-    def_equals coordinates
+    def_equals_and_hash coordinates
 
     # We use the inherited macro to create subclass initializers because any
     # subclass initializer will obscure all superclass initializers
@@ -37,7 +36,6 @@ module GeoJSON
   end
 
   class Position < Coordinates(Float64)
-
     def initialize(coordinates : Array(Number))
       initialize coordinates.map { |number| number.to_f64 }
 
@@ -72,9 +70,8 @@ module GeoJSON
   end
 
   class LineStringCoordinates < Coordinates(Position)
-
     def initialize(arrays : Array(Array))
-      initialize arrays.map { |array| Position.new(array)}
+      initialize arrays.map { |array| Position.new(array) }
     end
 
     def initialize(*arrays : Array)
@@ -85,6 +82,10 @@ module GeoJSON
       if coordinates.size < 2
         raise MalformedCoordinateException.new("LineString must have two or more points!")
       end
+    end
+
+    def ==(other : LineStringCoordinates)
+      self.coordinates == other.coordinates
     end
   end
 
@@ -101,7 +102,6 @@ module GeoJSON
   end
 
   class PolyRings < Coordinates(LinearRing)
-
     def initialize(arrays : Array(Array))
       initialize arrays.map { |array| LinearRing.new array }
     end
@@ -113,5 +113,4 @@ module GeoJSON
     def raise_if_invalid
     end
   end
-
 end

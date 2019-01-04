@@ -20,72 +20,69 @@ describe Geometry do
       end
     end
 
-    it "accepts valid geometry types" do
-      geometry_strings = [%({"type":"Point","coordinates":[0,0]}),
-                          %({"type":"MultiPoint","coordinates":[[0,0]]}),
-                          %({"type":"LineString","coordinates":[[0,0],[0,1]]}),
-                          %({"type":"MultiLineString","coordinates":[[[0,0],[0,1]],[[1,0],[0,1]]]}),
-                          %({"type":"Polygon","coordinates":[[[0,0],[1,0],[0,1],[0,0]]]}),
-                          %({"type":"MultiPolygon","coordinates":[[[[0,0],[0,1],[1,0],[0,0]]]]})]
-
-      geometry_strings.each do |json|
-        Geometry.from_json json
-      end
-    end
-
     it "returns the correct Point for a point string" do
-      result = Geometry.from_json %({"type":"Point","coordinates":[10,15]})
+      coordinates = Position.new 10, 15
 
-      reference = Point.new 10, 15
+      result = Geometry.from_json %({"type":"Point","coordinates":#{coordinates.to_json}})
+
+      reference = Point.new coordinates
 
       result.should eq reference
     end
 
     it "returns the correct MultiPoint for a multipoint string" do
-      result = Geometry.from_json %({"type":"MultiPoint","coordinates":[[10.0,15.0],[20.0,25.0]]})
+      first = Position.new 10, 15
+      second = Position.new 20, 25
 
-      reference = MultiPoint.new Point.new(10,15), Point.new(20,25)
+      result = Geometry.from_json %({"type":"MultiPoint","coordinates":[#{first.to_json},#{second.to_json}]})
+
+      reference = MultiPoint.new Point.new(first), Point.new(second)
 
       result.should eq reference
     end
 
     it "returns the correct LineString for a linestring string" do
-      result = Geometry.from_json %({"type":"LineString","coordinates":[[10.0,15.0],[20.0,25.0]]})
+      coordinates = LineStringCoordinates.new Position.new(10, 15), Position.new(20, 25)
 
-      reference = LineString.new Position.new(10,15), Position.new(20,25)
+      result = Geometry.from_json %({"type":"LineString","coordinates":#{coordinates.to_json}})
+
+      reference = LineString.new coordinates
 
       result.should eq reference
     end
 
     it "returns the correct MultiLineString for a multilinestring string" do
-      result = Geometry.from_json %({"type":"MultiLineString","coordinates":[[[0.0,0.0],[0.0,1.0]],[[1.0,0.0],[0.0,1.0]]]})
+      first = LineStringCoordinates.new Position.new(0, 0), Position.new(0, 1)
+      second = LineStringCoordinates.new Position.new(1, 0), Position.new(0, 1)
 
-      first  = LineString.new Position.new(0,0), Position.new(0,1)
-      second = LineString.new Position.new(1,0), Position.new(0,1)
-      reference = MultiLineString.new first, second
+      result = Geometry.from_json %({"type":"MultiLineString","coordinates":[#{first.to_json},#{second.to_json}]})
+
+      reference = MultiLineString.new LineString.new(first), LineString.new(second)
 
       result.should eq reference
     end
 
     it "returns the correct Polygon for a polygon string" do
-      result = Geometry.from_json %({"type":"Polygon","coordinates":[[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]]})
+      coordinates = PolyRings.new [Position.new(0, 0), Position.new(1, 0), Position.new(0, 1), Position.new(0, 0)]
 
-      reference = Polygon.new Position.new(0,0), Position.new(1,0), Position.new(0,1)
+      result = Geometry.from_json %({"type":"Polygon","coordinates":#{coordinates.to_json}})
+
+      reference = Polygon.new coordinates
 
       result.should eq reference
     end
 
     it "returns the correct MultiPolygon for a multipolygon string" do
-      result = Geometry.from_json %({"type":"MultiPolygon","coordinates":[[[[0.0,0.0],[0.0,1.0],[1.0,0.0],[0.0,0.0]]],[[[0.0,2.0],[0.0,3.0],[1.0,2.0],[0.0,2.0]]]]})
+      first = PolyRings.new [Position.new(0, 0), Position.new(0, 1), Position.new(1, 0), Position.new(0, 0)]
+      second = PolyRings.new [Position.new(0, 2), Position.new(0, 3), Position.new(1, 2), Position.new(0, 2)]
 
-      first  = Polygon.new Position.new(0,0), Position.new(0,1), Position.new(1,0)
-      second = Polygon.new Position.new(0,2), Position.new(0,3), Position.new(1,2)
-      reference = MultiPolygon.new first, second
+      result = Geometry.from_json %({"type":"MultiPolygon","coordinates":[#{first.to_json},#{second.to_json}]})
+
+      reference = MultiPolygon.new Polygon.new(first), Polygon.new(second)
 
       result.should eq reference
     end
   end
-
 end
 
 describe Point do
@@ -128,19 +125,56 @@ describe Point do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      point = Point.new 10, 15
+      coordinates = Position.new 10, 15
+      point = Point.new coordinates
 
-      point.to_json.should eq %({"type":"Point","coordinates":[10.0,15.0]})
+      reference_json = %({"type":"Point","coordinates":#{coordinates.to_json}})
+
+      point.to_json.should be_equivalent_json_to reference_json
     end
   end
 
   describe "#from_json" do
     it "creates a Point matching the json" do
-      result = Point.from_json %({"type":"Point","coordinates":[10.0,15.0]})
+      coordinates = Position.new 10, 15
 
-      reference = Point.new 10, 15
+      result = Point.from_json %({"type":"Point","coordinates":#{coordinates.to_json}})
+
+      reference = Point.new coordinates
 
       result.should eq reference
+    end
+  end
+
+  describe "#==" do
+    it "is true for the same object" do
+      result = Point.new 0, 1
+
+      result.should eq result
+    end
+
+    it "is true for a different Point with the same coordinates" do
+      first = Point.new 0, 1
+
+      second = Point.new 0, 1
+
+      first.should eq second
+    end
+
+    it "is false for a different Point with different coordinates" do
+      first = Point.new 0, 1
+
+      second = Point.new 1, 0
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = Point.new 0, 1
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end
@@ -175,7 +209,7 @@ describe LineString do
 
   describe "#type" do
     it %(returns "LineString") do
-      linestring = LineString.new Position.new(0,0), Position.new(1,0)
+      linestring = LineString.new Position.new(0, 0), Position.new(1, 0)
 
       linestring.type.should eq "LineString"
     end
@@ -183,26 +217,57 @@ describe LineString do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first = Position.new 10.0, 15.0
-      second = Position.new 20.0, 25.0
+      coordinates = LineStringCoordinates.new Position.new(10.0, 15.0), Position.new(20.0, 25.0)
 
-      linestring = LineString.new first, second
+      linestring = LineString.new coordinates
 
-      reference_json = %({"type":"LineString","coordinates":[[10.0,15.0],[20.0,25.0]]})
+      reference_json = %({"type":"LineString","coordinates":#{coordinates.to_json}})
 
-      linestring.to_json.should eq reference_json
+      linestring.to_json.should be_equivalent_json_to reference_json
     end
   end
 
   describe "#from_json" do
     it "creates a LineString matching the json" do
-      result = LineString.from_json %({"type":"LineString","coordinates":[[10.0,15.0],[20.0,25.0]]})
+      coordinates = LineStringCoordinates.new Position.new(10.0, 15.0), Position.new(20.0, 25.0)
 
-      first = Position.new 10, 15
-      second = Position.new 20, 25
-      reference = LineString.new first, second
+      result = LineString.from_json %({"type":"LineString","coordinates":#{coordinates.to_json}})
+
+      reference = LineString.new coordinates
 
       result.should eq reference
+    end
+  end
+
+  describe "#==" do
+    it "is true for the same object" do
+      result = LineString.new Position.new(10.0, 15.0), Position.new(20.0, 25.0)
+
+      result.should eq result
+    end
+
+    it "is true for a different LineString with the same coordinates" do
+      first = LineString.new Position.new(10.0, 15.0), Position.new(20.0, 25.0)
+
+      second = LineString.new Position.new(10.0, 15.0), Position.new(20.0, 25.0)
+
+      first.should eq second
+    end
+
+    it "is false for a different LineString with different coordinates" do
+      first = LineString.new Position.new(10.0, 15.0), Position.new(20.0, 25.0)
+
+      second = LineString.new Position.new(10.0, 15.0), Position.new(10.0, 13.0)
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = LineString.new Position.new(10.0, 15.0), Position.new(20.0, 25.0)
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end
@@ -231,13 +296,33 @@ describe Polygon do
     end
 
     it "creates a new polygon with the given rings" do
-      outer_ring = LinearRing.new(Position.new(0,0),Position.new(5,0),Position.new(0,5),Position.new(0,0))
-      inner_ring = LinearRing.new(Position.new(1,1),Position.new(1,2),Position.new(2,1),Position.new(1,1))
+      outer_ring = LinearRing.new(
+        Position.new(0, 0),
+        Position.new(5, 0),
+        Position.new(0, 5),
+        Position.new(0, 0)
+      )
+      inner_ring = LinearRing.new(
+        Position.new(1, 1),
+        Position.new(1, 2),
+        Position.new(2, 1),
+        Position.new(1, 1)
+      )
 
       polygon = Polygon.new outer_ring, inner_ring
 
-      polygon[0].should eq LinearRing.new(Position.new(0,0),Position.new(5,0),Position.new(0,5),Position.new(0,0))
-      polygon[1].should eq LinearRing.new(Position.new(1,1),Position.new(1,2),Position.new(2,1),Position.new(1,1))
+      polygon[0].should eq LinearRing.new(
+        Position.new(0, 0),
+        Position.new(5, 0),
+        Position.new(0, 5),
+        Position.new(0, 0)
+      )
+      polygon[1].should eq LinearRing.new(
+        Position.new(1, 1),
+        Position.new(1, 2),
+        Position.new(2, 1),
+        Position.new(1, 1)
+      )
     end
 
     it "creates a new polygon with an array of points" do
@@ -257,7 +342,7 @@ describe Polygon do
       second = Position.new 1, 0
       third = Position.new 0, 1
 
-      polygon = Polygon.new [0,0], [1,0], [0,1]
+      polygon = Polygon.new [0, 0], [1, 0], [0, 1]
 
       polygon.exterior[0].should eq Position.new 0, 0
       polygon.exterior[1].should eq Position.new 1, 0
@@ -267,7 +352,7 @@ describe Polygon do
 
   describe "#type" do
     it %(returns "Polygon") do
-      polygon = Polygon.new Position.new(0,0), Position.new(1,0), Position.new(0,1)
+      polygon = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
 
       polygon.type.should eq "Polygon"
     end
@@ -275,27 +360,23 @@ describe Polygon do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first = Position.new 0, 0
-      second = Position.new 1, 0
-      third = Position.new 0, 1
+      coordinates = PolyRings.new [Position.new(0, 0), Position.new(1, 0), Position.new(0, 1), Position.new(0, 0)]
 
-      polygon = Polygon.new first, second, third
+      polygon = Polygon.new coordinates
 
-      reference_json = %({"type":"Polygon","coordinates":[[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]]})
+      reference_json = %({"type":"Polygon","coordinates":#{coordinates.to_json}})
 
-      polygon.to_json.should eq reference_json
+      polygon.to_json.should be_equivalent_json_to reference_json
     end
   end
 
   describe "#from_json" do
     it "creates a Polygon matching the json" do
-      result = Polygon.from_json %({"type":"Polygon","coordinates":[[[0.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.0]]]})
+      coordinates = PolyRings.new [Position.new(0, 0), Position.new(1, 0), Position.new(0, 1), Position.new(0, 0)]
 
-      first = Position.new 0, 0
-      second = Position.new 1, 0
-      third = Position.new 0, 1
+      result = Polygon.from_json %({"type":"Polygon","coordinates":#{coordinates.to_json}})
 
-      reference = Polygon.new first, second, third
+      reference = Polygon.new coordinates
 
       result.should eq reference
     end
@@ -303,12 +384,54 @@ describe Polygon do
 
   describe "#exterior" do
     it "returns the first LinearRing" do
-      outer_ring = LinearRing.new(Position.new(0,0),Position.new(5,0),Position.new(0,5),Position.new(0,0))
-      inner_ring = LinearRing.new(Position.new(1,1),Position.new(1,2),Position.new(2,1),Position.new(1,1))
+      outer_ring = LinearRing.new(
+        Position.new(0, 0),
+        Position.new(5, 0),
+        Position.new(0, 5),
+        Position.new(0, 0)
+      )
+      inner_ring = LinearRing.new(
+        Position.new(1, 1),
+        Position.new(1, 2),
+        Position.new(2, 1),
+        Position.new(1, 1)
+      )
 
       polygon = Polygon.new outer_ring, inner_ring
 
       polygon.exterior.should eq outer_ring
+    end
+  end
+
+  describe "#==" do
+    it "is true for the same object" do
+      result = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
+
+      result.should eq result
+    end
+
+    it "is true for a different Polygon with the same coordinates" do
+      first = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
+
+      second = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
+
+      first.should eq second
+    end
+
+    it "is false for a different Polygon with different coordinates" do
+      first = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
+
+      second = Polygon.new Position.new(0, 0), Position.new(2, 0), Position.new(0, 5)
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = Polygon.new Position.new(0, 0), Position.new(1, 0), Position.new(0, 1)
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end
@@ -316,19 +439,19 @@ end
 describe GeometryCollection do
   describe ".new" do
     it "creates a new geometry collection with the given geometries" do
-      first  = Point.new 1, 5
-      second = LineString.new Position.new(2,7), Position.new(3,1)
+      first = Point.new 1, 5
+      second = LineString.new Position.new(2, 7), Position.new(3, 1)
 
       collection = GeometryCollection.new first, second
 
       collection[0].should eq Point.new 1, 5
-      collection[1].should eq LineString.new Position.new(2,7), Position.new(3,1)
+      collection[1].should eq LineString.new Position.new(2, 7), Position.new(3, 1)
     end
   end
 
   describe "#type" do
     it %(returns "GeometryCollection") do
-      collection = GeometryCollection.new Point.new(0,0)
+      collection = GeometryCollection.new Point.new(0, 0)
 
       collection.type.should eq "GeometryCollection"
     end
@@ -336,25 +459,62 @@ describe GeometryCollection do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first  = Point.new 1, 5
-      second = LineString.new Position.new(2,7), Position.new(3,1)
+      first = Point.new 1, 5
+      second = LineString.new Position.new(2, 7), Position.new(3, 1)
 
       collection = GeometryCollection.new first, second
 
-      collection.to_json.should eq %({"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[1.0,5.0]},{"type":"LineString","coordinates":[[2.0,7.0],[3.0,1.0]]}]})
+      reference_json = %({"type":"GeometryCollection","geometries":[#{first.to_json},#{second.to_json}]})
+
+      collection.to_json.should be_equivalent_json_to reference_json
     end
   end
 
   describe "#from_json" do
     it "creates a GeometryCollection matching the json" do
-      result = GeometryCollection.from_json %({"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[1.0,5.0]},{"type":"LineString","coordinates":[[2.0,7.0],[3.0,1.0]]}]})
+      first = Point.new 1, 5
+      second = LineString.new Position.new(2, 7), Position.new(3, 1)
 
-      first  = Point.new 1, 5
-      second = LineString.new Position.new(2,7), Position.new(3,1)
+      result = GeometryCollection.from_json %({"type":"GeometryCollection","geometries":[#{first.to_json},#{second.to_json}]})
 
       reference = GeometryCollection.new first, second
 
       result.should eq reference
+    end
+  end
+
+  describe "#==" do
+    first_geometry = Point.new 1, 5
+    second_geometry = LineString.new Position.new(2, 7), Position.new(3, 1)
+
+    it "is true for the same object" do
+      result = GeometryCollection.new first_geometry, second_geometry
+
+      result.should eq result
+    end
+
+    it "is true for a different GeometryCollection with the same coordinates" do
+      first = GeometryCollection.new first_geometry, second_geometry
+
+      second = GeometryCollection.new first_geometry, second_geometry
+
+      first.should eq second
+    end
+
+    it "is false for a different GeometryCollection with different geometries" do
+      first = GeometryCollection.new first_geometry, second_geometry
+
+      second = GeometryCollection.new second_geometry
+
+      first.should_not eq second
+    end
+
+    it "is false for an object of another class" do
+      first = GeometryCollection.new first_geometry, second_geometry
+
+      second = "Something else"
+
+      first.should_not eq second
     end
   end
 end
