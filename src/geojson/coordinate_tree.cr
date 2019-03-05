@@ -16,7 +16,7 @@ module GeoJSON
   end
 
 
-  abstract def leafValue : Float
+  abstract def leaf_value : Float
 
   abstract def parent : CoordinateTree
 
@@ -26,11 +26,11 @@ module GeoJSON
     children << child
   end
 
-  def fromGeoJSON(parser : JSON::PullParser)
+  def self.from_geojson(parser : JSON::PullParser)
     # TODO
   end
 
-  private def fromGeoJSON(parser : JSON::PullParser, parent : CoordinateTree)
+  private def self.from_geojson(parser : JSON::PullParser, parent : CoordinateTree)
     # TODO
   end
 
