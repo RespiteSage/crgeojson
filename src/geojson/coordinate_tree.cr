@@ -1,37 +1,72 @@
 module GeoJSON
+  # TODO
   abstract class CoordinateTree
+    # TODO
     class Root < CoordinateTree
-      #TODO
+      getter children = [] of CoordinateTree
+
+      def parent
+        raise "Roots do not have parents!"
+      end
+
+      def leaf_value
+        raise "Roots do not have leaf values!"
+      end
     end
 
 
     class Branch < CoordinateTree
-      #TODO
+      getter children = [] of CoordinateTree
+      property parent : CoordinateTree
+
+      # TODO
+      def initialize(@parent : CoordinateTree)
+        parent.add_child self
+      end
+
+      def leaf_value
+        raise "Branches do not have leaf values!"
+      end
     end
 
 
     class Leaf < CoordinateTree
-      #TODO
+      property parent : CoordinateTree
+      property leaf_value : Float32
+
+      # TODO
+      def initialize(@parent : CoordinateTree, leaf_value : Number)
+        @leaf_value = leaf_value.to_f32
+        parent.add_child self
+      end
+
+      def children
+        raise "Leaves do not have children!"
+      end
+    end
+
+    # TODO
+    abstract def leaf_value : Float32
+
+    # TODO
+    abstract def parent : CoordinateTree
+
+    # TODO
+    abstract def children : Array(CoordinateTree)
+
+    # :nodoc:
+    protected def add_child(child : CoordinateTree)
+      children << child
+    end
+
+    # TODO
+    def CoordinateTree.from_geojson(parser : JSON::PullParser)
+      # TODO
+    end
+
+    # :nodoc:
+    private def CoordinateTree.from_geojson(parser : JSON::PullParser, parent : CoordinateTree)
+      # TODO
     end
   end
-
-
-  abstract def leaf_value : Float
-
-  abstract def parent : CoordinateTree
-
-  abstract def children : Array(CoordinateTree)
-
-  private def addChild(CoordinateTree child)
-    children << child
-  end
-
-  def self.from_geojson(parser : JSON::PullParser)
-    # TODO
-  end
-
-  private def self.from_geojson(parser : JSON::PullParser, parent : CoordinateTree)
-    # TODO
-  end
-
 end
