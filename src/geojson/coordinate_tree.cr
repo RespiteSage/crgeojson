@@ -12,6 +12,8 @@ module GeoJSON
       def leaf_value
         raise "Roots do not have leaf values!"
       end
+
+      def_equals_and_hash children
     end
 
 
@@ -27,6 +29,8 @@ module GeoJSON
       def leaf_value
         raise "Branches do not have leaf values!"
       end
+
+      def_equals_and_hash parent, children
     end
 
 
@@ -43,6 +47,8 @@ module GeoJSON
       def children
         raise "Leaves do not have children!"
       end
+
+      def_equals_and_hash parent, leaf_value
     end
 
     # TODO
