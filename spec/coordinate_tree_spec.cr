@@ -100,24 +100,24 @@ describe CoordinateTree do
 
       it "adds the Leaf to its parent" do
         parent = Root.new
-        leaf = Leaf.new parent, 7.0
+        leaf = Leaf.new parent, 11.0
 
         parent.children.should eq [leaf]
       end
     end
 
     describe "#leaf_value" do
-      it "returns 3 when given in the constructor" do
-        leaf = Leaf.new Root.new, 11.0
+      it "returns 3 when given in the constructor" do # is this unnecessary repetition?
+        leaf = Leaf.new Root.new, 13.0
 
-        leaf.leaf_value.should eq 11.0
+        leaf.leaf_value.should eq 13.0
       end
     end
 
     describe "#parent" do
-      it "returns the parent of the Leaf" do
+      it "returns the parent of the Leaf" do # is this unnecessary repetition?
         parent = Root.new
-        leaf = Leaf.new parent, 13
+        leaf = Leaf.new parent, 17
 
         leaf.parent.should be parent
       end
@@ -126,7 +126,7 @@ describe CoordinateTree do
     describe "#children" do
       it "throws an error" do
         expect_raises(Exception, "Leaves do not have children!") do
-          Leaf.new(Root.new, 17.0).children
+          Leaf.new(Root.new, 19.0).children
         end
       end
     end
@@ -134,23 +134,52 @@ describe CoordinateTree do
 
   describe ".from_geojson" do
     it "deserializes just a root" do
-      # TODO
+      tree = CoordinateTree.from_geojson(JSON::PullParser.new "[]")
+
+      tree.should eq Root.new
     end
 
     it "deserializes a root with leaves" do
-      # TODO
+      tree = CoordinateTree.from_geojson(JSON::PullParser.new "[23, 29]")
+
+      root = Root.new
+      leaf1 = Leaf.new root, 23
+      leaf2 = Leaf.new root, 29
+
+      tree.should eq root
     end
 
     it "deserializes a root with a single branch" do
-      # TODO
+      tree = CoordinateTree.from_geojson(JSON::PullParser.new "[[]]")
+
+      root = Root.new
+      branch = Branch.new root
+
+      tree.should eq root
     end
 
     it "deserializes a root with multiple branches" do
-      # TODO
+      tree = CoordinateTree.from_geojson(JSON::PullParser.new "[[], []]")
+
+      root = Root.new
+      branch1 = Branch.new root
+      branch2 = Branch.new root
+
+      tree.should eq root
     end
 
     it "deserializes a root with branches and leaves" do
-      # TODO
+      tree = CoordinateTree.from_geojson(JSON::PullParser.new "[[31, 37], [41, 43]]")
+
+      root = Root.new
+      branch1 = Branch.new root
+      leaf11 = Leaf.new branch1, 31
+      leaf12 = Leaf.new branch1, 37
+      branch2 = Branch.new root
+      leaf21 = Leaf.new branch2, 41
+      leaf22 = Leaf.new branch2, 43
+
+      tree.should eq root
     end
   end
 end
