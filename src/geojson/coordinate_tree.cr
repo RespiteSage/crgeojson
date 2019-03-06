@@ -108,7 +108,7 @@ module GeoJSON
     end
 
     # TODO
-    def CoordinateTree.from_geojson(parser : JSON::PullParser)
+    def CoordinateTree.new(parser : JSON::PullParser)
       Root.new parser
     end
   end

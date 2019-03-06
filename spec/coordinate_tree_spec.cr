@@ -134,13 +134,13 @@ describe CoordinateTree do
 
   describe ".from_geojson" do
     it "deserializes just a root" do
-      tree = CoordinateTree.from_geojson(JSON::PullParser.new "[]")
+      tree = CoordinateTree.new(JSON::PullParser.new "[]")
 
       tree.should eq Root.new
     end
 
     it "deserializes a root with leaves" do
-      tree = CoordinateTree.from_geojson(JSON::PullParser.new "[23, 29]")
+      tree = CoordinateTree.new(JSON::PullParser.new "[23, 29]")
 
       root = Root.new
       leaf1 = Leaf.new root, 23
@@ -150,7 +150,7 @@ describe CoordinateTree do
     end
 
     it "deserializes a root with a single branch" do
-      tree = CoordinateTree.from_geojson(JSON::PullParser.new "[[]]")
+      tree = CoordinateTree.new(JSON::PullParser.new "[[]]")
 
       root = Root.new
       branch = Branch.new root
@@ -159,7 +159,7 @@ describe CoordinateTree do
     end
 
     it "deserializes a root with multiple branches" do
-      tree = CoordinateTree.from_geojson(JSON::PullParser.new "[[], []]")
+      tree = CoordinateTree.new(JSON::PullParser.new "[[], []]")
 
       root = Root.new
       branch1 = Branch.new root
@@ -169,7 +169,7 @@ describe CoordinateTree do
     end
 
     it "deserializes a root with branches and leaves" do
-      tree = CoordinateTree.from_geojson(JSON::PullParser.new "[[31, 37], [41, 43]]")
+      tree = CoordinateTree.new(JSON::PullParser.new "[[31, 37], [41, 43]]")
 
       root = Root.new
       branch1 = Branch.new root
