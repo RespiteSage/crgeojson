@@ -32,6 +32,10 @@ module GeoJSON
 
         raise_if_invalid
       end
+
+      def initialize(coordinate_tree : CoordinateTree)
+        @coordinates = coordinate_tree.children.map { |child| T.new child }
+      end
     end
   end
 
@@ -48,6 +52,10 @@ module GeoJSON
       else
         initialize [lon, lat]
       end
+    end
+
+    def initialize(coordinate_tree : CoordinateTree)
+      initialize coordinate_tree.children.flat_map { |child| child.leaf_value}
     end
 
     def longitude

@@ -49,6 +49,19 @@ describe Position do
         Position.new [10.0, 15.0, 20.0, 25.0]
       end
     end
+
+    it "creates appropriate coordinates from a CoordinateTree" do
+      root = Root.new
+      lon = Leaf.new root, 20
+      lat = Leaf.new root, -40
+      alt = Leaf.new root, 45
+
+      result = Position.new root
+
+      result.longitude.should eq 20
+      result.latitude.should eq -40
+      result.altivation.should eq 45
+    end
   end
 
   describe "#from_json" do
@@ -169,6 +182,20 @@ describe LineStringCoordinates do
       result[1].should eq Position.new 3, 2
       result[2].should eq Position.new 2, 0
       result[3].should eq Position.new 1, 2
+    end
+
+    it "creates appropriate coordinates from a CoordinateTree" do
+      root = Root.new
+      first_position = Branch.new root
+      first_position_lon = Leaf.new first_position, 2
+      first_position_lat = Leaf.new first_position, 3
+      second_position = Branch.new root
+      second_position_lon = Leaf.new second_position, 5
+      second_position_lat = Leaf.new second_position, 7
+
+      result = LineStringCoordinates.new root
+
+      result.should eq LineStringCoordinates.new [[2, 3], [5, 7]]
     end
   end
 
@@ -329,6 +356,26 @@ describe LinearRing do
       result[1].should eq Position.new 3, 2
       result[2].should eq Position.new 2, 0
       result[3].should eq Position.new 1, 2
+    end
+
+    it "creates appropriate coordinates from a CoordinateTree" do
+      root = Root.new
+      first_position = Branch.new root
+      first_position_lon = Leaf.new first_position, 2
+      first_position_lat = Leaf.new first_position, 3
+      second_position = Branch.new root
+      second_position_lon = Leaf.new second_position, 5
+      second_position_lat = Leaf.new second_position, 7
+      third_position = Branch.new root
+      third_position_lon = Leaf.new third_position, 11
+      third_position_lat = Leaf.new third_position, 13
+      fourth_position = Branch.new root
+      fourth_position_lon = Leaf.new fourth_position, 2
+      fourth_position_lat = Leaf.new fourth_position, 3
+
+      result = LinearRing.new root
+
+      result.should eq LinearRing.new [[2, 3], [5, 7], [11, 13], [2, 3]]
     end
   end
 
@@ -580,6 +627,27 @@ describe PolyRings do
         Position.new(3, 1),
         Position.new(2, 3)
       )
+    end
+
+    it "creates appropriate coordinates from a CoordinateTree" do
+      root = Root.new
+      first_ring = Branch.new root
+      first_position = Branch.new first_ring
+      first_position_lon = Leaf.new first_position, 2
+      first_position_lat = Leaf.new first_position, 3
+      second_position = Branch.new first_ring
+      second_position_lon = Leaf.new second_position, 5
+      second_position_lat = Leaf.new second_position, 7
+      third_position = Branch.new first_ring
+      third_position_lon = Leaf.new third_position, 11
+      third_position_lat = Leaf.new third_position, 13
+      fourth_position = Branch.new first_ring
+      fourth_position_lon = Leaf.new fourth_position, 2
+      fourth_position_lat = Leaf.new fourth_position, 3
+
+      result = PolyRings.new root
+
+      result.should eq PolyRings.new [[[2, 3], [5, 7], [11, 13], [2, 3]]]
     end
   end
 
