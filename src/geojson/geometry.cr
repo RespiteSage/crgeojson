@@ -3,35 +3,54 @@ require "./coordinate"
 
 module GeoJSON
   abstract class Geometry < Base
-    GEOMETRY_TYPES = [Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon]
-
     abstract def coordinates
 
-    def self.new(pull : JSON::PullParser)
-      Geometry.from_json(pull.read_raw)
-    end
+    def Geometry.new(pull : JSON::PullParser)
+      pull.read_begin_object
+      while pull.kind != :end_object
+        case pull.read_string
+        when "type"
+          begin
+            geometry_type = pull.read_string
+          rescue JSON::ParseException
+            raise "Type field is not a string!"
+          end
+        when "coordinates"
+          coordinates = CoordinateTree.new pull
+        else
+          pull.read_next # we currently ignore extra elements
+        end
+      end
+      pull.read_end_object
 
-    def Geometry.from_json(geometry_json)
-      parsed = JSON.parse geometry_json
-      type_field = parsed["type"]?
-
-      if type_field.nil?
+      if geometry_type.nil?
         raise "Type field missing!"
       end
 
-      type_string = type_field.as_s?
-
-      if type_string.nil?
-        raise "Type field is not a string!"
+      if coordinates.nil?
+        raise "Coordinates missing!"
       end
 
-      klass = GEOMETRY_TYPES.find { |k| k.name == "GeoJSON::#{type_string}" }
-
-      if klass.nil?
-        raise %(Invalid geometry type "#{type_string}"!)
+      case geometry_type
+      when "Point"
+        Point.new coordinates
+      when "MultiPoint"
+        MultiPoint.new coordinates
+      when "LineString"
+        LineString.new coordinates
+      when "MultiLineString"
+        MultiLineString.new coordinates
+      when "Polygon"
+        Polygon.new coordinates
+      when "MultiPolygon"
+        MultiPolygon.new coordinates
       else
-        klass.from_json geometry_json
+        raise %(Invalid geometry type "#{geometry_type}"!)
       end
+    end
+
+    def Geometry.from_json(geometry_json)
+      Geometry.new(JSON::PullParser.new geometry_json)
     end
 
     def_equals_and_hash coordinates, type
@@ -64,6 +83,10 @@ module GeoJSON
 
       def initialize(*coordinates : {{subtype}})
         initialize coordinates.to_a
+      end
+
+      def initialize(coordinates : CoordinateTree)
+        @coordinates = {{type}}.new coordinates
       end
     end
   end
