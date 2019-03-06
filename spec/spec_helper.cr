@@ -29,3 +29,8 @@ end
 def be_equivalent_json_to(expected)
   EquivalentJSONExpectation.new expected
 end
+
+
+alias Root = CoordinateTree::Root
+alias Branch = CoordinateTree::Branch
+alias Leaf = CoordinateTree::Leaf

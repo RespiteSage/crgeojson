@@ -1,9 +1,5 @@
 require "./spec_helper"
 
-alias Root = CoordinateTree::Root
-alias Branch = CoordinateTree::Branch
-alias Leaf = CoordinateTree::Leaf
-
 describe CoordinateTree do
   describe "::Root" do
     describe ".new" do
