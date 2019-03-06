@@ -73,11 +73,11 @@ module GeoJSON
 
     class Leaf < CoordinateTree
       property parent : CoordinateTree
-      property leaf_value : Float32
+      property leaf_value : Float64
 
       # TODO
       def initialize(@parent : CoordinateTree, leaf_value : Number)
-        @leaf_value = leaf_value.to_f32
+        @leaf_value = leaf_value.to_f64
         parent.add_child self
       end
 
