@@ -5,6 +5,24 @@ module GeoJSON
     class Root < CoordinateTree
       getter children = [] of CoordinateTree
 
+      def self.new(parser : JSON::PullParser)
+        root = self.new()
+
+        parser.read_begin_array
+        while parser.kind != :end_array
+          if parser.kind == :begin_array
+            Branch.new root, parser
+          elsif parser.kind == :int || parser.kind == :float
+            Leaf.new root, parser
+          else
+            # TODO: raise some sort of error
+          end
+        end
+        parser.read_end_array
+
+        root
+      end
+
       def parent
         raise "Roots do not have parents!"
       end
@@ -26,11 +44,30 @@ module GeoJSON
         parent.add_child self
       end
 
+      # TODO
+      def self.new(parent : CoordinateTree, parser : JSON::PullParser)
+        branch = new(parent)
+
+        parser.read_begin_array
+        while parser.kind != :end_array
+          if parser.kind == :begin_array
+            Branch.new branch, parser
+          elsif parser.kind == :int || parser.kind == :float
+            Leaf.new branch, parser
+          else
+            # TODO: raise some sort of error
+          end
+        end
+        parser.read_end_array
+
+        branch
+      end
+
       def leaf_value
         raise "Branches do not have leaf values!"
       end
 
-      def_equals_and_hash parent, children
+      def_equals_and_hash children
     end
 
 
@@ -44,11 +81,16 @@ module GeoJSON
         parent.add_child self
       end
 
+      # TODO
+      def self.new(parent : CoordinateTree, parser : JSON::PullParser)
+        new(parent, parser.read_float)
+      end
+
       def children
         raise "Leaves do not have children!"
       end
 
-      def_equals_and_hash parent, leaf_value
+      def_equals_and_hash leaf_value
     end
 
     # TODO
@@ -67,12 +109,7 @@ module GeoJSON
 
     # TODO
     def CoordinateTree.from_geojson(parser : JSON::PullParser)
-      # TODO
-    end
-
-    # :nodoc:
-    private def CoordinateTree.from_geojson(parser : JSON::PullParser, parent : CoordinateTree)
-      # TODO
+      Root.new parser
     end
   end
 end
