@@ -2,9 +2,12 @@ require "json"
 require "./coordinate"
 
 module GeoJSON
+  # TODO
   abstract class Geometry < Base
+    # TODO
     abstract def coordinates
 
+    # TODO
     def Geometry.new(pull : JSON::PullParser)
       pull.read_begin_object
       while pull.kind != :end_object
@@ -49,12 +52,14 @@ module GeoJSON
       end
     end
 
+    # TODO
     def Geometry.from_json(geometry_json)
       Geometry.new(JSON::PullParser.new geometry_json)
     end
 
     def_equals_and_hash coordinates, type
 
+    # TODO
     delegate "[]", to: coordinates
 
     # We need to inherit the Object-default self.from_json because we don't want
@@ -72,52 +77,64 @@ module GeoJSON
     # We use a macro to create subclass initializers because any subclass
     # initializer will obscure all superclass initializers
     macro coordinate_type(type, subtype)
+      # TODO
       getter coordinates : {{type}}
 
+      # TODO
       def initialize(@coordinates : {{type}})
       end
 
+      # TODO
       def initialize(coordinates : Array({{subtype}}))
         @coordinates = {{type}}.new coordinates
       end
 
+      # TODO
       def initialize(*coordinates : {{subtype}})
         initialize coordinates.to_a
       end
 
+      # TODO
       def initialize(coordinates : CoordinateTree)
         @coordinates = {{type}}.new coordinates
       end
     end
   end
 
+  # TODO
   class Point < Geometry
     getter type : String = "Point"
 
     coordinate_type Position, subtype: Number
 
+    # TODO
     def initialize(longitude lon, latitude lat, altivation alt = nil)
       @coordinates = Position.new lon, lat, alt
     end
 
+    # TODO
     delegate longitude, latitude, altivation, to: coordinates
   end
 
+  # TODO
   class LineString < Geometry
     getter type : String = "LineString"
 
     coordinate_type LineStringCoordinates, subtype: Position
 
+    # TODO
     def initialize(*points : Array(Number))
       @coordinates = LineStringCoordinates.new *points
     end
   end
 
+  # TODO
   class Polygon < Geometry
     getter type : String = "Polygon"
 
     coordinate_type PolyRings, subtype: LinearRing
 
+    # TODO
     def initialize(points : Array(Position))
       begin
         if points.first == points.last
@@ -136,31 +153,38 @@ module GeoJSON
       @coordinates = PolyRings.new ring
     end
 
+    # TODO
     def initialize(*points : Position)
       initialize points.to_a
     end
 
+    # TODO
     def initialize(*points : Array(Number))
       initialize *points.map { |point| Position.new point }
     end
 
+    # TODO
     def exterior
       coordinates[0]
     end
   end
 
+  # TODO
   class GeometryCollection < Base
     include JSON::Serializable
 
     getter type : String = "GeometryCollection"
+    # TODO
     getter geometries : Array(Geometry)
 
+    # TODO
     def initialize(*geometries : Geometry)
       @geometries = Array(Geometry).new.push(*geometries)
     end
 
     def_equals geometries
 
+    # TODO
     delegate "[]", to: geometries
   end
 end

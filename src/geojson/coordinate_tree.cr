@@ -5,6 +5,7 @@ module GeoJSON
     class Root < CoordinateTree
       getter children = [] of CoordinateTree
 
+      # TODO
       def self.new(parser : JSON::PullParser)
         root = self.new()
 
@@ -34,7 +35,7 @@ module GeoJSON
       def_equals_and_hash children
     end
 
-
+    # TODO
     class Branch < CoordinateTree
       getter children = [] of CoordinateTree
       property parent : CoordinateTree
@@ -70,7 +71,7 @@ module GeoJSON
       def_equals_and_hash children
     end
 
-
+    # TODO
     class Leaf < CoordinateTree
       property parent : CoordinateTree
       property leaf_value : Float64
