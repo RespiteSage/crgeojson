@@ -2,12 +2,15 @@ require "json"
 require "./coordinate"
 
 module GeoJSON
-  # TODO
+  # A `Geometry` represents a figure in geographic space.
   abstract class Geometry < Base
-    # TODO
+    # Returns this Geometry's coordinates.
     abstract def coordinates
 
-    # TODO
+    # Creates a new `Geometry` from the given *parser*.
+    #
+    # This static class method automatically chooses the correct
+    # Geometry class to create.
     def Geometry.new(pull : JSON::PullParser)
       pull.read_begin_object
       while pull.kind != :end_object
@@ -52,18 +55,18 @@ module GeoJSON
       end
     end
 
-    # TODO
+    # Creates a `Geometry` from the given GeoJSON string.
     def Geometry.from_json(geometry_json)
       Geometry.new(JSON::PullParser.new geometry_json)
     end
 
     def_equals_and_hash coordinates, type
 
-    # TODO
+    # Gets the coordinate at the given index.
     delegate "[]", to: coordinates
 
     # We need to inherit the Object-default self.from_json because we don't want
-    # Geometry subclasses inheriting its special self.from_json method
+    # Geometry subclasses inheriting its special self.from_json method.
     macro inherited
       include JSON::Serializable
 
@@ -75,39 +78,44 @@ module GeoJSON
     end
 
     # We use a macro to create subclass initializers because any subclass
-    # initializer will obscure all superclass initializers
+    # initializer will obscure all superclass initializers.
     macro coordinate_type(type, subtype)
-      # TODO
       getter coordinates : {{type}}
 
-      # TODO
+      # Create a new geometry with the given *coordinates*.
       def initialize(@coordinates : {{type}})
       end
 
-      # TODO
+      # Create a new geometry with coordinates created from the given.
+      # *coordinates* array
       def initialize(coordinates : Array({{subtype}}))
         @coordinates = {{type}}.new coordinates
       end
 
-      # TODO
+      # Create a new geometry with coordinates creates from the given.
+      # *coordinates*
       def initialize(*coordinates : {{subtype}})
         initialize coordinates.to_a
       end
 
-      # TODO
+      # Create a new geometry from the given *coordinates* CoordinateTree.
       def initialize(coordinates : CoordinateTree)
         @coordinates = {{type}}.new coordinates
       end
     end
   end
 
-  # TODO
+  # A `Point` is a `Geometry` representing a single `Position` in geographic
+  # space.
+  #
+  # This class corresponds to the [GeoJSON Point](https://tools.ietf.org/html/rfc7946#section-3.1.2).
   class Point < Geometry
     getter type : String = "Point"
 
     coordinate_type Position, subtype: Number
 
-    # TODO
+    # Creates a new `Point` at the given longitude, latitude, and
+    # altitude/elevation (altivation).
     def initialize(longitude lon, latitude lat, altivation alt = nil)
       @coordinates = Position.new lon, lat, alt
     end
@@ -116,25 +124,32 @@ module GeoJSON
     delegate longitude, latitude, altivation, to: coordinates
   end
 
-  # TODO
+  # A `LineString` is a `Geometry` representing two or more points in geographic
+  # space connected consecutively by lines.
+  #
+  # This class corresponds to the [GeoJSON LineString](https://tools.ietf.org/html/rfc7946#section-3.1.4).
   class LineString < Geometry
     getter type : String = "LineString"
 
     coordinate_type LineStringCoordinates, subtype: Position
 
-    # TODO
+    # Create a new `LineString` with coordinates based on the given *points*.
     def initialize(*points : Array(Number))
       @coordinates = LineStringCoordinates.new *points
     end
   end
 
-  # TODO
+  # A `Polygon` is a `Geometry` representing a closed geometric figure in
+  # geographic space with optional holes within it.
+  #
+  # This class corresponds to the [GeoJSON Polygon](https://tools.ietf.org/html/rfc7946#section-3.1.6).
   class Polygon < Geometry
     getter type : String = "Polygon"
 
     coordinate_type PolyRings, subtype: LinearRing
 
-    # TODO
+    # Create a new `Polygon` with an outer ring defined by the given *points* and
+    # no holes.
     def initialize(points : Array(Position))
       begin
         if points.first == points.last
@@ -153,38 +168,43 @@ module GeoJSON
       @coordinates = PolyRings.new ring
     end
 
-    # TODO
+    # Creates a new `Polygon` with an outer ring defined by the given *points* and
+    # no holes.
     def initialize(*points : Position)
       initialize points.to_a
     end
 
-    # TODO
+    # Creates a new `Polygon` with an outer ring created from the given *points*
+    # and no holes.
     def initialize(*points : Array(Number))
       initialize *points.map { |point| Position.new point }
     end
 
-    # TODO
+    # Returns the exterior `LinearRing` of this `Polygon`
     def exterior
       coordinates[0]
     end
   end
 
-  # TODO
+  # A `GeometryCollection` represents a collection of several geometries
+  # (`Geometry` objects).
+  #
+  # This class corresponds to the [GeoJSON GeometryCollection](https://tools.ietf.org/html/rfc7946#section-3.1.8).
   class GeometryCollection < Base
     include JSON::Serializable
 
     getter type : String = "GeometryCollection"
-    # TODO
+    # Returns an array of the geometries in this `GeometryCollection`
     getter geometries : Array(Geometry)
 
-    # TODO
+    # Creates a new `GeometryCollection` containing the given *geometries*.
     def initialize(*geometries : Geometry)
       @geometries = Array(Geometry).new.push(*geometries)
     end
 
     def_equals geometries
 
-    # TODO
+    # Gets the geometry at the given index.
     delegate "[]", to: geometries
   end
 end

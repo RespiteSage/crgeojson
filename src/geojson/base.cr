@@ -1,9 +1,9 @@
 require "json"
 
 module GeoJSON
-  # TODO
+  # A `GeoJSON::Base` specifies the properties shared by all GeoJSON classes.
   private abstract class Base
-    # TODO
+    # Returns the type of this GeoJSON object.
     abstract def type : String
   end
 end
