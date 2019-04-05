@@ -81,7 +81,7 @@ module GeoJSON
     end
 
     # A `CoordinateTree::Leaf` is a terminal node in a `CoordinateTree`
-    # structure. It a parent and a leaf value but no children.
+    # structure. It has a parent and a leaf value but no children.
     class Leaf < CoordinateTree
       property parent : CoordinateTree
       property leaf_value : Float64

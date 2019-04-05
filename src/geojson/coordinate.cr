@@ -7,7 +7,7 @@ module GeoJSON
   end
 
   # A `Coordinates(T)` represents coordinates in a GeoJSON geometry. It provides
-  # several constructors and a `#[]`` accessor.
+  # several constructors and a `#[]` accessor.
   #
   # Subclasses must implement `#raise_if_invalid`, which is meant to raise a
   # `MalformedCoordinateException` if the coordinates are malformed.
