@@ -37,6 +37,12 @@ module GeoJSON
         raise "Coordinates missing!"
       end
 
+      create_geometry of_type: geometry_type, with: coordinates
+    end
+
+    # Creates a geometry of the given *geometry_type* with the given
+    # *coordinates*.
+    private def self.create_geometry(of_type geometry_type, with coordinates)
       case geometry_type
       when "Point"
         Point.new coordinates
