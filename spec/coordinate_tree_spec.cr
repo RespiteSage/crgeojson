@@ -103,7 +103,7 @@ describe CoordinateTree do
     end
 
     describe "#leaf_value" do
-      it "returns 3 when given in the constructor" do # is this unnecessary repetition?
+      it "returns the leaf value given in the constructor" do # is this unnecessary repetition?
         leaf = Leaf.new Root.new, 13.0
 
         leaf.leaf_value.should eq 13.0
@@ -111,7 +111,7 @@ describe CoordinateTree do
     end
 
     describe "#parent" do
-      it "returns the parent of the Leaf" do # is this unnecessary repetition?
+      it "returns the parent given in the constructor" do # is this unnecessary repetition?
         parent = Root.new
         leaf = Leaf.new parent, 17
 
