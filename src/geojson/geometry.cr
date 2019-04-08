@@ -11,23 +11,8 @@ module GeoJSON
     #
     # This static class method automatically chooses the correct
     # Geometry class to create.
-    def Geometry.new(pull : JSON::PullParser)
-      pull.read_begin_object
-      while pull.kind != :end_object
-        case pull.read_string
-        when "type"
-          begin
-            geometry_type = pull.read_string
-          rescue JSON::ParseException
-            raise "Type field is not a string!"
-          end
-        when "coordinates"
-          coordinates = CoordinateTree.new pull
-        else
-          pull.read_next # we currently ignore extra elements
-        end
-      end
-      pull.read_end_object
+    def Geometry.new(parser : JSON::PullParser)
+      geometry_type, coordinates = parse_geometry using: parser
 
       if geometry_type.nil?
         raise "Type field missing!"
@@ -38,6 +23,29 @@ module GeoJSON
       end
 
       create_geometry of_type: geometry_type, with: coordinates
+    end
+
+    # Parses the geometry type and coordinates (returned as a tuple, in that
+    # order) from the given *parser*.
+    private def self.parse_geometry(using parser : JSON::PullParser)
+      parser.read_begin_object
+      while parser.kind != :end_object
+        case parser.read_string
+        when "type"
+          begin
+            geometry_type = parser.read_string
+          rescue JSON::ParseException
+            raise "Type field is not a string!"
+          end
+        when "coordinates"
+          coordinates = CoordinateTree.new parser
+        else
+          parser.read_next # we currently ignore extra elements
+        end
+      end
+      parser.read_end_object
+
+      {geometry_type, coordinates}
     end
 
     # Creates a geometry of the given *geometry_type* with the given
