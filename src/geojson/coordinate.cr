@@ -60,6 +60,10 @@ module GeoJSON
 
   # A `Position` represents a position on earth with a longitude, latitude, and
   # optional altitude/elevation (`#altivation`).
+  #
+  # According to the GeoJSON spec, longitude and latitude are to be stored as
+  # decimal degrees, and altitude/elevation is to be stored as a height in
+  # meters.
   class Position < Coordinates(Float64)
     # Creates a new `Coordinates` with the values from the given *coordinates*.
     def initialize(coordinates : Array(Number))
