@@ -80,7 +80,7 @@ module GeoJSON
 
     # Creates a new `Position` from the given *coordinate_tree*.
     def initialize(coordinate_tree : CoordinateTree)
-      initialize coordinate_tree.children.flat_map { |child| child.leaf_value}
+      initialize coordinate_tree.children.map { |child| child.leaf_value}
     end
 
     # Returns the longitude of this `Position`.
