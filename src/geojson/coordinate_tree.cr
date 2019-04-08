@@ -12,7 +12,7 @@ module GeoJSON
       # constructor assumes that the *parser* is positioned at the beginning of
       # a GeoJSON coordinate string.
       def self.new(parser : JSON::PullParser)
-        root = self.new()
+        root = self.new
 
         parser.read_begin_array
         while parser.kind != :end_array

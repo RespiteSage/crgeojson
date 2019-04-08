@@ -139,7 +139,7 @@ end
 describe LineStringCoordinates do
   describe ".new" do
     it "properly sets internal points from Positions" do
-      first  = Position.new 1, 2
+      first = Position.new 1, 2
       second = Position.new 3, 2
 
       result = LineStringCoordinates.new first, second
@@ -157,7 +157,7 @@ describe LineStringCoordinates do
     end
 
     it "works properly with an array of Positions" do
-      first  = Position.new 1, 2
+      first = Position.new 1, 2
       second = Position.new 3, 2
 
       result = LineStringCoordinates.new [first, second]
@@ -201,7 +201,7 @@ describe LineStringCoordinates do
 
   describe "#from_json" do
     it "returns a LineString corresponding to the json" do
-      first  = Position.new 1.0, 2.0
+      first = Position.new 1.0, 2.0
       second = Position.new 3.0, 2.0
 
       linestring = LineStringCoordinates.from_json "[#{first.to_json},#{second.to_json}]"
@@ -219,7 +219,7 @@ describe LineStringCoordinates do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first  = Position.new 1.0, 2.0
+      first = Position.new 1.0, 2.0
       second = Position.new 3.0, 2.0
 
       linestring = LineStringCoordinates.new first, second
@@ -292,9 +292,9 @@ end
 describe LinearRing do
   describe ".new" do
     it "properly sets internal points from Positions" do
-      first  = Position.new 1, 2
+      first = Position.new 1, 2
       second = Position.new 3, 2
-      third  = Position.new 2, 0
+      third = Position.new 2, 0
       fourth = Position.new 1, 2
 
       result = LinearRing.new first, second, third, fourth
@@ -306,9 +306,9 @@ describe LinearRing do
     end
 
     it "raises for fewer than four arguments" do
-      first  = Position.new 1, 2
+      first = Position.new 1, 2
       second = Position.new 3, 2
-      third  = Position.new 1, 2
+      third = Position.new 1, 2
 
       expect_raises(Exception, "LinearRing must have four or more points!") do
         LinearRing.new first, second, third
@@ -316,9 +316,9 @@ describe LinearRing do
     end
 
     it "raises if the first and last argument differ" do
-      first  = Position.new 1, 2
+      first = Position.new 1, 2
       second = Position.new 3, 2
-      third  = Position.new 2, 0
+      third = Position.new 2, 0
       fourth = Position.new 5, 5
 
       expect_raises(Exception, "LinearRing must have matching first and last points!") do
@@ -327,9 +327,9 @@ describe LinearRing do
     end
 
     it "works properly with an array of Positions" do
-      first  = Position.new 1, 2
+      first = Position.new 1, 2
       second = Position.new 3, 2
-      third  = Position.new 2, 0
+      third = Position.new 2, 0
       fourth = Position.new 1, 2
 
       result = LinearRing.new [first, second, third, fourth]
@@ -381,9 +381,9 @@ describe LinearRing do
 
   describe "#from_json" do
     it "returns a LinearRing corresponding to the json" do
-      first  = Position.new 0, 0
+      first = Position.new 0, 0
       second = Position.new 1, 0
-      third  = Position.new 0, 1
+      third = Position.new 0, 1
       fourth = Position.new 0, 0
 
       linear_ring = LinearRing.from_json "[#{first.to_json},#{second.to_json},#{third.to_json},#{fourth.to_json}]"
@@ -407,9 +407,9 @@ describe LinearRing do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first  = Position.new 0, 0
+      first = Position.new 0, 0
       second = Position.new 1, 0
-      third  = Position.new 0, 1
+      third = Position.new 0, 1
       fourth = Position.new 0, 0
 
       linear_ring = LinearRing.new first, second, third, fourth
