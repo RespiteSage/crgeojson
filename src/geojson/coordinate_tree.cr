@@ -21,7 +21,7 @@ module GeoJSON
           elsif parser.kind == :int || parser.kind == :float
             Leaf.new root, parser
           else
-            # TODO: raise some sort of error
+            raise MalformedCoordinateException.new "Cannot parse into CoordinateTree!"
           end
         end
         parser.read_end_array
@@ -65,7 +65,7 @@ module GeoJSON
           elsif parser.kind == :int || parser.kind == :float
             Leaf.new branch, parser
           else
-            # TODO: raise some sort of error
+            raise MalformedCoordinateException.new "Cannot parse into CoordinateTree!"
           end
         end
         parser.read_end_array
