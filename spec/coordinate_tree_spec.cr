@@ -18,14 +18,6 @@ describe CoordinateTree do
       end
     end
 
-    describe "#parent" do
-      it "throws an error" do
-        expect_raises(Exception, "Roots do not have parents!") do
-          Root.new.parent
-        end
-      end
-    end
-
     describe "#children" do
       it "returns the children added to the Root" do
         root = Root.new
@@ -43,7 +35,6 @@ describe CoordinateTree do
         parent = Root.new
         branch = Branch.new parent
 
-        branch.parent.should be parent
         branch.children.should eq [] of CoordinateTree
       end
 
@@ -60,15 +51,6 @@ describe CoordinateTree do
         expect_raises(Exception, "Branches do not have leaf values!") do
           Branch.new(Root.new).leaf_value
         end
-      end
-    end
-
-    describe "#parent" do
-      it "returns the parent of the Branch" do # is this unnecessary repetition?
-        parent = Root.new
-        branch = Branch.new parent
-
-        branch.parent.should be parent
       end
     end
 
@@ -90,7 +72,6 @@ describe CoordinateTree do
         parent = Root.new
         leaf = Leaf.new parent, 7.0
 
-        leaf.parent.should be parent
         leaf.leaf_value.should eq 7.0
       end
 
@@ -107,15 +88,6 @@ describe CoordinateTree do
         leaf = Leaf.new Root.new, 13.0
 
         leaf.leaf_value.should eq 13.0
-      end
-    end
-
-    describe "#parent" do
-      it "returns the parent given in the constructor" do # is this unnecessary repetition?
-        parent = Root.new
-        leaf = Leaf.new parent, 17
-
-        leaf.parent.should be parent
       end
     end
 

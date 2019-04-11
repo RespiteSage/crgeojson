@@ -29,10 +29,6 @@ module GeoJSON
         root
       end
 
-      def parent
-        raise "Roots do not have parents!"
-      end
-
       def leaf_value
         raise "Roots do not have leaf values!"
       end
@@ -44,11 +40,10 @@ module GeoJSON
     # structure. It has children and a parent but no leaf value.
     class Branch < CoordinateTree
       getter children = [] of CoordinateTree
-      property parent : CoordinateTree
 
       # Creates a new `Branch` with the given *parent* and adds the new `Branch`
       # as a child of *parent*.
-      def initialize(@parent : CoordinateTree)
+      def initialize(parent : CoordinateTree)
         parent.add_child self
       end
 
@@ -83,12 +78,11 @@ module GeoJSON
     # A `CoordinateTree::Leaf` is a terminal node in a `CoordinateTree`
     # structure. It has a parent and a leaf value but no children.
     class Leaf < CoordinateTree
-      property parent : CoordinateTree
       property leaf_value : Float64
 
       # Creates a new `Leaf` with the given *parent* and *leaf_value and adds
       # the new `Branch` as a child of *parent*.
-      def initialize(@parent : CoordinateTree, leaf_value : Number)
+      def initialize(parent : CoordinateTree, leaf_value : Number)
         @leaf_value = leaf_value.to_f64
         parent.add_child self
       end
@@ -112,11 +106,6 @@ module GeoJSON
     # `CoordinateTree::Root` and `CoordinateTree::Branch` nodes will raise when
     # this method is called.
     abstract def leaf_value : Float32
-
-    # Gets the parent of this `CoordinateTree` node.
-    #
-    # `CoordinateTree::Root` nodes will raise when this method is called.
-    abstract def parent : CoordinateTree
 
     # Gets the children of this `CoordinateTree` node.
     #
