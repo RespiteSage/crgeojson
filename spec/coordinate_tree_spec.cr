@@ -6,7 +6,7 @@ describe CoordinateTree do
       it "creates a Root without children" do
         root = Root.new
 
-        root.children.should eq [] of CoordinateTree
+        root.cloned_children.should eq [] of CoordinateTree
       end
     end
 
@@ -18,13 +18,16 @@ describe CoordinateTree do
       end
     end
 
-    describe "#children" do
-      it "returns the children added to the Root" do
+    describe "#each" do
+      it "enumerates the children added to the Root" do
         root = Root.new
         branch = Branch.new root
         leaf = Leaf.new root, 3
 
-        root.children.should eq [branch, leaf]
+        children = Array(CoordinateTree).new
+        root.each { |child| children << child }
+
+        children.should eq [branch, leaf]
       end
     end
   end
@@ -35,14 +38,14 @@ describe CoordinateTree do
         parent = Root.new
         branch = Branch.new parent
 
-        branch.children.should eq [] of CoordinateTree
+        branch.cloned_children.should eq [] of CoordinateTree
       end
 
       it "adds the Branch to its parent" do
         parent = Root.new
         branch = Branch.new parent
 
-        parent.children.should eq [branch]
+        parent.cloned_children.should eq [branch]
       end
     end
 
@@ -54,14 +57,17 @@ describe CoordinateTree do
       end
     end
 
-    describe "#children" do
-      it "returns the children added to the Branch" do
+    describe "#each" do
+      it "enumerates the children added to the Branch" do
         parent = Root.new
         big_branch = Branch.new parent
         lil_branch = Branch.new big_branch
         leaf = Leaf.new big_branch, 5
 
-        big_branch.children.should eq [lil_branch, leaf]
+        children = Array(CoordinateTree).new
+        big_branch.each { |child| children << child }
+
+        children.should eq [lil_branch, leaf]
       end
     end
   end
@@ -79,7 +85,7 @@ describe CoordinateTree do
         parent = Root.new
         leaf = Leaf.new parent, 11.0
 
-        parent.children.should eq [leaf]
+        parent.cloned_children.should eq [leaf]
       end
     end
 
@@ -91,10 +97,10 @@ describe CoordinateTree do
       end
     end
 
-    describe "#children" do
+    describe "#each" do
       it "throws an error" do
-        expect_raises(Exception, "Leaves do not have children!") do
-          Leaf.new(Root.new, 19.0).children
+        expect_raises(Exception, "Leaves have no children to enumerate!") do
+          Leaf.new(Root.new, 19.0).each { |child| child }
         end
       end
     end

@@ -6,7 +6,7 @@ module GeoJSON
     # A `CoordinateTree::Root` is the root node of a `CoordinateTree` structure.
     # It has children but no parent or leaf value.
     class Root < CoordinateTree
-      getter children = [] of CoordinateTree
+      private getter children = [] of CoordinateTree
 
       # Creates a `CoordinateTree` from the given `JSON::PullParser`. This
       # constructor assumes that the *parser* is positioned at the beginning of
@@ -33,13 +33,15 @@ module GeoJSON
         raise "Roots do not have leaf values!"
       end
 
-      def_equals_and_hash children
+      delegate "each", to: children
+
+      def_equals_and_hash @children
     end
 
     # A `CoordinateTree::Branch` is an intermediate node in a `CoordinateTree`
     # structure. It has children and a parent but no leaf value.
     class Branch < CoordinateTree
-      getter children = [] of CoordinateTree
+      private getter children = [] of CoordinateTree
 
       # Creates a new `Branch` with the given *parent* and adds the new `Branch`
       # as a child of *parent*.
@@ -72,7 +74,9 @@ module GeoJSON
         raise "Branches do not have leaf values!"
       end
 
-      def_equals_and_hash children
+      delegate "each", to: children
+
+      def_equals_and_hash @children
     end
 
     # A `CoordinateTree::Leaf` is a terminal node in a `CoordinateTree`
@@ -94,23 +98,21 @@ module GeoJSON
         new(parent, parser.read_float)
       end
 
-      def children
-        raise "Leaves do not have children!"
+      # Raises an exception because a Leaf has no children to enumerate upon.
+      def each(&block)
+        raise "Leaves have no children to enumerate!"
       end
 
       def_equals_and_hash leaf_value
     end
+
+    include Enumerable(CoordinateTree)
 
     # Gets the leaf value of this `CoordinateTree` node.
     #
     # `CoordinateTree::Root` and `CoordinateTree::Branch` nodes will raise when
     # this method is called.
     abstract def leaf_value : Float32
-
-    # Gets the children of this `CoordinateTree` node.
-    #
-    # `CoordinateTree::Leaf` nodes will raise when this method is called.
-    abstract def children : Array(CoordinateTree)
 
     # :nodoc:
     # Adds the given `CoordinateTree` node as a *child* of this node.

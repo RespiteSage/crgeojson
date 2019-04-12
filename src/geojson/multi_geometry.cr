@@ -15,7 +15,7 @@ module GeoJSON
     # Creates a new geometry with coordinates based on the given
     # *coordinate_tree*.
     def initialize(coordinate_tree : CoordinateTree)
-      @coordinates = coordinate_tree.children.map { |child| E.new child }
+      @coordinates = coordinate_tree.map { |child| E.new child }
     end
 
     # Gets a new `T` from the coordinates at the given index.

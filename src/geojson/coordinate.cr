@@ -53,7 +53,7 @@ module GeoJSON
       # structure is assumed to be correct for the particular kind of
       # `Coordinates` that are being created.
       def initialize(coordinate_tree : CoordinateTree)
-        @coordinates = coordinate_tree.children.map { |child| T.new child }
+        @coordinates = coordinate_tree.map { |child| T.new child }
       end
     end
   end
@@ -84,7 +84,7 @@ module GeoJSON
 
     # Creates a new `Position` from the given *coordinate_tree*.
     def initialize(coordinate_tree : CoordinateTree)
-      initialize coordinate_tree.children.map { |child| child.leaf_value }
+      initialize coordinate_tree.map { |child| child.leaf_value }
     end
 
     # Returns the longitude of this `Position`.
