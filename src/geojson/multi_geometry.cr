@@ -2,7 +2,7 @@ require "json"
 
 module GeoJSON
   # A `MultiGeometry` is a `Geometry` corresponding to a "normal geometry" type
-  # T and which can contain multiple coordinates of type E.
+  # *T* and which can contain multiple coordinates of type *E*.
   module MultiGeometry(T, E)
     # Returns an array of this geometry's coordinates.
     getter coordinates : Array(E)
@@ -30,24 +30,27 @@ module GeoJSON
   class MultiPoint < Geometry
     include MultiGeometry(Point, Position)
 
+    # Gets this MultiPoint's GeoJSON type ("MultiPoint")
     getter type : String = "MultiPoint"
   end
 
   # A `MultiLineString` is a `Geometry` representing several `LineString`s.
   #
-  # This class corresponds to the [GeoJSON MultiPoint](https://tools.ietf.org/html/rfc7946#section-3.1.5).
+  # This class corresponds to the [GeoJSON MultiLineString](https://tools.ietf.org/html/rfc7946#section-3.1.5).
   class MultiLineString < Geometry
     include MultiGeometry(LineString, LineStringCoordinates)
 
+    # Gets this MultiLineString's GeoJSON type ("MultiLineString")
     getter type : String = "MultiLineString"
   end
 
   # A `MultiPolygon` is a `Geometry` representing several `Polygon`s.
   #
-  # This class corresponds to the [GeoJSON MultiPoint](https://tools.ietf.org/html/rfc7946#section-3.1.7).
+  # This class corresponds to the [GeoJSON MultiPolygon](https://tools.ietf.org/html/rfc7946#section-3.1.7).
   class MultiPolygon < Geometry
     include MultiGeometry(Polygon, PolyRings)
 
+    # Gets this MultiPolygon's GeoJSON type ("MultiPolygon")
     getter type : String = "MultiPolygon"
   end
 end

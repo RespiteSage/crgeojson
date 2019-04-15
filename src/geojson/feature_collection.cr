@@ -4,6 +4,7 @@ module GeoJSON
   class FeatureCollection < Base
     include JSON::Serializable
 
+    # Gets this FeatureCollection's GeoJSON type ("FeatureCollection")
     getter type : String = "FeatureCollection"
     # Returns this `FeatureCollections` array of features.
     getter features : Array(Feature)

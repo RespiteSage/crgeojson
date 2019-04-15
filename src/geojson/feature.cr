@@ -4,14 +4,15 @@ module GeoJSON
   class Feature < Base
     include JSON::Serializable
 
+    # Gets this Feature's GeoJSON type ("Feature")
     getter type : String = "Feature"
 
-    # Gets this Feature's geometry.
     @[JSON::Field(emit_null: true)]
+    # Gets this Feature's geometry.
     getter geometry : Geometry?
 
-    # Gets this Feature's properties.
     @[JSON::Field(emit_null: true)]
+    # Gets this Feature's properties.
     getter properties : Hash(String, JSON::Any::Type)?
 
     # Gets this Feature's id.

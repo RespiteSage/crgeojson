@@ -29,10 +29,12 @@ module GeoJSON
         root
       end
 
+      # Raises an exception because a Root does not have a leaf value.
       def leaf_value
         raise "Roots do not have leaf values!"
       end
 
+      # Iterates over this Root's children.
       delegate "each", to: children
 
       def_equals_and_hash @children
@@ -70,10 +72,12 @@ module GeoJSON
         branch
       end
 
+      # Raises an exception because a Branch does not have a leaf value.
       def leaf_value
         raise "Branches do not have leaf values!"
       end
 
+      # Iterates over this Branch's children.
       delegate "each", to: children
 
       def_equals_and_hash @children
@@ -82,9 +86,10 @@ module GeoJSON
     # A `CoordinateTree::Leaf` is a terminal node in a `CoordinateTree`
     # structure. It has a parent and a leaf value but no children.
     class Leaf < CoordinateTree
+      # The Float64 value at this Leaf
       property leaf_value : Float64
 
-      # Creates a new `Leaf` with the given *parent* and *leaf_value and adds
+      # Creates a new `Leaf` with the given *parent* and *leaf_value* and adds
       # the new `Branch` as a child of *parent*.
       def initialize(parent : CoordinateTree, leaf_value : Number)
         @leaf_value = leaf_value.to_f64

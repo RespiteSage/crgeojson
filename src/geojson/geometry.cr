@@ -82,6 +82,7 @@ module GeoJSON
     # We need to inherit the Object-default self.from_json because we don't want
     # Geometry subclasses inheriting its special self.from_json method.
     macro inherited
+      # Creates a new geometry from the given *parser*.
       include JSON::Serializable
 
       def self.from_json(json)
@@ -100,14 +101,14 @@ module GeoJSON
       def initialize(@coordinates : {{type}})
       end
 
-      # Create a new geometry with coordinates created from the given.
-      # *coordinates* array
+      # Create a new geometry with coordinates created from the given
+      # *coordinates* array.
       def initialize(coordinates : Array({{subtype}}))
         @coordinates = {{type}}.new coordinates
       end
 
-      # Create a new geometry with coordinates creates from the given.
-      # *coordinates*
+      # Create a new geometry with coordinates creates from the given
+      # *coordinates*.
       def initialize(*coordinates : {{subtype}})
         initialize coordinates.to_a
       end
@@ -124,6 +125,7 @@ module GeoJSON
   #
   # This class corresponds to the [GeoJSON Point](https://tools.ietf.org/html/rfc7946#section-3.1.2).
   class Point < Geometry
+    # Gets this Point's GeoJSON type ("Point")
     getter type : String = "Point"
 
     coordinate_type Position, subtype: Number
@@ -134,8 +136,17 @@ module GeoJSON
       @coordinates = Position.new lon, lat, alt
     end
 
-    # TODO
-    delegate longitude, latitude, altivation, to: coordinates
+    # Gets this Point's longitude in decimal degrees according to WGS84.
+    delegate longitude, to: coordinates
+
+    # Gets this Point's latitude in decimal degrees according to WGS84.
+    delegate latitude, to: coordinates
+
+    # Gets this Point's altitude/elevation.
+    #
+    # Technically, this positional value is meant to be the height in meters
+    # above the WGS84 ellipsoid.
+    delegate altivation, to: coordinates
   end
 
   # A `LineString` is a `Geometry` representing two or more points in geographic
@@ -143,6 +154,7 @@ module GeoJSON
   #
   # This class corresponds to the [GeoJSON LineString](https://tools.ietf.org/html/rfc7946#section-3.1.4).
   class LineString < Geometry
+    # Gets this LineString's GeoJSON type ("LineString")
     getter type : String = "LineString"
 
     coordinate_type LineStringCoordinates, subtype: Position
@@ -158,6 +170,7 @@ module GeoJSON
   #
   # This class corresponds to the [GeoJSON Polygon](https://tools.ietf.org/html/rfc7946#section-3.1.6).
   class Polygon < Geometry
+    # Gets this Polygon's GeoJSON type ("Polygon")
     getter type : String = "Polygon"
 
     coordinate_type PolyRings, subtype: LinearRing
@@ -207,6 +220,7 @@ module GeoJSON
   class GeometryCollection < Base
     include JSON::Serializable
 
+    # Gets this GeometryCollection's GeoJSON type ("GeometryCollection")
     getter type : String = "GeometryCollection"
     # Returns an array of the geometries in this `GeometryCollection`
     getter geometries : Array(Geometry)
