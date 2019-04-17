@@ -4,13 +4,13 @@ describe Geometry do
   describe "#from_json" do
     it "rejects invalid geometry type" do
       expect_raises(Exception, %(Invalid geometry type "Sphere"!)) do
-        Geometry.from_json %({"type":"Sphere"})
+        Geometry.from_json %({"type":"Sphere","coordinates":[]})
       end
     end
 
     it "rejects missing type string" do
       expect_raises(Exception, "Type field missing!") do
-        Geometry.from_json %({"kind":"Sphere"})
+        Geometry.from_json %({"kind":"Sphere","coordinates":[]})
       end
     end
 
