@@ -1,4 +1,4 @@
-require "./geojson/*"
+require "./geojson/**"
 
 module GeoJSON
 end

@@ -1,5 +1,8 @@
 require "json"
-require "./coordinate"
+require "./coordinates/position"
+require "./coordinates/line_string_coordinates"
+require "./coordinates/linear_ring"
+require "./coordinates/poly_rings"
 
 module GeoJSON
   # A `Geometry` represents a figure in geographic space.
