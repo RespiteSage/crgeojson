@@ -2,7 +2,7 @@ require "./malformed_coordinate_exception"
 require "./coordinates"
 require "./position"
 
-module GeoJSON
+module GeoJSON::Coordinates
   # `LineStringCoordinates` represent multiple positions connected by lines.
   # They must contain at least two `Position` coordinates.
   class LineStringCoordinates < Coordinates(Position)

@@ -2,7 +2,7 @@ require "./malformed_coordinate_exception"
 require "./coordinates"
 require "./line_string_coordinates"
 
-module GeoJSON
+module GeoJSON::Coordinates
   # A `LinearRing` is a closed set of `LineStringCoordinates`. To satisfy this
   # requirement, it must consist of at least four postions, and the first and
   # last positions must be the same.

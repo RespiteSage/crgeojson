@@ -2,7 +2,7 @@ require "./malformed_coordinate_exception"
 require "./coordinates"
 require "./linear_ring"
 
-module GeoJSON
+module GeoJSON::Coordinates
   # A `PolyRings` represents a collection of `LinearRing` coordinates. There are
   # no validity restrictions on how many `LinearRing` coordinates may be in a
   # `PolyRings`.

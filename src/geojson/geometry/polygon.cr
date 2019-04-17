@@ -11,7 +11,7 @@ module GeoJSON
     # Gets this Polygon's GeoJSON type ("Polygon")
     getter type : String = "Polygon"
 
-    coordinate_type PolyRings, subtype: LinearRing
+    coordinate_type Coordinates::PolyRings, subtype: LinearRing
 
     # Create a new `Polygon` with an outer ring defined by the given *points* and
     # no holes.

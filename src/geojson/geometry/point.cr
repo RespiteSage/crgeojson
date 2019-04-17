@@ -10,7 +10,7 @@ module GeoJSON
     # Gets this Point's GeoJSON type ("Point")
     getter type : String = "Point"
 
-    coordinate_type Position, subtype: Number
+    coordinate_type Coordinates::Position, subtype: Number
 
     # Creates a new `Point` at the given longitude, latitude, and
     # altitude/elevation (altivation).

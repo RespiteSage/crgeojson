@@ -1,6 +1,6 @@
 require "json"
 
-module GeoJSON
+module GeoJSON::Coordinates
   # A `Coordinates(T)` represents coordinates in a GeoJSON geometry. It provides
   # several constructors and a `#[]` accessor.
   #

@@ -1,4 +1,4 @@
-module GeoJSON
+module GeoJSON::Coordinates
   # A `CoordinateTree` is a standard tree structure in which there is a defined,
   # parent-less `Root`, intermediate `Branch` nodes, and `Leaf` nodes which have
   # floating-point values and lack children.

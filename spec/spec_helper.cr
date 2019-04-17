@@ -3,6 +3,8 @@ require "../src/geojson/**"
 
 include GeoJSON
 
+include GeoJSON::Coordinates
+
 struct EquivalentJSONExpectation(T)
   def initialize(@expected_value : T)
   end
