@@ -1,5 +1,6 @@
 require "./malformed_coordinate_exception"
 require "./coordinates"
+require "./position"
 
 module GeoJSON
   # `LineStringCoordinates` represent multiple positions connected by lines.
