@@ -32,6 +32,21 @@ describe Position do
       result.altivation.should eq 23.0
     end
 
+    it "works with two named arguments" do
+      result = Position.new longitude: 29.0, latitude: 31.0
+
+      result.longitude.should eq 29.0
+      result.latitude.should eq 31.0
+    end
+
+    it "works with three named arguments" do
+      result = Position.new longitude: 37.0, latitude: 41.0, altivation: 43.0
+
+      result.longitude.should eq 37.0
+      result.latitude.should eq 41.0
+      result.altivation.should eq 43.0
+    end
+
     it "raises for an array with only one value" do
       expect_raises(MalformedCoordinateException, "Position must have two or three coordinates!") do
         Position.new [10.0]
