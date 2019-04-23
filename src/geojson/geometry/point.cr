@@ -1,4 +1,5 @@
 require "./geometry"
+require "./single_geometry"
 require "../coordinates/position"
 
 module GeoJSON
@@ -7,15 +8,15 @@ module GeoJSON
   #
   # This class corresponds to the [GeoJSON Point](https://tools.ietf.org/html/rfc7946#section-3.1.2).
   class Point < Geometry
+    include SingleGeometry(Coordinates::Position)
+
     # Gets this Point's GeoJSON type ("Point")
     getter type : String = "Point"
 
-    coordinate_type Coordinates::Position, subtype: Number
-
     # Creates a new `Point` at the given longitude, latitude, and
     # altitude/elevation (altivation).
-    def initialize(*, longitude lon, latitude lat, altivation alt = nil)
-      @coordinates = Position.new longitude: lon, latitude: lat, altivation: alt
+    def self.new(*, longitude lon, latitude lat, altivation alt = nil)
+      new Position.new longitude: lon, latitude: lat, altivation: alt
     end
 
     # Gets this Point's longitude in decimal degrees according to WGS84.

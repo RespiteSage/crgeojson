@@ -10,6 +10,10 @@ module GeoJSON
       @coordinates = coordinates.map { |coordinate| coordinate.coordinates }.to_a
     end
 
+    # :ditto:
+    def initialize(@coordinates : Array(E))
+    end
+
     # Creates a new geometry with coordinates based on the given
     # *coordinate_tree*.
     def initialize(coordinate_tree : CoordinateTree)

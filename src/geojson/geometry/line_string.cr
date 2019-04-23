@@ -1,4 +1,5 @@
 require "./geometry"
+require "./single_geometry"
 require "../coordinates/position"
 require "../coordinates/line_string_coordinates"
 
@@ -8,9 +9,9 @@ module GeoJSON
   #
   # This class corresponds to the [GeoJSON LineString](https://tools.ietf.org/html/rfc7946#section-3.1.4).
   class LineString < Geometry
+    include SingleGeometry(Coordinates::LineStringCoordinates)
+
     # Gets this LineString's GeoJSON type ("LineString")
     getter type : String = "LineString"
-
-    coordinate_type Coordinates::LineStringCoordinates, subtype: Position
   end
 end

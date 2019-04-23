@@ -1,4 +1,5 @@
 require "./geometry"
+require "./single_geometry"
 require "../coordinates/linear_ring"
 require "../coordinates/poly_rings"
 
@@ -8,14 +9,14 @@ module GeoJSON
   #
   # This class corresponds to the [GeoJSON Polygon](https://tools.ietf.org/html/rfc7946#section-3.1.6).
   class Polygon < Geometry
+    include SingleGeometry(Coordinates::PolyRings)
+
     # Gets this Polygon's GeoJSON type ("Polygon")
     getter type : String = "Polygon"
 
-    coordinate_type Coordinates::PolyRings, subtype: LinearRing
-
     # Create a new `Polygon` with an outer ring defined by the given *points* and
     # no holes.
-    def initialize(points : Array)
+    def self.new(points : Array)
       begin
         if points.first == points.last
           ring = LinearRing.new points
@@ -30,12 +31,12 @@ module GeoJSON
         end
       end
 
-      @coordinates = PolyRings.new [ring]
+      new PolyRings.new [ring]
     end
 
     # Creates a new `Polygon` with the given *rings*.
-    def initialize(rings : Array(LinearRing))
-      @coordinates = PolyRings.new rings
+    def self.new(rings : Array(LinearRing))
+      new PolyRings.new rings
     end
 
     # Returns the exterior `LinearRing` of this `Polygon`
