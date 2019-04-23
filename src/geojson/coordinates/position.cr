@@ -11,17 +11,17 @@ module GeoJSON::Coordinates
   class Position < Coordinates(Float64)
     # Creates a new `Position` with the given *longitude*, *latitude*, and
     # *altivation*.
-    def initialize(*, longitude lon, latitude lat, altivation alt = nil)
+    def self.new(*, longitude lon, latitude lat, altivation alt = nil)
       unless alt.nil?
-        initialize [lon, lat, alt]
+        new [lon, lat, alt]
       else
-        initialize [lon, lat]
+        new [lon, lat]
       end
     end
 
     # Creates a new `Position` from the given *coordinate_tree*.
-    def initialize(coordinate_tree : CoordinateTree)
-      initialize coordinate_tree.map { |child| child.leaf_value }
+    def self.new(coordinate_tree : CoordinateTree)
+      new coordinate_tree.map { |child| child.leaf_value }
     end
 
     # Returns the longitude of this `Position`.
