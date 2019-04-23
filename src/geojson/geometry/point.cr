@@ -14,7 +14,7 @@ module GeoJSON
 
     # Creates a new `Point` at the given longitude, latitude, and
     # altitude/elevation (altivation).
-    def initialize(longitude lon, latitude lat, altivation alt = nil)
+    def initialize(*, longitude lon, latitude lat, altivation alt = nil)
       @coordinates = Position.new lon, lat, alt
     end
 

@@ -11,7 +11,7 @@ module GeoJSON::Coordinates
   class Position < Coordinates(Float64)
     # Creates a new `Position` with the given *longitude*, *latitude*, and
     # *altivation*.
-    def initialize(longitude lon, latitude lat, altivation alt = nil)
+    def initialize(*, longitude lon, latitude lat, altivation alt = nil)
       unless alt.nil?
         initialize [lon, lat, alt]
       else
