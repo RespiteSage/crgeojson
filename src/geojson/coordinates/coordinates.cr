@@ -10,10 +10,33 @@ module GeoJSON::Coordinates
     # Gets the actual coordinates array of these `Coordinates`.
     getter coordinates : Array(T)
 
-    # :nodoc:
-    # This initializer is only here to satisfy the compiler (so that
-    # `coordinates` is properly initialized).
+    # Creates new `Coordinates` backed by the given *coordinates*.
     def initialize(@coordinates : Array(T))
+      raise_if_invalid
+    end
+
+    # Creates a new `Coordinates` that is a copy of the *other* `Coordinates`.
+    def initialize(other : self)
+      @coordinates = other.coordinates.clone
+    end
+
+    # Creates a new `Coordinates` from the given *coordinates* array.
+    def initialize(coordinates : Array)
+      @coordinates = coordinates.map { |coord| T.new coord }
+    end
+
+    # Creates new `Coordinates` using the given *parser*.
+    def initialize(parser : JSON::PullParser)
+      @coordinates = Array(T).new(parser)
+
+      raise_if_invalid
+    end
+
+    # Creates new `Coordinates` from the given *coordinate_tree*. The tree's
+    # structure is assumed to be correct for the particular kind of
+    # `Coordinates` that are being created.
+    def initialize(coordinate_tree : CoordinateTree)
+      @coordinates = coordinate_tree.map { |child| T.new child }
     end
 
     # Raises a `MalformedCoordinateException` if these coordinates are
@@ -23,38 +46,5 @@ module GeoJSON::Coordinates
     delegate to_json, "[]", to: coordinates
 
     def_equals_and_hash coordinates
-
-    # We use the inherited macro to create subclass initializers because any
-    # subclass initializer will obscure all superclass initializers.
-    macro inherited
-      # Creates new `Coordinates` backed by the given *coordinates*.
-      def initialize(@coordinates : Array(T))
-        raise_if_invalid
-      end
-
-      # Creates a new `Coordinates` that is a copy of the *other* `Coordinates`.
-      def initialize(other : self)
-        @coordinates = other.coordinates.clone
-      end
-
-      # Creates a new `Coordinates` from the given *coordinates* array.
-      def initialize(coordinates : Array)
-        @coordinates = coordinates.map { |coord| T.new coord }
-      end
-
-      # Creates new `Coordinates` using the given *parser*.
-      def initialize(parser : JSON::PullParser)
-        @coordinates = Array(T).new(parser)
-
-        raise_if_invalid
-      end
-
-      # Creates new `Coordinates` from the given *coordinate_tree*. The tree's
-      # structure is assumed to be correct for the particular kind of
-      # `Coordinates` that are being created.
-      def initialize(coordinate_tree : CoordinateTree)
-        @coordinates = coordinate_tree.map { |child| T.new child }
-      end
-    end
   end
 end
