@@ -9,13 +9,6 @@ module GeoJSON::Coordinates
   # decimal degrees, and altitude/elevation is to be stored as a height in
   # meters.
   class Position < Coordinates(Float64)
-    # Creates a new `Coordinates` with the values from the given *coordinates*.
-    def initialize(coordinates : Array(Number))
-      initialize coordinates.map { |number| number.to_f64 }
-
-      raise_if_invalid
-    end
-
     # Creates a new `Position` with the given *longitude*, *latitude*, and
     # *altivation*.
     def initialize(longitude lon, latitude lat, altivation alt = nil)

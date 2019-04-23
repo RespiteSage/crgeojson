@@ -88,7 +88,7 @@ describe Polygon do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      coordinates = PolyRings.new [Position.new([0, 0]), Position.new([1, 0]), Position.new([0, 1]), Position.new([0, 0])]
+      coordinates = PolyRings.new [[Position.new([0, 0]), Position.new([1, 0]), Position.new([0, 1]), Position.new([0, 0])]]
 
       polygon = Polygon.new coordinates
 
@@ -100,7 +100,7 @@ describe Polygon do
 
   describe "#from_json" do
     it "creates a Polygon matching the json" do
-      coordinates = PolyRings.new [Position.new([0, 0]), Position.new([1, 0]), Position.new([0, 1]), Position.new([0, 0])]
+      coordinates = PolyRings.new [[Position.new([0, 0]), Position.new([1, 0]), Position.new([0, 1]), Position.new([0, 0])]]
 
       result = Polygon.from_json %({"type":"Polygon","coordinates":#{coordinates.to_json}})
 

@@ -63,7 +63,7 @@ describe Geometry do
     end
 
     it "returns the correct Polygon for a polygon string" do
-      coordinates = PolyRings.new [Position.new([0, 0]), Position.new([1, 0]), Position.new([0, 1]), Position.new([0, 0])]
+      coordinates = PolyRings.new [[Position.new([0, 0]), Position.new([1, 0]), Position.new([0, 1]), Position.new([0, 0])]]
 
       result = Geometry.from_json %({"type":"Polygon","coordinates":#{coordinates.to_json}})
 
@@ -73,8 +73,8 @@ describe Geometry do
     end
 
     it "returns the correct MultiPolygon for a multipolygon string" do
-      first = PolyRings.new [Position.new([0, 0]), Position.new([0, 1]), Position.new([1, 0]), Position.new([0, 0])]
-      second = PolyRings.new [Position.new([0, 2]), Position.new([0, 3]), Position.new([1, 2]), Position.new([0, 2])]
+      first = PolyRings.new [[Position.new([0, 0]), Position.new([0, 1]), Position.new([1, 0]), Position.new([0, 0])]]
+      second = PolyRings.new [[Position.new([0, 2]), Position.new([0, 3]), Position.new([1, 2]), Position.new([0, 2])]]
 
       result = Geometry.from_json %({"type":"MultiPolygon","coordinates":[#{first.to_json},#{second.to_json}]})
 

@@ -29,8 +29,8 @@ describe MultiPolygon do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first = PolyRings.new [Position.new([0, 0]), Position.new([0, 1]), Position.new([1, 0]), Position.new([0, 0])]
-      second = PolyRings.new [Position.new([0, 2]), Position.new([0, 3]), Position.new([1, 2]), Position.new([0, 2])]
+      first = PolyRings.new [[Position.new([0, 0]), Position.new([0, 1]), Position.new([1, 0]), Position.new([0, 0])]]
+      second = PolyRings.new [[Position.new([0, 2]), Position.new([0, 3]), Position.new([1, 2]), Position.new([0, 2])]]
 
       multipolygon = MultiPolygon.new [Polygon.new(first), Polygon.new(second)]
 
@@ -42,8 +42,8 @@ describe MultiPolygon do
 
   describe "#from_json" do
     it "creates a MultiPolygon matching the json" do
-      first = PolyRings.new [Position.new([0, 0]), Position.new([0, 1]), Position.new([1, 0]), Position.new([0, 0])]
-      second = PolyRings.new [Position.new([0, 2]), Position.new([0, 3]), Position.new([1, 2]), Position.new([0, 2])]
+      first = PolyRings.new [[Position.new([0, 0]), Position.new([0, 1]), Position.new([1, 0]), Position.new([0, 0])]]
+      second = PolyRings.new [[Position.new([0, 2]), Position.new([0, 3]), Position.new([1, 2]), Position.new([0, 2])]]
 
       result = MultiPolygon.from_json %({"type":"MultiPolygon","coordinates":[#{first.to_json},#{second.to_json}]})
 

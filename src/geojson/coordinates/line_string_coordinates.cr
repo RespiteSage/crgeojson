@@ -6,16 +6,6 @@ module GeoJSON::Coordinates
   # `LineStringCoordinates` represent multiple positions connected by lines.
   # They must contain at least two `Position` coordinates.
   class LineStringCoordinates < Coordinates(Position)
-    # Creates new `LineStringCoordinates` from the given *arrays*.
-    def initialize(arrays : Array(Array))
-      initialize arrays.map { |array| Position.new(array) }
-    end
-
-    # Creates a new `LineStringCoordinates` from the given *arrays*.
-    def initialize(*arrays : Array)
-      initialize arrays.to_a
-    end
-
     # Raises a `MalformedCoordinateException` if these `LineStringCoordinates`
     # have fewer than two positions.
     private def raise_if_invalid

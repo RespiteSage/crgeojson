@@ -32,6 +32,16 @@ module GeoJSON::Coordinates
         raise_if_invalid
       end
 
+      # Creates a new `Coordinates` that is a copy of the *other* `Coordinates`.
+      def initialize(other : self)
+        @coordinates = other.coordinates.clone
+      end
+
+      # Creates a new `Coordinates` from the given *coordinates* array.
+      def initialize(coordinates : Array)
+        @coordinates = coordinates.map { |coord| T.new coord }
+      end
+
       # Creates new `Coordinates` using the given *parser*.
       def initialize(parser : JSON::PullParser)
         @coordinates = Array(T).new(parser)
