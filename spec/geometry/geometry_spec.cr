@@ -21,7 +21,7 @@ describe Geometry do
     end
 
     it "returns the correct Point for a point string" do
-      coordinates = Position.new 10, 15
+      coordinates = Position.new [10, 15]
 
       result = Geometry.from_json %({"type":"Point","coordinates":#{coordinates.to_json}})
 
@@ -31,18 +31,18 @@ describe Geometry do
     end
 
     it "returns the correct MultiPoint for a multipoint string" do
-      first = Position.new 10, 15
-      second = Position.new 20, 25
+      first = Position.new [10, 15]
+      second = Position.new [20, 25]
 
       result = Geometry.from_json %({"type":"MultiPoint","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      reference = MultiPoint.new Point.new(first), Point.new(second)
+      reference = MultiPoint.new [Point.new(first), Point.new(second)]
 
       result.should eq reference
     end
 
     it "returns the correct LineString for a linestring string" do
-      coordinates = LineStringCoordinates.new Position.new(10, 15), Position.new(20, 25)
+      coordinates = LineStringCoordinates.new [Position.new([10, 15]), Position.new([20, 25])]
 
       result = Geometry.from_json %({"type":"LineString","coordinates":#{coordinates.to_json}})
 
@@ -52,18 +52,18 @@ describe Geometry do
     end
 
     it "returns the correct MultiLineString for a multilinestring string" do
-      first = LineStringCoordinates.new Position.new(0, 0), Position.new(0, 1)
-      second = LineStringCoordinates.new Position.new(1, 0), Position.new(0, 1)
+      first = LineStringCoordinates.new [Position.new([0, 0]), Position.new([0, 1])]
+      second = LineStringCoordinates.new [Position.new([1, 0]), Position.new([0, 1])]
 
       result = Geometry.from_json %({"type":"MultiLineString","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      reference = MultiLineString.new LineString.new(first), LineString.new(second)
+      reference = MultiLineString.new [LineString.new(first), LineString.new(second)]
 
       result.should eq reference
     end
 
     it "returns the correct Polygon for a polygon string" do
-      coordinates = PolyRings.new [Position.new(0, 0), Position.new(1, 0), Position.new(0, 1), Position.new(0, 0)]
+      coordinates = PolyRings.new [Position.new([0, 0]), Position.new([1, 0]), Position.new([0, 1]), Position.new([0, 0])]
 
       result = Geometry.from_json %({"type":"Polygon","coordinates":#{coordinates.to_json}})
 
@@ -73,12 +73,12 @@ describe Geometry do
     end
 
     it "returns the correct MultiPolygon for a multipolygon string" do
-      first = PolyRings.new [Position.new(0, 0), Position.new(0, 1), Position.new(1, 0), Position.new(0, 0)]
-      second = PolyRings.new [Position.new(0, 2), Position.new(0, 3), Position.new(1, 2), Position.new(0, 2)]
+      first = PolyRings.new [Position.new([0, 0]), Position.new([0, 1]), Position.new([1, 0]), Position.new([0, 0])]
+      second = PolyRings.new [Position.new([0, 2]), Position.new([0, 3]), Position.new([1, 2]), Position.new([0, 2])]
 
       result = Geometry.from_json %({"type":"MultiPolygon","coordinates":[#{first.to_json},#{second.to_json}]})
 
-      reference = MultiPolygon.new Polygon.new(first), Polygon.new(second)
+      reference = MultiPolygon.new [Polygon.new(first), Polygon.new(second)]
 
       result.should eq reference
     end

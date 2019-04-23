@@ -6,7 +6,7 @@ module GeoJSON
     getter coordinates : Array(E)
 
     # Creates a new geometry with the given *coordinates*.
-    def initialize(*coordinates : T)
+    def initialize(coordinates : Array(T))
       @coordinates = coordinates.map { |coordinate| coordinate.coordinates }.to_a
     end
 

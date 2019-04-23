@@ -32,11 +32,6 @@ module GeoJSON::Coordinates
         raise_if_invalid
       end
 
-      # Creates new `Coordinates` with the values from the given *coordinates*.
-      def initialize(*coordinates : T)
-        initialize coordinates.to_a
-      end
-
       # Creates new `Coordinates` using the given *parser*.
       def initialize(parser : JSON::PullParser)
         @coordinates = Array(T).new(parser)

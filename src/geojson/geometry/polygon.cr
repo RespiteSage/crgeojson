@@ -15,7 +15,7 @@ module GeoJSON
 
     # Create a new `Polygon` with an outer ring defined by the given *points* and
     # no holes.
-    def initialize(points : Array(Position))
+    def initialize(points : Array)
       begin
         if points.first == points.last
           ring = LinearRing.new points
@@ -30,19 +30,12 @@ module GeoJSON
         end
       end
 
-      @coordinates = PolyRings.new ring
+      @coordinates = PolyRings.new [ring]
     end
 
-    # Creates a new `Polygon` with an outer ring defined by the given *points* and
-    # no holes.
-    def initialize(*points : Position)
-      initialize points.to_a
-    end
-
-    # Creates a new `Polygon` with an outer ring created from the given *points*
-    # and no holes.
-    def initialize(*points : Array(Number))
-      initialize *points.map { |point| Position.new point }
+    # Creates a new `Polygon` with the given *rings*.
+    def initialize(rings : Array(LinearRing))
+      @coordinates = PolyRings.new rings
     end
 
     # Returns the exterior `LinearRing` of this `Polygon`

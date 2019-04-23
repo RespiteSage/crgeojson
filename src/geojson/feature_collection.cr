@@ -13,11 +13,6 @@ module GeoJSON
     def initialize(@features : Array(Feature))
     end
 
-    # Creates a new `FeatureCollection` with the given *features*.
-    def initialize(*features : Feature)
-      @features = features.to_a
-    end
-
     def_equals_and_hash type, features
   end
 end

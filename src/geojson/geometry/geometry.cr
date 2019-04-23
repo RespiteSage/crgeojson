@@ -102,14 +102,8 @@ module GeoJSON
 
       # Create a new geometry with coordinates created from the given
       # *coordinates* array.
-      def initialize(coordinates : Array({{subtype}}))
+      def initialize(coordinates : Array)
         @coordinates = {{type}}.new coordinates
-      end
-
-      # Create a new geometry with coordinates creates from the given
-      # *coordinates*.
-      def initialize(*coordinates : {{subtype}})
-        initialize coordinates.to_a
       end
 
       # Create a new geometry from the given *coordinates* CoordinateTree.

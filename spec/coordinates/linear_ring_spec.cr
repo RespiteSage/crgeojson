@@ -3,70 +3,61 @@ require "../spec_helper"
 describe LinearRing do
   describe ".new" do
     it "properly sets internal points from Positions" do
-      first = Position.new 1, 2
-      second = Position.new 3, 2
-      third = Position.new 2, 0
-      fourth = Position.new 1, 2
+      first = Position.new [1, 2]
+      second = Position.new [3, 2]
+      third = Position.new [2, 0]
+      fourth = Position.new [1, 2]
 
-      result = LinearRing.new first, second, third, fourth
+      result = LinearRing.new [first, second, third, fourth]
 
-      result[0].should eq Position.new 1, 2
-      result[1].should eq Position.new 3, 2
-      result[2].should eq Position.new 2, 0
-      result[3].should eq Position.new 1, 2
+      result[0].should eq Position.new [1, 2]
+      result[1].should eq Position.new [3, 2]
+      result[2].should eq Position.new [2, 0]
+      result[3].should eq Position.new [1, 2]
     end
 
     it "raises for fewer than four arguments" do
-      first = Position.new 1, 2
-      second = Position.new 3, 2
-      third = Position.new 1, 2
+      first = Position.new [1, 2]
+      second = Position.new [3, 2]
+      third = Position.new [1, 2]
 
       expect_raises(Exception, "LinearRing must have four or more points!") do
-        LinearRing.new first, second, third
+        LinearRing.new [first, second, third]
       end
     end
 
     it "raises if the first and last argument differ" do
-      first = Position.new 1, 2
-      second = Position.new 3, 2
-      third = Position.new 2, 0
-      fourth = Position.new 5, 5
+      first = Position.new [1, 2]
+      second = Position.new [3, 2]
+      third = Position.new [2, 0]
+      fourth = Position.new [5, 5]
 
       expect_raises(Exception, "LinearRing must have matching first and last points!") do
-        LinearRing.new first, second, third, fourth
+        LinearRing.new [first, second, third, fourth]
       end
     end
 
     it "works properly with an array of Positions" do
-      first = Position.new 1, 2
-      second = Position.new 3, 2
-      third = Position.new 2, 0
-      fourth = Position.new 1, 2
+      first = Position.new [1, 2]
+      second = Position.new [3, 2]
+      third = Position.new [2, 0]
+      fourth = Position.new [1, 2]
 
       result = LinearRing.new [first, second, third, fourth]
 
-      result[0].should eq Position.new 1, 2
-      result[1].should eq Position.new 3, 2
-      result[2].should eq Position.new 2, 0
-      result[3].should eq Position.new 1, 2
+      result[0].should eq Position.new [1, 2]
+      result[1].should eq Position.new [3, 2]
+      result[2].should eq Position.new [2, 0]
+      result[3].should eq Position.new [1, 2]
     end
 
     it "works properly with an array of arrays of floats" do
       result = LinearRing.new [[1.0, 2.0], [3.0, 2.0], [2.0, 0.0], [1.0, 2.0]]
 
-      result[0].should eq Position.new 1, 2
-      result[1].should eq Position.new 3, 2
-      result[2].should eq Position.new 2, 0
-      result[3].should eq Position.new 1, 2
-    end
-
-    it "works properly with multiple arrays of floats" do
-      result = LinearRing.new [1.0, 2.0], [3.0, 2.0], [2.0, 0.0], [1.0, 2.0]
-
-      result[0].should eq Position.new 1, 2
-      result[1].should eq Position.new 3, 2
-      result[2].should eq Position.new 2, 0
-      result[3].should eq Position.new 1, 2
+      result[0].should eq Position.new [1, 2]
+      result[1].should eq Position.new [3, 2]
+      result[2].should eq Position.new [2, 0]
+      result[3].should eq Position.new [1, 2]
     end
 
     it "creates appropriate coordinates from a CoordinateTree" do
@@ -92,13 +83,13 @@ describe LinearRing do
 
   describe "#from_json" do
     it "returns a LinearRing corresponding to the json" do
-      first = Position.new 0, 0
-      second = Position.new 1, 0
-      third = Position.new 0, 1
-      fourth = Position.new 0, 0
+      first = Position.new [0, 0]
+      second = Position.new [1, 0]
+      third = Position.new [0, 1]
+      fourth = Position.new [0, 0]
 
       linear_ring = LinearRing.from_json "[#{first.to_json},#{second.to_json},#{third.to_json},#{fourth.to_json}]"
-      reference = LinearRing.new first, second, third, fourth
+      reference = LinearRing.new [first, second, third, fourth]
 
       linear_ring.should eq reference
     end
@@ -118,12 +109,12 @@ describe LinearRing do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      first = Position.new 0, 0
-      second = Position.new 1, 0
-      third = Position.new 0, 1
-      fourth = Position.new 0, 0
+      first = Position.new [0, 0]
+      second = Position.new [1, 0]
+      third = Position.new [0, 1]
+      fourth = Position.new [0, 0]
 
-      linear_ring = LinearRing.new first, second, third, fourth
+      linear_ring = LinearRing.new [first, second, third, fourth]
 
       reference_json = "[#{first.to_json},#{second.to_json},#{third.to_json},#{fourth.to_json}]"
 
@@ -133,24 +124,24 @@ describe LinearRing do
 
   describe "#==" do
     it "is true for the same object" do
-      result = Position.new 0, 1
+      result = Position.new [0, 1]
 
       result.should eq result
     end
 
     it "is true for a different LinearRing with the same coordinates" do
       first = LinearRing.new(
-        Position.new(0, 0),
-        Position.new(1, 0),
-        Position.new(0, 1),
-        Position.new(0, 0)
+        [Position.new([0, 0]),
+         Position.new([1, 0]),
+         Position.new([0, 1]),
+         Position.new([0, 0])]
       )
 
       second = LinearRing.new(
-        Position.new(0, 0),
-        Position.new(1, 0),
-        Position.new(0, 1),
-        Position.new(0, 0)
+        [Position.new([0, 0]),
+         Position.new([1, 0]),
+         Position.new([0, 1]),
+         Position.new([0, 0])]
       )
 
       first.should eq second
@@ -158,17 +149,17 @@ describe LinearRing do
 
     it "is false for a different LinearRing with different coordinates" do
       first = LinearRing.new(
-        Position.new(0, 0),
-        Position.new(1, 0),
-        Position.new(0, 1),
-        Position.new(0, 0)
+        [Position.new([0, 0]),
+         Position.new([1, 0]),
+         Position.new([0, 1]),
+         Position.new([0, 0])]
       )
 
       second = LinearRing.new(
-        Position.new(0, 0),
-        Position.new(2, 1),
-        Position.new(1, 2),
-        Position.new(0, 0)
+        [Position.new([0, 0]),
+         Position.new([2, 1]),
+         Position.new([1, 2]),
+         Position.new([0, 0])]
       )
 
       first.should_not eq second
@@ -176,17 +167,17 @@ describe LinearRing do
 
     it "is true for a LineStringCoordinates with the same coordinates" do
       first = LinearRing.new(
-        Position.new(0, 0),
-        Position.new(1, 0),
-        Position.new(0, 1),
-        Position.new(0, 0)
+        [Position.new([0, 0]),
+         Position.new([1, 0]),
+         Position.new([0, 1]),
+         Position.new([0, 0])]
       )
 
       second = LineStringCoordinates.new(
-        Position.new(0, 0),
-        Position.new(1, 0),
-        Position.new(0, 1),
-        Position.new(0, 0)
+        [Position.new([0, 0]),
+         Position.new([1, 0]),
+         Position.new([0, 1]),
+         Position.new([0, 0])]
       )
 
       first.should eq second
@@ -194,23 +185,23 @@ describe LinearRing do
 
     it "is false for an object of another Coordinates subclass" do
       first = LinearRing.new(
-        Position.new(0, 0),
-        Position.new(1, 0),
-        Position.new(0, 1),
-        Position.new(0, 0)
+        [Position.new([0, 0]),
+         Position.new([1, 0]),
+         Position.new([0, 1]),
+         Position.new([0, 0])]
       )
 
-      second = MockCoordinates(Position).new [Position.new(0, 0), Position.new(1, 0), Position.new(0, 1), Position.new(0, 0)]
+      second = MockCoordinates(Position).new [Position.new([0, 0]), Position.new([1, 0]), Position.new([0, 1]), Position.new([0, 0])]
 
       first.should_not eq second
     end
 
     it "is false for an object of another class" do
       first = LinearRing.new(
-        Position.new(0, 0),
-        Position.new(1, 0),
-        Position.new(0, 1),
-        Position.new(0, 0)
+        [Position.new([0, 0]),
+         Position.new([1, 0]),
+         Position.new([0, 1]),
+         Position.new([0, 0])]
       )
 
       second = "Something else"

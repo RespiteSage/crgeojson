@@ -3,7 +3,7 @@ require "./spec_helper"
 describe Feature do
   describe ".new" do
     it "sets a geometry and leaves properties and id unset" do
-      geometry = Point.new 0, 0
+      geometry = Point.new [0, 0]
 
       feature = Feature.new geometry
 
@@ -13,7 +13,7 @@ describe Feature do
     end
 
     it "sets geometry and properties, leaving id unset" do
-      geometry = Point.new 1, 0
+      geometry = Point.new [1, 0]
 
       properties = {"color" => "0xFF00FF", "layer" => 2_i64} of String => JSON::Any::Type
 
@@ -25,7 +25,7 @@ describe Feature do
     end
 
     it "sets geometry and id as a number, leaving properties unset" do
-      geometry = Point.new 4, 9
+      geometry = Point.new [4, 9]
 
       feature = Feature.new geometry, id: 43
 
@@ -35,7 +35,7 @@ describe Feature do
     end
 
     it "sets geometry and id as a string, leaving properties unset" do
-      geometry = LineString.new [0, 0], [1, 4]
+      geometry = LineString.new [[0, 0], [1, 4]]
 
       feature = Feature.new geometry, id: "forty-three"
 
@@ -45,7 +45,7 @@ describe Feature do
     end
 
     it "sets geometry, properties, and id" do
-      geometry = Point.new 1, 0
+      geometry = Point.new [1, 0]
 
       properties = {"color" => "0xFF00FF", "layer" => 2_i64} of String => JSON::Any::Type
 
@@ -67,7 +67,7 @@ describe Feature do
 
   describe "#type" do
     it %(returns "Feature") do
-      feature = Feature.new Point.new(0, 0)
+      feature = Feature.new Point.new([0, 0])
 
       feature.type.should eq "Feature"
     end
@@ -75,7 +75,7 @@ describe Feature do
 
   describe "#to_json" do
     it "returns accurate json" do
-      geometry = Point.new 1, 0
+      geometry = Point.new [1, 0]
 
       properties = {"color" => "0xFF00FF", "layer" => 2_i64} of String => JSON::Any::Type
 
@@ -87,7 +87,7 @@ describe Feature do
     end
 
     it "does not output any id when it is unset" do
-      geometry = Point.new 1, 0
+      geometry = Point.new [1, 0]
 
       properties = {"color" => "0xFF00FF", "layer" => 2_i64} of String => JSON::Any::Type
 
@@ -99,7 +99,7 @@ describe Feature do
     end
 
     it "outputs null value for unset properties" do
-      geometry = Point.new 1, 0
+      geometry = Point.new [1, 0]
 
       feature = Feature.new geometry, id: 43
 
@@ -121,7 +121,7 @@ describe Feature do
 
   describe "#from_json" do
     it "creates a Feature from the matching json" do
-      geometry = Point.new 1, 0
+      geometry = Point.new [1, 0]
 
       result = Feature.from_json %({"type":"Feature","geometry":#{geometry.to_json},"properties":{"layer":2},"id":43})
 
@@ -131,7 +131,7 @@ describe Feature do
     end
 
     it "creates a Feature from json with a missing id" do
-      geometry = Point.new 1, 0
+      geometry = Point.new [1, 0]
 
       result = Feature.from_json %({"type":"Feature","geometry":#{geometry.to_json},"properties":{"layer":2}})
 
@@ -141,7 +141,7 @@ describe Feature do
     end
 
     it "creates a Feature from json with null properties" do
-      geometry = Point.new 1, 0
+      geometry = Point.new [1, 0]
 
       result = Feature.from_json %({"type":"Feature","geometry":#{geometry.to_json},"properties":null,"id":43})
 
@@ -160,7 +160,7 @@ describe Feature do
   end
 
   describe "#==" do
-    geometry = Point.new 0, 1
+    geometry = Point.new [0, 1]
     properties = {"layer" => 2_i64} of String => JSON::Any::Type
     id = 43
 
@@ -201,7 +201,7 @@ describe Feature do
     it "is false for a different Feature with a different geometry" do
       first = Feature.new geometry, properties, id: id
 
-      other_geometry = Point.new 7, 1
+      other_geometry = Point.new [7, 1]
 
       second = Feature.new other_geometry, properties, id: id
 

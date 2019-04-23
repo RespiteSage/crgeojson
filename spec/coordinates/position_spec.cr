@@ -3,21 +3,21 @@ require "../spec_helper"
 describe Position do
   describe ".new" do
     it "properly sets the longitude and latitude" do
-      result = Position.new 15.0, 10.0
+      result = Position.new [15.0, 10.0]
 
       result.longitude.should eq 15.0
       result.latitude.should eq 10.0
     end
 
     it "accepts integers" do
-      result = Position.new 15, 10
+      result = Position.new [15, 10]
 
       result.longitude.should eq 15.0
       result.latitude.should eq 10.0
     end
 
     it "properly sets coordinates with an altivation" do
-      result = Position.new 12.0, 41.0, 300.0
+      result = Position.new [12.0, 41.0, 300.0]
 
       result.longitude.should eq 12.0
       result.latitude.should eq 41.0
@@ -61,7 +61,7 @@ describe Position do
   describe "#from_json" do
     it "returns a Position corresponding to the json" do
       position = Position.from_json "[10.0,15.0]"
-      reference = Position.new 10.0, 15.0
+      reference = Position.new [10.0, 15.0]
 
       position.should eq reference
     end
@@ -81,7 +81,7 @@ describe Position do
 
   describe "#to_json" do
     it "returns accurate geoJSON" do
-      position = Position.new 10.0, 15.0
+      position = Position.new [10.0, 15.0]
 
       reference_json = "[10.0,15.0]"
 
@@ -91,29 +91,29 @@ describe Position do
 
   describe "#==" do
     it "is true for the same object" do
-      result = Position.new 0, 1
+      result = Position.new [0, 1]
 
       result.should eq result
     end
 
     it "is true for a different Position with the same coordinates" do
-      first = Position.new 0, 1
+      first = Position.new [0, 1]
 
-      second = Position.new 0, 1
+      second = Position.new [0, 1]
 
       first.should eq second
     end
 
     it "is false for a different Position with different coordinates" do
-      first = Position.new 0, 1
+      first = Position.new [0, 1]
 
-      second = Position.new 1, 0
+      second = Position.new [1, 0]
 
       first.should_not eq second
     end
 
     it "is false for an object of another Coordinates subclass" do
-      first = Position.new 0, 1
+      first = Position.new [0, 1]
 
       second = MockCoordinates(Float64).new [0.0, 1.0]
 
@@ -121,7 +121,7 @@ describe Position do
     end
 
     it "is false for an object of another class" do
-      first = Position.new 0, 1
+      first = Position.new [0, 1]
 
       second = "Something else"
 

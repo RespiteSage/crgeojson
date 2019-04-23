@@ -4,83 +4,83 @@ describe PolyRings do
   describe ".new" do
     it "properly sets internal rings" do
       first = LinearRing.new(
-        Position.new(1, 2),
-        Position.new(3, 2),
-        Position.new(2, 0),
-        Position.new(1, 2)
+        [Position.new([1, 2]),
+         Position.new([3, 2]),
+         Position.new([2, 0]),
+         Position.new([1, 2])]
       )
       second = LinearRing.new(
-        Position.new(2, 3),
-        Position.new(4, 3),
-        Position.new(3, 1),
-        Position.new(2, 3)
+        [Position.new([2, 3]),
+         Position.new([4, 3]),
+         Position.new([3, 1]),
+         Position.new([2, 3])]
       )
 
-      result = PolyRings.new first, second
+      result = PolyRings.new [first, second]
 
       result[0].should eq LinearRing.new(
-        Position.new(1, 2),
-        Position.new(3, 2),
-        Position.new(2, 0),
-        Position.new(1, 2)
+        [Position.new([1, 2]),
+         Position.new([3, 2]),
+         Position.new([2, 0]),
+         Position.new([1, 2])]
       )
       result[1].should eq LinearRing.new(
-        Position.new(2, 3),
-        Position.new(4, 3),
-        Position.new(3, 1),
-        Position.new(2, 3)
+        [Position.new([2, 3]),
+         Position.new([4, 3]),
+         Position.new([3, 1]),
+         Position.new([2, 3])]
       )
     end
 
     it "works properly with an array of rings" do
       first = LinearRing.new(
-        Position.new(1, 2),
-        Position.new(3, 2),
-        Position.new(2, 0),
-        Position.new(1, 2)
+        [Position.new([1, 2]),
+         Position.new([3, 2]),
+         Position.new([2, 0]),
+         Position.new([1, 2])]
       )
       second = LinearRing.new(
-        Position.new(2, 3),
-        Position.new(4, 3),
-        Position.new(3, 1),
-        Position.new(2, 3)
+        [Position.new([2, 3]),
+         Position.new([4, 3]),
+         Position.new([3, 1]),
+         Position.new([2, 3])]
       )
 
       result = PolyRings.new [first, second]
 
       result[0].should eq LinearRing.new(
-        Position.new(1, 2),
-        Position.new(3, 2),
-        Position.new(2, 0),
-        Position.new(1, 2)
+        [Position.new([1, 2]),
+         Position.new([3, 2]),
+         Position.new([2, 0]),
+         Position.new([1, 2])]
       )
       result[1].should eq LinearRing.new(
-        Position.new(2, 3),
-        Position.new(4, 3),
-        Position.new(3, 1),
-        Position.new(2, 3)
+        [Position.new([2, 3]),
+         Position.new([4, 3]),
+         Position.new([3, 1]),
+         Position.new([2, 3])]
       )
     end
 
     it "works properly with an array of arrays of positions" do
-      first = [Position.new(1.0, 2.0), Position.new(3.0, 2.0),
-               Position.new(2.0, 0.0), Position.new(1.0, 2.0)]
-      second = [Position.new(2.0, 3.0), Position.new(4.0, 3.0),
-                Position.new(3.0, 1.0), Position.new(2.0, 3.0)]
+      first = [Position.new([1.0, 2.0]), Position.new([3.0, 2.0]),
+               Position.new([2.0, 0.0]), Position.new([1.0, 2.0])]
+      second = [Position.new([2.0, 3.0]), Position.new([4.0, 3.0]),
+                Position.new([3.0, 1.0]), Position.new([2.0, 3.0])]
 
       result = PolyRings.new [first, second]
 
       result[0].should eq LinearRing.new(
-        Position.new(1, 2),
-        Position.new(3, 2),
-        Position.new(2, 0),
-        Position.new(1, 2)
+        [Position.new([1, 2]),
+         Position.new([3, 2]),
+         Position.new([2, 0]),
+         Position.new([1, 2])]
       )
       result[1].should eq LinearRing.new(
-        Position.new(2, 3),
-        Position.new(4, 3),
-        Position.new(3, 1),
-        Position.new(2, 3)
+        [Position.new([2, 3]),
+         Position.new([4, 3]),
+         Position.new([3, 1]),
+         Position.new([2, 3])]
       )
     end
 
@@ -89,34 +89,16 @@ describe PolyRings do
                               [[2.0, 3.0], [4.0, 3.0], [3.0, 1.0], [2.0, 3.0]]]
 
       result[0].should eq LinearRing.new(
-        Position.new(1, 2),
-        Position.new(3, 2),
-        Position.new(2, 0),
-        Position.new(1, 2)
+        [Position.new([1, 2]),
+         Position.new([3, 2]),
+         Position.new([2, 0]),
+         Position.new([1, 2])]
       )
       result[1].should eq LinearRing.new(
-        Position.new(2, 3),
-        Position.new(4, 3),
-        Position.new(3, 1),
-        Position.new(2, 3)
-      )
-    end
-
-    it "works properly with multiple arrays of arrays of floats" do
-      result = PolyRings.new [[1.0, 2.0], [3.0, 2.0], [2.0, 0.0], [1.0, 2.0]],
-        [[2.0, 3.0], [4.0, 3.0], [3.0, 1.0], [2.0, 3.0]]
-
-      result[0].should eq LinearRing.new(
-        Position.new(1, 2),
-        Position.new(3, 2),
-        Position.new(2, 0),
-        Position.new(1, 2)
-      )
-      result[1].should eq LinearRing.new(
-        Position.new(2, 3),
-        Position.new(4, 3),
-        Position.new(3, 1),
-        Position.new(2, 3)
+        [Position.new([2, 3]),
+         Position.new([4, 3]),
+         Position.new([3, 1]),
+         Position.new([2, 3])]
       )
     end
 
@@ -145,20 +127,20 @@ describe PolyRings do
   describe "#from_json" do
     it "returns PolyRings corresponding to the json" do
       first = LinearRing.new(
-        Position.new(1, 2),
-        Position.new(3, 2),
-        Position.new(2, 0),
-        Position.new(1, 2)
+        [Position.new([1, 2]),
+         Position.new([3, 2]),
+         Position.new([2, 0]),
+         Position.new([1, 2])]
       )
       second = LinearRing.new(
-        Position.new(2, 3),
-        Position.new(4, 3),
-        Position.new(3, 1),
-        Position.new(2, 3)
+        [Position.new([2, 3]),
+         Position.new([4, 3]),
+         Position.new([3, 1]),
+         Position.new([2, 3])]
       )
 
       polyrings = PolyRings.from_json %([#{first.to_json},#{second.to_json}])
-      reference = PolyRings.new first, second
+      reference = PolyRings.new [first, second]
 
       polyrings.should eq reference
     end
@@ -167,19 +149,19 @@ describe PolyRings do
   describe "#to_json" do
     it "returns accurate geoJSON" do
       first = LinearRing.new(
-        Position.new(1, 2),
-        Position.new(3, 2),
-        Position.new(2, 0),
-        Position.new(1, 2)
+        [Position.new([1, 2]),
+         Position.new([3, 2]),
+         Position.new([2, 0]),
+         Position.new([1, 2])]
       )
       second = LinearRing.new(
-        Position.new(2, 3),
-        Position.new(4, 3),
-        Position.new(3, 1),
-        Position.new(2, 3)
+        [Position.new([2, 3]),
+         Position.new([4, 3]),
+         Position.new([3, 1]),
+         Position.new([2, 3])]
       )
 
-      polyrings = PolyRings.new first, second
+      polyrings = PolyRings.new [first, second]
 
       reference_json = %([#{first.to_json},#{second.to_json}])
 
@@ -189,42 +171,42 @@ describe PolyRings do
 
   describe "#==" do
     first_ring = LinearRing.new(
-      Position.new(1, 2),
-      Position.new(3, 2),
-      Position.new(2, 0),
-      Position.new(1, 2)
+      [Position.new([1, 2]),
+       Position.new([3, 2]),
+       Position.new([2, 0]),
+       Position.new([1, 2])]
     )
     second_ring = LinearRing.new(
-      Position.new(2, 3),
-      Position.new(4, 3),
-      Position.new(3, 1),
-      Position.new(2, 3)
+      [Position.new([2, 3]),
+       Position.new([4, 3]),
+       Position.new([3, 1]),
+       Position.new([2, 3])]
     )
 
     it "is true for the same object" do
-      result = PolyRings.new first_ring, second_ring
+      result = PolyRings.new [first_ring, second_ring]
 
       result.should eq result
     end
 
     it "is true for a different PolyRings with the same coordinates" do
-      first = PolyRings.new first_ring, second_ring
+      first = PolyRings.new [first_ring, second_ring]
 
-      second = PolyRings.new first_ring, second_ring
+      second = PolyRings.new [first_ring, second_ring]
 
       first.should eq second
     end
 
     it "is false for a different PolyRings with different coordinates" do
-      first = PolyRings.new first_ring, second_ring
+      first = PolyRings.new [first_ring, second_ring]
 
-      second = PolyRings.new second_ring
+      second = PolyRings.new [second_ring]
 
       first.should_not eq second
     end
 
     it "is false for an object of another Coordinates subclass" do
-      first = PolyRings.new first_ring, second_ring
+      first = PolyRings.new [first_ring, second_ring]
 
       second = MockCoordinates(LinearRing).new [first_ring, second_ring]
 
@@ -232,7 +214,7 @@ describe PolyRings do
     end
 
     it "is false for an object of another class" do
-      first = PolyRings.new first_ring, second_ring
+      first = PolyRings.new [first_ring, second_ring]
 
       second = "Something else"
 

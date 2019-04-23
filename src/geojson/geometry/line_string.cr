@@ -12,10 +12,5 @@ module GeoJSON
     getter type : String = "LineString"
 
     coordinate_type Coordinates::LineStringCoordinates, subtype: Position
-
-    # Create a new `LineString` with coordinates based on the given *points*.
-    def initialize(*points : Array(Number))
-      @coordinates = LineStringCoordinates.new *points
-    end
   end
 end
