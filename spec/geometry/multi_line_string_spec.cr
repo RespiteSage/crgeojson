@@ -3,14 +3,23 @@ require "../spec_helper"
 describe MultiLineString do
   describe ".new" do
     it "creates a new multilinestring with the given array of linestrings" do
-      first = Position.new [10.0, 15.0]
-      second = Position.new [20.0, 25.0]
+      first = LineString.new [[10.0, 15.0], [20.0, 25.0]]
+      second = LineString.new [[10.0, 25.0], [20.0, 15.0]]
 
-      linestring = LineString.new [first, second]
+      multilinestring = MultiLineString.new [first, second]
 
-      multilinestring = MultiLineString.new [linestring]
+      multilinestring[0].should eq LineString.new [[10.0, 15.0], [20.0, 25.0]]
+      multilinestring[1].should eq LineString.new [[10.0, 25.0], [20.0, 15.0]]
+    end
 
-      multilinestring[0].should eq LineString.new([Position.new([10.0, 15.0]), Position.new([20.0, 25.0])])
+    it "creates a new multilinestring from an array of LineStringCoordinates" do
+      first = LineStringCoordinates.new [[10.0, 15.0], [20.0, 25.0]]
+      second = LineStringCoordinates.new [[10.0, 25.0], [20.0, 15.0]]
+
+      multilinestring = MultiLineString.new [first, second]
+
+      multilinestring[0].should eq LineString.new [[10.0, 15.0], [20.0, 25.0]]
+      multilinestring[1].should eq LineString.new [[10.0, 25.0], [20.0, 15.0]]
     end
   end
 

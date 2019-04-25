@@ -2,7 +2,7 @@ require "../spec_helper"
 
 describe PolyRings do
   describe ".new" do
-    it "properly sets internal rings" do
+    it "creates a new PolyRings from an array of LinearRings" do
       first = LinearRing.new(
         [Position.new([1, 2]),
          Position.new([3, 2]),
@@ -32,37 +32,7 @@ describe PolyRings do
       )
     end
 
-    it "works properly with an array of rings" do
-      first = LinearRing.new(
-        [Position.new([1, 2]),
-         Position.new([3, 2]),
-         Position.new([2, 0]),
-         Position.new([1, 2])]
-      )
-      second = LinearRing.new(
-        [Position.new([2, 3]),
-         Position.new([4, 3]),
-         Position.new([3, 1]),
-         Position.new([2, 3])]
-      )
-
-      result = PolyRings.new [first, second]
-
-      result[0].should eq LinearRing.new(
-        [Position.new([1, 2]),
-         Position.new([3, 2]),
-         Position.new([2, 0]),
-         Position.new([1, 2])]
-      )
-      result[1].should eq LinearRing.new(
-        [Position.new([2, 3]),
-         Position.new([4, 3]),
-         Position.new([3, 1]),
-         Position.new([2, 3])]
-      )
-    end
-
-    it "works properly with an array of arrays of positions" do
+    it "creates a new PolyRings from an array of arrays of Positions" do
       first = [Position.new([1.0, 2.0]), Position.new([3.0, 2.0]),
                Position.new([2.0, 0.0]), Position.new([1.0, 2.0])]
       second = [Position.new([2.0, 3.0]), Position.new([4.0, 3.0]),
@@ -84,7 +54,7 @@ describe PolyRings do
       )
     end
 
-    it "works properly with an array of arrays of arrays of floats" do
+    it "creates a new PolyRings from an array of arrays of arrays of floats" do
       result = PolyRings.new [[[1.0, 2.0], [3.0, 2.0], [2.0, 0.0], [1.0, 2.0]],
                               [[2.0, 3.0], [4.0, 3.0], [3.0, 1.0], [2.0, 3.0]]]
 
@@ -121,6 +91,16 @@ describe PolyRings do
       result = PolyRings.new root
 
       result.should eq PolyRings.new [[[2, 3], [5, 7], [11, 13], [2, 3]]]
+    end
+
+    it "creates a new PolyRings by copying an existing PolyRings" do
+      old_coordinates = PolyRings.new [[[1.0, 2.0], [3.0, 2.0], [2.0, 0.0], [1.0, 2.0]],
+                                       [[2.0, 3.0], [4.0, 3.0], [3.0, 1.0], [2.0, 3.0]]]
+
+      new_coordinates = PolyRings.new old_coordinates
+
+      new_coordinates.coordinates.should eq old_coordinates.coordinates
+      new_coordinates.coordinates.should_not be old_coordinates.coordinates
     end
   end
 

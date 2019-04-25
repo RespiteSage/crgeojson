@@ -2,6 +2,18 @@ require "../spec_helper"
 
 describe Polygon do
   describe ".new" do
+    it "creates a new polygon from a PolyRings" do
+      coordinates = PolyRings.new(
+        [[[2, 2], [-2, 2], [-2, -2], [2, -2], [2, 2]],
+         [[1, 0], [0, -1], [-1, 0], [0, 1], [1, 0]]]
+      )
+
+      polygon = Polygon.new coordinates
+
+      polygon[0].should eq LinearRing.new [[2, 2], [-2, 2], [-2, -2], [2, -2], [2, 2]]
+      polygon[1].should eq LinearRing.new [[1, 0], [0, -1], [-1, 0], [0, 1], [1, 0]]
+    end
+
     it "creates a new polygon with the given points" do
       first = Position.new [0, 0]
       second = Position.new [1, 0]

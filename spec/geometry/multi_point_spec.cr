@@ -2,7 +2,7 @@ require "../spec_helper"
 
 describe MultiPoint do
   describe ".new" do
-    it "creates a new multipoint with the given points" do
+    it "creates a multipoint with the given points" do
       first = Point.new [10.0, 15.0]
       second = Point.new [20.0, 25.0]
 
@@ -10,6 +10,31 @@ describe MultiPoint do
 
       multipoint[0].should eq Point.new [10.0, 15.0]
       multipoint[1].should eq Point.new [20.0, 25.0]
+    end
+
+    it "creates a multipoint from Positions" do
+      first = Position.new [10.0, 15.0]
+      second = Position.new [20.0, 25.0]
+
+      multipoint = MultiPoint.new [first, second]
+
+      multipoint[0].should eq Point.new [10.0, 15.0]
+      multipoint[1].should eq Point.new [20.0, 25.0]
+    end
+
+    it "creates a multipoint from a CoordinateTree" do
+      root = Root.new
+      first_point = Branch.new root
+      first_point_lon = Leaf.new first_point, 2
+      first_point_lat = Leaf.new first_point, 3
+      second_point = Branch.new root
+      second_point_lon = Leaf.new second_point, 5
+      second_point_lat = Leaf.new second_point, 7
+
+      result = MultiPoint.new root
+
+      result[0].should eq Point.new [2, 3]
+      result[1].should eq Point.new [5, 7]
     end
   end
 

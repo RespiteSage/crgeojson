@@ -2,7 +2,16 @@ require "../spec_helper"
 
 describe LineString do
   describe ".new" do
-    it "creates a new linestring with the given array of points" do
+    it "creates a new linestring from a LineStringCoordinates" do
+      coordinates = LineStringCoordinates.new [[10, 15], [20, 25]]
+
+      linestring = LineString.new coordinates
+
+      linestring[0].should eq Position.new([10.0, 15.0])
+      linestring[1].should eq Position.new([20.0, 25.0])
+    end
+
+    it "creates a new linestring from an array of Positions" do
       first = Position.new [10, 15]
       second = Position.new [20, 25]
 

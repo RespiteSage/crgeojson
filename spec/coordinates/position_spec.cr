@@ -2,21 +2,14 @@ require "../spec_helper"
 
 describe Position do
   describe ".new" do
-    it "properly sets the longitude and latitude" do
+    it "properly sets the longitude and latitude from an array of floats" do
       result = Position.new [15.0, 10.0]
 
       result.longitude.should eq 15.0
       result.latitude.should eq 10.0
     end
 
-    it "accepts integers" do
-      result = Position.new [15, 10]
-
-      result.longitude.should eq 15.0
-      result.latitude.should eq 10.0
-    end
-
-    it "properly sets coordinates with an altivation" do
+    it "properly sets coordinates with an altivation from an array of floats" do
       result = Position.new [12.0, 41.0, 300.0]
 
       result.longitude.should eq 12.0
@@ -24,22 +17,22 @@ describe Position do
       result.altivation.should eq 300.0
     end
 
-    it "works with an array of floats" do
-      result = Position.new [17.0, 19.0, 23.0]
+    it "accepts integers" do
+      result = Position.new [15, 10, 5]
 
-      result.longitude.should eq 17.0
-      result.latitude.should eq 19.0
-      result.altivation.should eq 23.0
+      result.longitude.should eq 15.0
+      result.latitude.should eq 10.0
+      result.altivation.should eq 5.0
     end
 
-    it "works with two named arguments" do
+    it "sets the longitude and latitude from two named arguments" do
       result = Position.new longitude: 29.0, latitude: 31.0
 
       result.longitude.should eq 29.0
       result.latitude.should eq 31.0
     end
 
-    it "works with three named arguments" do
+    it "sets the longitude and latitude from three named arguments" do
       result = Position.new longitude: 37.0, latitude: 41.0, altivation: 43.0
 
       result.longitude.should eq 37.0
@@ -70,6 +63,15 @@ describe Position do
       result.longitude.should eq 20
       result.latitude.should eq -40
       result.altivation.should eq 45
+    end
+
+    it "creates a new Position by copying an existing Position" do
+      old_position = Position.new [5, 8, 13]
+
+      new_position = Position.new old_position
+
+      new_position.coordinates.should eq old_position.coordinates
+      new_position.coordinates.should_not be old_position.coordinates
     end
   end
 

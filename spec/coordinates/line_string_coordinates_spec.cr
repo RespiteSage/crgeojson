@@ -2,7 +2,7 @@ require "../spec_helper"
 
 describe LineStringCoordinates do
   describe ".new" do
-    it "properly sets internal points from Positions" do
+    it "creates new coordinates from an array of Positions" do
       first = Position.new [1, 2]
       second = Position.new [3, 2]
 
@@ -20,17 +20,7 @@ describe LineStringCoordinates do
       end
     end
 
-    it "works properly with an array of Positions" do
-      first = Position.new [1, 2]
-      second = Position.new [3, 2]
-
-      result = LineStringCoordinates.new [first, second]
-
-      result[0].should eq Position.new [1, 2]
-      result[1].should eq Position.new [3, 2]
-    end
-
-    it "works properly with an array of arrays of floats" do
+    it "creates new coordinates from an array of arrays of floats" do
       result = LineStringCoordinates.new [[1.0, 2.0], [3.0, 2.0], [2.0, 0.0], [1.0, 2.0]]
 
       result[0].should eq Position.new [1, 2]
@@ -51,6 +41,15 @@ describe LineStringCoordinates do
       result = LineStringCoordinates.new root
 
       result.should eq LineStringCoordinates.new [[2, 3], [5, 7]]
+    end
+
+    it "creates a new LineStringCoordinates by copying an existing LineStringCoordinates" do
+      old_coordinates = LineStringCoordinates.new [[1.0, 2.0], [3.0, 2.0], [2.0, 0.0], [1.0, 2.0]]
+
+      new_coordinates = LineStringCoordinates.new old_coordinates
+
+      new_coordinates.coordinates.should eq old_coordinates.coordinates
+      new_coordinates.coordinates.should_not be old_coordinates.coordinates
     end
   end
 

@@ -15,6 +15,20 @@ describe MultiPolygon do
       multipolygon[0].should eq Polygon.new [first, second, third]
       multipolygon[1].should eq Polygon.new [second, first, third]
     end
+
+    it "creates a new multipolygon with the given PolyRings" do
+      first = Position.new [0, 0]
+      second = Position.new [1, 0]
+      third = Position.new [0, 1]
+
+      polygon_one = PolyRings.new [[first, second, third, first]]
+      polygon_two = PolyRings.new [[second, first, third, second]]
+
+      multipolygon = MultiPolygon.new [polygon_one, polygon_two]
+
+      multipolygon[0].should eq Polygon.new [first, second, third]
+      multipolygon[1].should eq Polygon.new [second, first, third]
+    end
   end
 
   describe "#type" do

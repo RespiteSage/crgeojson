@@ -2,7 +2,7 @@ require "../spec_helper"
 
 describe LinearRing do
   describe ".new" do
-    it "properly sets internal points from Positions" do
+    it "properly sets internal points from an array of Positions" do
       first = Position.new [1, 2]
       second = Position.new [3, 2]
       third = Position.new [2, 0]
@@ -37,21 +37,7 @@ describe LinearRing do
       end
     end
 
-    it "works properly with an array of Positions" do
-      first = Position.new [1, 2]
-      second = Position.new [3, 2]
-      third = Position.new [2, 0]
-      fourth = Position.new [1, 2]
-
-      result = LinearRing.new [first, second, third, fourth]
-
-      result[0].should eq Position.new [1, 2]
-      result[1].should eq Position.new [3, 2]
-      result[2].should eq Position.new [2, 0]
-      result[3].should eq Position.new [1, 2]
-    end
-
-    it "works properly with an array of arrays of floats" do
+    it "creates new coordinates from an array of arrays of floats" do
       result = LinearRing.new [[1.0, 2.0], [3.0, 2.0], [2.0, 0.0], [1.0, 2.0]]
 
       result[0].should eq Position.new [1, 2]
@@ -78,6 +64,15 @@ describe LinearRing do
       result = LinearRing.new root
 
       result.should eq LinearRing.new [[2, 3], [5, 7], [11, 13], [2, 3]]
+    end
+
+    it "creates a new LinearRing by copying an existing LinearRing" do
+      old_coordinates = LinearRing.new [[1.0, 2.0], [3.0, 2.0], [2.0, 0.0], [1.0, 2.0]]
+
+      new_coordinates = LinearRing.new old_coordinates
+
+      new_coordinates.coordinates.should eq old_coordinates.coordinates
+      new_coordinates.coordinates.should_not be old_coordinates.coordinates
     end
   end
 
