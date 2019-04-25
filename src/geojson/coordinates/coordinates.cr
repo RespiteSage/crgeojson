@@ -45,6 +45,11 @@ module GeoJSON::Coordinates
       raise_if_invalid
     end
 
+    # Creates a copy of these `Coordinates`.
+    def clone
+      self.class.new self
+    end
+
     # Raises a `MalformedCoordinateException` if these coordinates are
     # invalid.
     abstract def raise_if_invalid
