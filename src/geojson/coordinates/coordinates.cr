@@ -18,11 +18,15 @@ module GeoJSON::Coordinates
     # Creates a new `Coordinates` that is a copy of the *other* `Coordinates`.
     def initialize(other : self)
       @coordinates = other.coordinates.clone
+
+      raise_if_invalid
     end
 
     # Creates a new `Coordinates` from the given *coordinates* array.
     def initialize(coordinates : Array)
       @coordinates = coordinates.map { |coord| T.new coord }
+
+      raise_if_invalid
     end
 
     # Creates new `Coordinates` using the given *parser*.
@@ -37,6 +41,8 @@ module GeoJSON::Coordinates
     # `Coordinates` that are being created.
     def initialize(coordinate_tree : CoordinateTree)
       @coordinates = coordinate_tree.map { |child| T.new child }
+
+      raise_if_invalid
     end
 
     # Raises a `MalformedCoordinateException` if these coordinates are
