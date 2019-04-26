@@ -14,6 +14,11 @@ module GeoJSON
     # Gets this Polygon's GeoJSON type ("Polygon")
     getter type : String = "Polygon"
 
+    # Creates a new `Polygon` with the given *rings*.
+    def self.new(rings : Array(LinearRing))
+      new PolyRings.new rings
+    end
+
     # Create a new `Polygon` with an outer ring defined by the given *points* and
     # no holes.
     def self.new(points : Array)
@@ -32,11 +37,6 @@ module GeoJSON
       end
 
       new PolyRings.new [ring]
-    end
-
-    # Creates a new `Polygon` with the given *rings*.
-    def self.new(rings : Array(LinearRing))
-      new PolyRings.new rings
     end
 
     # Returns the exterior `LinearRing` of this `Polygon`
