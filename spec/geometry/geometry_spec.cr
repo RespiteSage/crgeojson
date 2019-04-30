@@ -20,6 +20,12 @@ describe Geometry do
       end
     end
 
+    it "rejects invalid json" do
+      expect_raises(JSON::ParseException) do
+        Geometry.from_json %({"type": "Point","coordinates":0, 0]})
+      end
+    end
+
     it "returns the correct Point for a point string" do
       coordinates = Position.new [10, 15]
 
