@@ -3,6 +3,8 @@ require "../src/geojson/**"
 
 include GeoJSON
 
+include GeoJSON::Coordinates
+
 struct EquivalentJSONExpectation(T)
   def initialize(@expected_value : T)
   end
@@ -28,6 +30,12 @@ end
 
 def be_equivalent_json_to(expected)
   EquivalentJSONExpectation.new expected
+end
+
+class MockCoordinates(T) < Coordinates(T)
+  def raise_if_invalid
+    # do nothing
+  end
 end
 
 alias Root = CoordinateTree::Root
