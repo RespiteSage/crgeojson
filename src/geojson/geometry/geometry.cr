@@ -1,8 +1,9 @@
 require "json"
+require "./pseudo_geometry"
 
 module GeoJSON
   # A `Geometry` represents a figure in geographic space.
-  abstract class Geometry < Base
+  abstract class Geometry < PseudoGeometry
     # Returns this Geometry's coordinates.
     abstract def coordinates
 

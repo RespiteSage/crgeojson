@@ -9,7 +9,7 @@ module GeoJSON
 
     @[JSON::Field(emit_null: true)]
     # Gets this Feature's geometry.
-    getter geometry : Geometry?
+    getter geometry : PseudoGeometry?
 
     @[JSON::Field(emit_null: true)]
     # Gets this Feature's properties.
