@@ -47,18 +47,8 @@ module GeoJSON
     # *coordinates*.
     private def self.create_pseudo_geometry(of_type element_type, with contents)
       case element_type
-      when "Point"
-        Point.new contents.as CoordinateTree
-      when "MultiPoint"
-        MultiPoint.new contents.as CoordinateTree
-      when "LineString"
-        LineString.new contents.as CoordinateTree
-      when "MultiLineString"
-        MultiLineString.new contents.as CoordinateTree
-      when "Polygon"
-        Polygon.new contents.as CoordinateTree
-      when "MultiPolygon"
-        MultiPolygon.new contents.as CoordinateTree
+      when "Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"
+        Geometry.create_geometry element_type, contents.as CoordinateTree
       when "GeometryCollection"
         GeometryCollection.new contents.as Array(Geometry)
       else
