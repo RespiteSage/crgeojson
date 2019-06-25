@@ -63,6 +63,14 @@ describe Feature do
       feature.properties.should be_nil
       feature.id.should be_nil
     end
+
+    it "can set geometry to a GeometryCollection" do
+      geometry_collection = GeometryCollection.new [Point.new([0, 0])]
+
+      feature = Feature.new geometry_collection
+
+      feature.geometry.should eq geometry_collection
+    end
   end
 
   describe "#type" do
