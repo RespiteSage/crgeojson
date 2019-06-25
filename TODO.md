@@ -10,9 +10,6 @@
 - Allow extra "foreign" json members and find a way to give easy access to them
 - Add testing to make sure that the library properly deserializes unordered
   GeoJSON strings
-- Consider whether GeometryCollection should be a Geometry; the GeoJSON
-  specification stipulates that a GeometryCollection SHOULD not contain another
-  GeometryCollection, not that it MUST not
 - Implement antimeridian cutting of existing Geometry objects
 - Handle coordinates around the poles
 
