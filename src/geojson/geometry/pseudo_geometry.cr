@@ -1,9 +1,15 @@
 require "../base"
 
 module GeoJSON
-  # TODO
+  # A `PseudoGeometry` is a geometry element in a GeoJSON feature.
+  #
+  # This class is really just a union of `Geometry` and `GeometryCollection`
+  # with built-in JSON parsing logic.
   abstract class PseudoGeometry < Base
-    # TODO
+    # Creates a new `PseudoGeometry` from the given *parser*.
+    #
+    # This static class method automatically chooses the correct
+    # PseudoGeometry class (`Geometry` or `GeometryCollection`) to create.
     def PseudoGeometry.new(parser : JSON::PullParser)
       element_type, contents = parse_pseudo_geometry using: parser
 
@@ -18,8 +24,8 @@ module GeoJSON
       create_pseudo_geometry of_type: element_type, with: contents
     end
 
-    # Parses the geometry type and coordinates (returned as a tuple, in that
-    # order) from the given *parser*.
+    # Parses the type and coordinates (returned as a tuple, in that order) from
+    # the given *parser*.
     private def self.parse_pseudo_geometry(using parser : JSON::PullParser)
       parser.read_begin_object
       while parser.kind != :end_object
@@ -43,8 +49,8 @@ module GeoJSON
       {element_type, contents}
     end
 
-    # Creates a geometry of the given *geometry_type* with the given
-    # *coordinates*.
+    # Creates a `Geometry` or `GeometryCollection` based on the given
+    #  *element_type* and *contents*.
     private def self.create_pseudo_geometry(of_type element_type, with contents)
       case element_type
       when "Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"
