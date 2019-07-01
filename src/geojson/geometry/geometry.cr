@@ -1,8 +1,9 @@
 require "json"
+require "./pseudo_geometry"
 
 module GeoJSON
   # A `Geometry` represents a figure in geographic space.
-  abstract class Geometry < Base
+  abstract class Geometry < PseudoGeometry
     # Returns this Geometry's coordinates.
     abstract def coordinates
 
@@ -27,29 +28,18 @@ module GeoJSON
     # Parses the geometry type and coordinates (returned as a tuple, in that
     # order) from the given *parser*.
     private def self.parse_geometry(using parser : JSON::PullParser)
-      parser.read_begin_object
-      while parser.kind != :end_object
-        case parser.read_string
-        when "type"
-          begin
-            geometry_type = parser.read_string
-          rescue JSON::ParseException
-            raise "Type field is not a string!"
-          end
-        when "coordinates"
-          coordinates = CoordinateTree.new parser
-        else
-          parser.read_next # we currently ignore extra elements
-        end
-      end
-      parser.read_end_object
+      element_type, contents = parse_pseudo_geometry using: parser
 
-      {geometry_type, coordinates}
+      if element_type == "GeometryCollection"
+        raise "GeometryCollection is not a Geometry!"
+      end
+
+      {element_type, contents.as CoordinateTree}
     end
 
     # Creates a geometry of the given *geometry_type* with the given
     # *coordinates*.
-    private def self.create_geometry(of_type geometry_type, with coordinates)
+    protected def self.create_geometry(of_type geometry_type, with coordinates)
       case geometry_type
       when "Point"
         Point.new coordinates
