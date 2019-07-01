@@ -10,7 +10,7 @@ module GeoJSON
     #
     # This static class method automatically chooses the correct
     # PseudoGeometry class (`Geometry` or `GeometryCollection`) to create.
-    def PseudoGeometry.new(parser : JSON::PullParser)
+    def self.new(parser : JSON::PullParser)
       element_type, contents = parse_pseudo_geometry using: parser
 
       if element_type.nil?
