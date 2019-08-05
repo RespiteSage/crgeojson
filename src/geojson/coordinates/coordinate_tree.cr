@@ -104,7 +104,7 @@ module GeoJSON::Coordinates
       end
 
       # Raises an exception because a Leaf has no children to enumerate upon.
-      def each(&block)
+      def each(&block : CoordinateTree -> _)
         raise "Leaves have no children to enumerate!"
       end
 
