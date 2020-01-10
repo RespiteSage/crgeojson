@@ -42,11 +42,26 @@ feature.to_json # => %({"type": "Feature",
                 #       "id": "Galapagos"})
 ```
 
-TODO: Write more usage instructions here
+If we instead had that string and wanted to deserialize it into a feature, we
+could do so like this:
+
+```crystal
+json_string = %({"type": "Feature",
+                 "geometry": {"type": "Point", "coordinates": [-91.343, 0.018]},
+                 "id": "Galapagos"})
+
+feature = GeoJSON::Feature.from_json json_string
+```
+
+This library currently conforms with almost all of the GeoJSON Specification, so
+you can also serialize, deserialize, and programmatically manipulate
+FeatureCollections, MultiPoints, LineStrings, MultiLineStrings, Polygons,
+MultiPolygons, and GeometryCollections.
 
 ## Development
 
-TODO: Write development instructions here
+Features still to be developed can be found in `TODO.md`. Make sure to add specs
+for any new features.
 
 ## Contributing
 
