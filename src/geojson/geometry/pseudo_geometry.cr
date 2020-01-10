@@ -1,3 +1,5 @@
+require "json"
+
 require "../base"
 
 module GeoJSON
@@ -28,7 +30,7 @@ module GeoJSON
     # the given *parser*.
     private def self.parse_pseudo_geometry(using parser : JSON::PullParser)
       parser.read_begin_object
-      while parser.kind != :end_object
+      while parser.kind != JSON::PullParser::Kind::EndObject
         case parser.read_string
         when "type"
           begin
