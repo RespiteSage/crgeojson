@@ -30,7 +30,7 @@ module GeoJSON::Coordinates
       end
 
       # Raises an exception because a Root does not have a leaf value.
-      def leaf_value
+      def leaf_value : Float64
         raise "Roots do not have leaf values!"
       end
 
@@ -73,7 +73,7 @@ module GeoJSON::Coordinates
       end
 
       # Raises an exception because a Branch does not have a leaf value.
-      def leaf_value
+      def leaf_value : Float64
         raise "Branches do not have leaf values!"
       end
 
@@ -117,7 +117,7 @@ module GeoJSON::Coordinates
     #
     # `CoordinateTree::Root` and `CoordinateTree::Branch` nodes will raise when
     # this method is called.
-    abstract def leaf_value : Float32
+    abstract def leaf_value : Float64
 
     # :nodoc:
     # Adds the given `CoordinateTree` node as a *child* of this node.
