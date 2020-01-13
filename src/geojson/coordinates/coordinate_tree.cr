@@ -1,7 +1,5 @@
 require "json"
 
-alias Kind = JSON::PullParser::Kind
-
 module GeoJSON::Coordinates
   # A `CoordinateTree` is a standard tree structure in which there is a defined,
   # parent-less `Root`, intermediate `Branch` nodes, and `Leaf` nodes which have
@@ -19,10 +17,10 @@ module GeoJSON::Coordinates
         root = self.new
 
         parser.read_begin_array
-        until parser.kind == Kind::EndArray
-          if parser.kind == Kind::BeginArray
+        until parser.kind.end_array?
+          if parser.kind.begin_array?
             Branch.new root, parser
-          elsif parser.kind == Kind::Int || parser.kind == Kind::Float
+          elsif parser.kind.int? || parser.kind.float?
             Leaf.new root, parser
           else
             raise MalformedCoordinateException.new "Cannot parse into CoordinateTree!"
@@ -62,10 +60,10 @@ module GeoJSON::Coordinates
         branch = new(parent)
 
         parser.read_begin_array
-        until parser.kind == Kind::EndArray
-          if parser.kind == Kind::BeginArray
+        until parser.kind.end_array?
+          if parser.kind.begin_array?
             Branch.new branch, parser
-          elsif parser.kind == Kind::Int || parser.kind == Kind::Float
+          elsif parser.kind.int? || parser.kind.float?
             Leaf.new branch, parser
           else
             raise MalformedCoordinateException.new "Cannot parse into CoordinateTree!"
