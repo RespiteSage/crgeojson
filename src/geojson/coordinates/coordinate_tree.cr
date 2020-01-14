@@ -1,3 +1,5 @@
+require "json"
+
 module GeoJSON::Coordinates
   # A `CoordinateTree` is a standard tree structure in which there is a defined,
   # parent-less `Root`, intermediate `Branch` nodes, and `Leaf` nodes which have
@@ -14,23 +16,13 @@ module GeoJSON::Coordinates
       def self.new(parser : JSON::PullParser)
         root = self.new
 
-        parser.read_begin_array
-        while parser.kind != :end_array
-          if parser.kind == :begin_array
-            Branch.new root, parser
-          elsif parser.kind == :int || parser.kind == :float
-            Leaf.new root, parser
-          else
-            raise MalformedCoordinateException.new "Cannot parse into CoordinateTree!"
-          end
-        end
-        parser.read_end_array
+        root.deserialize_children(parser)
 
         root
       end
 
       # Raises an exception because a Root does not have a leaf value.
-      def leaf_value
+      def leaf_value : Float64
         raise "Roots do not have leaf values!"
       end
 
@@ -57,23 +49,13 @@ module GeoJSON::Coordinates
       def self.new(parent : CoordinateTree, parser : JSON::PullParser)
         branch = new(parent)
 
-        parser.read_begin_array
-        while parser.kind != :end_array
-          if parser.kind == :begin_array
-            Branch.new branch, parser
-          elsif parser.kind == :int || parser.kind == :float
-            Leaf.new branch, parser
-          else
-            raise MalformedCoordinateException.new "Cannot parse into CoordinateTree!"
-          end
-        end
-        parser.read_end_array
+        branch.deserialize_children(parser)
 
         branch
       end
 
       # Raises an exception because a Branch does not have a leaf value.
-      def leaf_value
+      def leaf_value : Float64
         raise "Branches do not have leaf values!"
       end
 
@@ -117,12 +99,29 @@ module GeoJSON::Coordinates
     #
     # `CoordinateTree::Root` and `CoordinateTree::Branch` nodes will raise when
     # this method is called.
-    abstract def leaf_value : Float32
+    abstract def leaf_value : Float64
 
     # :nodoc:
     # Adds the given `CoordinateTree` node as a *child* of this node.
     protected def add_child(child : CoordinateTree)
       children << child
+    end
+
+    # :nodoc:
+    # Reads from the given *parser* to create the proper child structure for
+    # the `CoordinateTree` node.
+    protected def deserialize_children(parser : JSON::PullParser)
+      parser.read_begin_array
+      until parser.kind.end_array?
+        if parser.kind.begin_array?
+          Branch.new self, parser
+        elsif parser.kind.int? || parser.kind.float?
+          Leaf.new self, parser
+        else
+          raise MalformedCoordinateException.new "Cannot parse into CoordinateTree!"
+        end
+      end
+      parser.read_end_array
     end
 
     # Creates a new `CoordinateTree` structure based on the given *parser*.
