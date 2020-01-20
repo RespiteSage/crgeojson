@@ -30,9 +30,10 @@ feature = GeoJSON::Feature.new geometry: point, id: "Galapagos"
 ```
 
 Note that this library (like the GeoJSON specification) uses positions of the
-form [longitude, latitude(, optional altitude/elevation)]. Additionally, the
-`id` above is optional. Refer to the documentation of `Feature.new` for more
-information.
+form [longitude, latitude(, optional altitude/elevation)]. This is particularly
+important when not using named arguments to specify points and positions.
+Additionally, the `id` field above is optional. Refer to the documentation of
+`Feature.new` for more information.
 
 Now that we have our feature, we can serialize it to GeoJSON:
 
