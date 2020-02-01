@@ -2,7 +2,7 @@ name: geojson
 version: 0.1.2
 
 authors:
-  - Benjamin Wade <benjamin@va.wagner.com>
+  - Benjamin Wade
 
 crystal: 0.32.1
 

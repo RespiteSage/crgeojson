@@ -10,7 +10,7 @@ writing geoJSON strings and objects that represent them, based on the
 ```yaml
 dependencies:
   geojson:
-    git: ssh://git@192.168.99.111:7999/~bwade/crgeojson.git
+    git: TODO
 ```
 2. Run `shards install`
 
@@ -66,11 +66,11 @@ for any new features.
 
 ## Contributing
 
-1. Clone the repo from ssh://git@192.168.99.111:7999/~bwade/crgeojson.git
+1. Create a fork of this repository
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+5. Create a new Pull Request from your branch to this repository
 
 ## Contributors
 
