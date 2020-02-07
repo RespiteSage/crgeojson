@@ -10,7 +10,7 @@ writing geoJSON strings and objects that represent them, based on the
 ```yaml
 dependencies:
   geojson:
-    git: TODO
+    github: kinxer/crgeojson
 ```
 2. Run `shards install`
 
