@@ -1,8 +1,11 @@
 require "json"
 
+require "../base"
 require "../coordinates/coordinate_tree"
 
 module GeoJSON
+  include Coordinates
+
   # A `Geometry` represents a figure in geographic space.
   abstract class Geometry < Base
     # Returns this Geometry's coordinates.

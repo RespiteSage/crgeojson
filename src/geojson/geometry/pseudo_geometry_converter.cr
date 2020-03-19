@@ -5,8 +5,6 @@ require "./geometry_collection"
 require "../coordinates/coordinate_tree"
 
 module GeoJSON
-  include Coordinates
-
   # A `PseudoGeometryConverter` handles deserialization and serialization of
   # geometry elements in GeoJSON features.
   struct PseudoGeometryConverter

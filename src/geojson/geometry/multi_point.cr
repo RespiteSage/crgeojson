@@ -1,4 +1,7 @@
+require "./geometry"
+require "./multi_geometry"
 require "./point"
+require "../coordinates/position"
 
 module GeoJSON
   # A `MultiPoint` is a `Geometry` representing several `Point`s.

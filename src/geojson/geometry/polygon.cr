@@ -1,7 +1,7 @@
 require "./geometry"
 require "./single_geometry"
-require "../coordinates/linear_ring"
 require "../coordinates/poly_rings"
+require "../coordinates/linear_ring"
 
 module GeoJSON
   # A `Polygon` is a `Geometry` representing a closed geometric figure in

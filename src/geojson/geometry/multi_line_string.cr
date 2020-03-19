@@ -1,4 +1,7 @@
+require "./geometry"
+require "./multi_geometry"
 require "./line_string"
+require "../coordinates/line_string_coordinates"
 
 module GeoJSON
   # A `MultiLineString` is a `Geometry` representing several `LineString`s.

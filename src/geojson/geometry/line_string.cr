@@ -1,6 +1,5 @@
 require "./geometry"
 require "./single_geometry"
-require "../coordinates/position"
 require "../coordinates/line_string_coordinates"
 
 module GeoJSON

@@ -1,3 +1,5 @@
+require "../coordinates/coordinate_tree"
+
 module GeoJSON
   # A `MultiGeometry` is a `Geometry` corresponding to a "normal geometry" type
   # *T* and which can contain multiple coordinates of type *E*.
