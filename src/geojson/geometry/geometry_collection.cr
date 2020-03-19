@@ -1,12 +1,11 @@
 require "./geometry"
-require "./pseudo_geometry"
 
 module GeoJSON
   # A `GeometryCollection` represents a collection of several geometries
   # (`Geometry` objects).
   #
   # This class corresponds to the [GeoJSON GeometryCollection](https://tools.ietf.org/html/rfc7946#section-3.1.8).
-  class GeometryCollection < PseudoGeometry
+  class GeometryCollection < Base
     include JSON::Serializable
 
     # Gets this GeometryCollection's GeoJSON type ("GeometryCollection")
