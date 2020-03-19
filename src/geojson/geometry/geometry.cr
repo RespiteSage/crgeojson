@@ -58,7 +58,7 @@ module GeoJSON
     protected def self.create_geometry(of_type geometry_type, with coordinates)
       {% begin %}
         case geometry_type
-        {% for klass in @type.subclasses %}
+        {% for klass in @type.subclasses.map(&.id.split("::").last) %}
           when "{{klass.id}}"
             {{klass.id}}.new coordinates
         {% end %}
