@@ -1,5 +1,6 @@
-require "./malformed_coordinate_exception"
 require "./coordinates"
+require "./coordinate_tree"
+require "./malformed_coordinate_exception"
 
 module GeoJSON::Coordinates
   # A `Position` represents a position on earth with a longitude, latitude, and

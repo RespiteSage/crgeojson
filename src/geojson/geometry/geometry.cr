@@ -1,9 +1,13 @@
 require "json"
-require "./pseudo_geometry"
+
+require "../base"
+require "../coordinates/coordinate_tree"
 
 module GeoJSON
+  include Coordinates
+
   # A `Geometry` represents a figure in geographic space.
-  abstract class Geometry < PseudoGeometry
+  abstract class Geometry < Base
     # Returns this Geometry's coordinates.
     abstract def coordinates
 
@@ -28,7 +32,22 @@ module GeoJSON
     # Parses the geometry type and coordinates (returned as a tuple, in that
     # order) from the given *parser*.
     private def self.parse_geometry(using parser : JSON::PullParser)
-      element_type, contents = parse_pseudo_geometry using: parser
+      parser.read_begin_object
+      while parser.kind != JSON::PullParser::Kind::EndObject
+        case parser.read_string
+        when "type"
+          begin
+            element_type = parser.read_string
+          rescue JSON::ParseException
+            raise "Type field is not a string!"
+          end
+        when "coordinates"
+          contents = CoordinateTree.new parser
+        else
+          parser.read_next # we currently ignore extra elements
+        end
+      end
+      parser.read_end_object
 
       if element_type == "GeometryCollection"
         raise "GeometryCollection is not a Geometry!"
@@ -40,22 +59,16 @@ module GeoJSON
     # Creates a geometry of the given *geometry_type* with the given
     # *coordinates*.
     protected def self.create_geometry(of_type geometry_type, with coordinates)
-      case geometry_type
-      when "Point"
-        Point.new coordinates
-      when "MultiPoint"
-        MultiPoint.new coordinates
-      when "LineString"
-        LineString.new coordinates
-      when "MultiLineString"
-        MultiLineString.new coordinates
-      when "Polygon"
-        Polygon.new coordinates
-      when "MultiPolygon"
-        MultiPolygon.new coordinates
-      else
-        raise %(Invalid geometry type "#{geometry_type}"!)
-      end
+      {% begin %}
+        case geometry_type
+        {% for klass in @type.subclasses.map(&.id.split("::").last) %}
+          when "{{klass.id}}"
+            {{klass.id}}.new coordinates
+        {% end %}
+        else
+          raise %(Invalid geometry type "#{geometry_type}"!)
+        end
+      {% end %}
     end
 
     # Creates a `Geometry` from the given GeoJSON string.

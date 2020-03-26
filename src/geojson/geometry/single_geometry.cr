@@ -1,3 +1,5 @@
+require "../coordinates/coordinate_tree"
+
 module GeoJSON
   # A `SingleGeometry` is a `Geometry` with a single `Coordinates` member of
   # type *T*.

@@ -1,4 +1,13 @@
+require "json"
+
+require "./base"
+require "./geometry/geometry"
+require "./geometry/geometry_collection"
+require "./geometry/pseudo_geometry_converter"
+
 module GeoJSON
+  alias PseudoGeometry = Geometry | GeometryCollection
+
   # A `Feature` represents a [GeoJSON Feature object](https://tools.ietf.org/html/rfc7946#section-3.2)
   # with a geometry and properties.
   class Feature < Base
@@ -7,7 +16,7 @@ module GeoJSON
     # Gets this Feature's GeoJSON type ("Feature")
     getter type : String = "Feature"
 
-    @[JSON::Field(emit_null: true)]
+    @[JSON::Field(emit_null: true, converter: GeoJSON::PseudoGeometryConverter)]
     # Gets this Feature's geometry.
     getter geometry : PseudoGeometry?
 

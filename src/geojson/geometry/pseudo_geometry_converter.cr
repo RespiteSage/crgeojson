@@ -1,19 +1,16 @@
 require "json"
 
-require "../base"
+require "./geometry"
+require "./geometry_collection"
+require "../coordinates/coordinate_tree"
 
 module GeoJSON
-  # A `PseudoGeometry` is a geometry element in a GeoJSON feature.
-  #
-  # This class is really just a union of `Geometry` and `GeometryCollection`
-  # with built-in JSON parsing logic.
-  abstract class PseudoGeometry < Base
-    # Creates a new `PseudoGeometry` from the given *parser*.
-    #
-    # This static class method automatically chooses the correct
-    # PseudoGeometry class (`Geometry` or `GeometryCollection`) to create.
-    def self.new(parser : JSON::PullParser)
-      element_type, contents = parse_pseudo_geometry using: parser
+  # A `PseudoGeometryConverter` handles deserialization and serialization of
+  # geometry elements in GeoJSON features.
+  struct PseudoGeometryConverter
+    # Creates a `Geometry` or `GeometryCollection` from the given GeoJSON string.
+    def self.from_json(parser : JSON::PullParser)
+      element_type, contents = self.parse_pseudo_geometry using: parser
 
       if element_type.nil?
         raise "Type field missing!"
@@ -64,9 +61,10 @@ module GeoJSON
       end
     end
 
-    # Creates a `Geometry` or `GeometryCollection` from the given GeoJSON string.
-    def PseudoGeometry.from_json(geometry_json)
-      PseudoGeometry.new(JSON::PullParser.new geometry_json)
+    # Serializes a `Geometry` or `GeometryCollection` by passing the *builder*
+    # to its `#to_json` method.
+    def self.to_json(value, builder : JSON::Builder)
+      value.to_json builder
     end
   end
 end

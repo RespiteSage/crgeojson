@@ -1,3 +1,8 @@
+require "json"
+
+require "./base"
+require "./feature"
+
 module GeoJSON
   # A `FeatureCollection` represents a [GeoJSON FeatureCollection object](https://tools.ietf.org/html/rfc7946#section-3.3)
   # and contains one or more `Feature`s.

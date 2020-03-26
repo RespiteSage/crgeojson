@@ -1,4 +1,3 @@
-require "./malformed_coordinate_exception"
 require "./coordinates"
 require "./linear_ring"
 

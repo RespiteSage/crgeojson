@@ -1,4 +1,7 @@
+require "./geometry"
+require "./multi_geometry"
 require "./polygon"
+require "../coordinates/poly_rings"
 
 module GeoJSON
   # A `MultiPolygon` is a `Geometry` representing several `Polygon`s.
